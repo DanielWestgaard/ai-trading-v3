@@ -1,6 +1,15 @@
 # ai-trading-v3
 This repo will build on the learnings from v2.
 
+# Learning from previous try
+I have a quite large project (v2). I came really close to deploying a model on a demo account, but stopped as I struggled to understand my own code. 
+1. Lack of proper planning
+2. Lack of planning for organization
+3. Lack of following set structure
+4. Relying too much on AI assistant to create this project for me.
+    - This led to me not fully understanding the project and code I was writing/copying. So when going back to add or modify code, there would be duplicates and "code-types" spread across multiple files (like code related to positioning).
+5. Properly importing files and methods
+
 # Project Structure
 ```
 algotrading/
@@ -19,7 +28,8 @@ algotrading/
 │   ├── base.py              # Abstract model class
 │   ├── gbdt_models/         # Gradient boosting models (XGBoost, LightGBM)
 │   ├── nn_models/           # Neural network models (LSTM, GRU)
-│   └── ensemble/            # Model combination strategies
+│   ├── ensemble/            # Model combination strategies
+│   └── definitions/         # Model architecture definitions
 │
 ├── strategies/              # Trading strategies
 │   ├── base.py              # Strategy interface
@@ -65,6 +75,18 @@ algotrading/
 │   ├── unit/                # Unit tests
 │   ├── integration/         # Integration tests
 │   └── data/                # Test data
+│
+├── model_storage/           # Trained model storage
+│   ├── production/          # Production-ready models
+│   │   ├── forex/           # Forex market models
+│   │   │   ├── v1/          # Version 1 models
+│   │   │   └── v2/          # Version 2 models
+│   │   └── indices/         # Indices market models
+│   │       ├── v1/          # Version 1 models
+│   │       └── v2/          # Version 2 models
+│   ├── staging/             # Models under evaluation
+│   ├── archive/             # Previous models for reference
+│   └── metadata/            # Model performance metadata
 │
 ├── docs/                    # Documentation
 │   ├── architecture/        # System architecture docs
