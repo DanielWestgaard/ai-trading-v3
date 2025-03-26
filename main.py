@@ -1,6 +1,6 @@
 import argparse
 import utils.logging_utils as log_utils
-from broker.capital_com.base import BaseBroker
+from broker.capital_com.capitalcom import CapitalCom
 
 def parse_arguments():
     """Parse command line arguments."""
@@ -15,7 +15,7 @@ def main():
     logger = log_utils.setup_logging(log_to_file=True)
     
     if args.broker_func:
-        broker = BaseBroker()  # Now you can instantiate it directly
+        broker = CapitalCom()  # Now you can instantiate it directly
 
 if __name__ == "__main__":
     exit(main())
