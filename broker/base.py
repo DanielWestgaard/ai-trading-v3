@@ -4,6 +4,8 @@ from typing import Dict, List, Optional, Tuple, Union
 import pandas as pd
 from datetime import datetime
 
+import utils.broker_utils as br_util
+
 class BaseBroker(ABC):
     """Abstract base class for broker implementations."""
     
@@ -14,6 +16,11 @@ class BaseBroker(ABC):
             config: Dictionary containing configuration parameters
         """
         self.config = config
+        
+        try: 
+            secrets, api_key, password, email = br_util.load_secrets()
+        except:
+            pass
     
     # ==================== DATA METHODS ====================
     
