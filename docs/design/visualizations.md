@@ -1,0 +1,1 @@
+![Trading System Architecture](docs/design/svg/trading_system_architecture_overview.svg)
