@@ -1,6 +1,6 @@
 import argparse
 import utils.logging_utils as log_utils
-from broker.base import BaseBroker
+from broker.capital_com.base import BaseBroker
 
 def parse_arguments():
     """Parse command line arguments."""
