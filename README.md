@@ -1,7 +1,7 @@
 # ai-trading-v3
 This repo will build on the learnings from v2.
 
-# Learning from previous try
+# Learnings from previous work (v2)
 I have a quite large project (v2). I came really close to deploying a model on a demo account, but stopped as I struggled to understand my own code. 
 1. Lack of proper planning for the system as a whole
 2. Lack of planning for organizing (files and folders)
@@ -11,6 +11,9 @@ I have a quite large project (v2). I came really close to deploying a model on a
 5. Properly importing files and methods
 6. Doing "everything at once"
     - My approach to this was wrong. I made everything "as good and as complex" as I could, and when I wanted to test it out on a demo account or modify something, it would be too complex to understand and a real pain to work with.
+7. Not having unified methods
+    - Having a unified backtesting pipeline-, testing pipeline-, and monitoring pipeline that would fit "any changes" to model/-s or complexity.
+    - Having 1 method for finding the right models, 1 place for training, 1 for position sizing and so on.
 
 # Project Structure
 ```
