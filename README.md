@@ -3,12 +3,14 @@ This repo will build on the learnings from v2.
 
 # Learning from previous try
 I have a quite large project (v2). I came really close to deploying a model on a demo account, but stopped as I struggled to understand my own code. 
-1. Lack of proper planning
-2. Lack of planning for organization
-3. Lack of following set structure
+1. Lack of proper planning for the system as a whole
+2. Lack of planning for organizing (files and folders)
+3. Lack of following said structure
 4. Relying too much on AI assistant to create this project for me.
-    - This led to me not fully understanding the project and code I was writing/copying. So when going back to add or modify code, there would be duplicates and "code-types" spread across multiple files (like code related to positioning).
+    - This led to me not fully understanding the project and code I was writing/copying. So when going back to add or modify code, there would be duplicates and "code-types" spread across multiple files (like code related to positioning spread across three files).
 5. Properly importing files and methods
+6. Doing "everything at once"
+    - My approach to this was wrong. I made everything "as good and as complex" as I could, and when I wanted to test it out on a demo account or modify something, it would be too complex to understand and a real pain to work with.
 
 # Project Structure
 ```
