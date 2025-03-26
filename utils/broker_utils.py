@@ -11,7 +11,7 @@ import json
 import config.system_config as config
 
 
-def load_secrets_alpaca(file_path="live_market_data/secrets/secrets.txt"):
+def load_secrets_alpaca(file_path="secrets/secrets.txt"):
     desired_keys={"alpaca_secret_key_paper", "alpaca_api_key_paper"}
     secrets = {}
     
@@ -28,7 +28,7 @@ def load_secrets_alpaca(file_path="live_market_data/secrets/secrets.txt"):
 
     return secrets, api_key, secret_key
 
-def load_secrets(file_path="live_market_data/secrets/secrets.txt"):
+def load_secrets(file_path="secrets/secrets.txt"):
     """
     Utility functions to extract the following keys: API_KEY_CAP, PASSWORD_CAP, EMAIL.
     
@@ -53,111 +53,9 @@ def load_secrets(file_path="live_market_data/secrets/secrets.txt"):
 
     return secrets, api_key, password, email
 
-def setup_logging(type='standard', save_to_file=True):
-    """
-    Configure logging for the project.
-    Logs are saved to the logs directory specified in config if save_to_file is True.
-    
-    Args:
-        type (str): Type of logger to create
-        save_to_file (bool): Whether to save logs to a file
-    
-    Returns:
-        Logger
-        Path to the created log file or None if save_to_file is False
-    """
-    # Only manage existing log files if we're saving to file
-    if save_to_file:
-        manage_log_files()
-        
-        # Create logs directory if it doesn't exist
-        os.makedirs(config.LOGS_DIR, exist_ok=True)
-    
-    # Initialize log_filepath
-    log_filepath = None
-    
-    # Create handlers list starting with StreamHandler
-    handlers = [logging.StreamHandler()]
-    
-    # Add FileHandler if we're saving to file
-    if save_to_file:
-        # Create log filename with timestamp
-        timestamp = get_timestamp()
-        log_filename = f"{type}_{timestamp}.log"
-        log_filepath = os.path.join(config.LOGS_DIR, log_filename)
-        handlers.append(logging.FileHandler(log_filepath))
-    
-    # Reset root logger
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    
-    # Configure logging
-    logging.basicConfig(
-        level=config.LOGGING_LEVEL,
-        format=config.LOGGING_FORMAT,
-        handlers=handlers
-    )
-    
-    logger = logging.getLogger(type)
-    logger.info("Logging configured successfully!")
-    if save_to_file:
-        logger.info(f"Logging to file: {log_filepath}")
-    
-    # Store log path in global variable for easy access
-    global current_log_path
-    current_log_path = log_filepath
-    
-    return logger, log_filepath
-
-# Global variable to store current log file path
-current_log_path = None
-
-def get_current_log_path():
-    """
-    Get the path to the current log file.
-    
-    Returns:
-        Path to current log file or None if logging not initialized
-    """
-    return current_log_path
-
-def manage_log_files():
-    """
-    Manage log files by archiving old ones if there are too many.
-    """
-    if not config.ARCHIVE_LOGS:
-        return
-        
-    try:
-        log_files = [f for f in os.listdir(config.LOGS_DIR) 
-                     if f.endswith(".log")]
-        
-        # If we have more than the maximum allowed log files
-        if len(log_files) > config.MAX_LOG_FILES:
-            # Sort by modification time (oldest first)
-            log_files.sort(key=lambda f: os.path.getmtime(os.path.join(config.LOGS_DIR, f)))
-            
-            # Create archives directory if it doesn't exist
-            archives_dir = os.path.join(config.LOGS_DIR, "archives")
-            os.makedirs(archives_dir, exist_ok=True)
-            
-            # Move oldest files to archives
-            files_to_archive = log_files[:len(log_files) - config.MAX_LOG_FILES]
-            for file in files_to_archive:
-                old_path = os.path.join(config.LOGS_DIR, file)
-                new_path = os.path.join(archives_dir, file)
-                os.rename(old_path, new_path)
-                
-            logging.info(f"Archived {len(files_to_archive)} old log files")
-    except Exception as e:
-        logging.warning(f"Error managing log files: {e}")
-
-def get_timestamp():
-    """Return current timestamp string for file naming."""
-    return datetime.now().strftime("%Y%m%d_%H%M%S")
-
 
 # Related to handling
+
 def on_open(ws, subscription_message):
     print("Connection opened")
     # Send the subscription message
@@ -226,7 +124,6 @@ def on_error(ws, error):
 
 def on_close(ws, close_status_code, close_msg):
     print("Connection closed")
-
 
 
 # Related to API
