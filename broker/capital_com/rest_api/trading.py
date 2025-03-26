@@ -9,9 +9,8 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 import json
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config.utils import extract_deal_reference, load_secrets, setup_logging
-import config.config as config
+from utils.broker_utils import extract_deal_reference, load_secrets
+import config.market_config as config
 
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 

@@ -10,9 +10,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config.utils import load_secrets, setup_logging
-import config.config as config
+import config.market_config as config
 
 
 # Global variables

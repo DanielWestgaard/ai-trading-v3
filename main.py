@@ -1,23 +1,21 @@
 import argparse
-
 import utils.logging_utils as log_utils
+from broker.base import BaseBroker
 
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
-    parser.add_argument('--broker-func', action='store_true', default=True, help='Test all broker functinoality')
+    parser.add_argument('--broker-func', action='store_true', default=True, help='Test all broker functionality')
     
     return parser.parse_args()
 
-
 def main():
     args = parse_arguments()
+    logger = log_utils.setup_logging(log_to_file=True)
     
     if args.broker_func:
-        logger = log_utils.setup_logging(log_to_file=True)
-        logger.info("Trading system starting...")
-        print(hei)
+        broker = BaseBroker()  # Now you can instantiate it directly
 
 if __name__ == "__main__":
     exit(main())

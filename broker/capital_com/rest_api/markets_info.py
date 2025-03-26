@@ -15,8 +15,8 @@ import pandas as pd
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 #from config.utils import load_secrets, setup_logging
-import config.config as config
-from config.utils import convert_json_to_ohlcv_csv
+import config.market_config as config
+from utils.broker_utils import convert_json_to_ohlcv_csv
 
 
 # Global variables

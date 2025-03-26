@@ -8,7 +8,8 @@ import json
 # Add the parent directory to the path for imports
 #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import config.system_config as config
+import config.system_config as sys_config
+import config.market_config as mark_config
 
 
 def load_secrets_alpaca(file_path="secrets/secrets.txt"):
@@ -35,7 +36,7 @@ def load_secrets(file_path="secrets/secrets.txt"):
     Returns:
         secrets{}, API_KEY_CAP, PASSWORD_CAP, EMAIL
     """
-    desired_keys = {"API_KEY_CAP", "PASSWORD_CAP", "EMAIL", "ENCRYPTION_KEY_CAP"}
+    desired_keys = {"API_KEY_CAP", "PASSWORD_CAP", "EMAIL"}
     secrets = {}
     
     with open(file_path, "r") as file:
@@ -49,7 +50,7 @@ def load_secrets(file_path="secrets/secrets.txt"):
     api_key = secrets.get('API_KEY_CAP')
     password = secrets.get('PASSWORD_CAP')
     email = secrets.get('EMAIL')
-    encryption_key = secrets.get('ENCRYPTION_KEY_CAP')
+    logging.info(f"Loaded credentials. Length: {len(secrets)}")
 
     return secrets, api_key, password, email
 
@@ -128,7 +129,7 @@ def on_close(ws, close_status_code, close_msg):
 
 # Related to API
 
-def get_account_id_by_name(json_data, account_name=config.ACCOUNT_TEST):
+def get_account_id_by_name(json_data, account_name=mark_config.ACCOUNT_TEST):
     """ Retrieves the account ID based on the account name. """
     # Parse the JSON string to a Python dictionary
     parsed_data = json.loads(json_data)
