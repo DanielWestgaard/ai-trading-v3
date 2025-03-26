@@ -24,8 +24,22 @@ algotrading/
 │   ├── market_config.yaml   # Market-specific settings (forex, indices)
 │   └── system_config.yaml   # System-wide settings
 │
+├── brokers/                 # Broker API integration
+│   ├── base.py              # Abstract broker interface
+│   ├── capital_com/         # Capital.com specific implementation
+│   │   ├── client.py        # Main API client
+│   │   ├── data.py          # Data-related methods
+│   │   ├── account.py       # Account-related methods
+│   │   └── trading.py       # Order execution methods
+│   └── adapters/            # Adapters for system integration
+│       ├── data_adapter.py  # Adapter for data system
+│       ├── execution_adapter.py  # Adapter for execution system
+│       └── account_adapter.py    # Adapter for account monitoring
+│
 ├── data/                    # Data management
 │   ├── loaders/             # Data acquisition modules
+│   │   ├── broker_loader.py # Loads data from broker APIs
+│   │   └── file_loader.py   # Loads data from files
 │   ├── processors/          # Data cleaning and feature engineering
 │   ├── features/            # Feature definitions and generators
 │   └── storage/             # Data storage (CSV, parquet files)
@@ -44,9 +58,10 @@ algotrading/
 │   └── position_sizing/     # Position sizing algorithms
 │
 ├── execution/               # Order execution
-│   ├── broker_api/          # Broker integration
+│   ├── order_manager.py     # Order management system
 │   ├── order_types/         # Different order implementations
-│   └── execution_algos/     # Smart execution algorithms
+│   ├── execution_algos/     # Smart execution algorithms
+│   └── position_tracker.py  # Position tracking and management
 │
 ├── risk/                    # Risk management
 │   ├── position_risk.py     # Per-position risk calculations
