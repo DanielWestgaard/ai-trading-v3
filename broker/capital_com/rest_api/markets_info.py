@@ -48,8 +48,8 @@ def historical_prices(X_SECURITY_TOKEN, CST,
     res = conn.getresponse()
     data = res.read()
 
+    parsed_data = json.loads(data.decode("utf-8"))
     if print_answer:
-        parsed_data = json.loads(data.decode("utf-8"))
         print(json.dumps(parsed_data, indent=4))
     return parsed_data
 

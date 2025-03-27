@@ -24,8 +24,8 @@ def main():
         #                            from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
         #                            print_answer=True)
         broker.fetch_and_save_historical_prices(epic="SILVER", resolution="MINUTE_5",
-                                                from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
-                                                print_answer=True, save_raw_data=True)
+                                                from_date="2020-01-01T00:00:00", to_date="2025-03-27T01:00:00",
+                                                print_answer=False, save_raw_data=True)
         
         broker.end_session()
 
