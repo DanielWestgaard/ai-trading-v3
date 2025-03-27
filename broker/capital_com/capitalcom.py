@@ -1,5 +1,6 @@
 from abc import ABC
 import logging
+import time
 from typing import Any, Dict, List, Optional, Tuple, Union
 import pandas as pd
 from datetime import datetime
@@ -24,19 +25,22 @@ class CapitalCom(BaseBroker):
             self.secrets, self.api_key, self.password, self.email = br_util.load_secrets()
             # Encrypting password
             self.enc_pass = session.encrypt_password(self.password, self.api_key)
-            
         except:
             logging.info("Could not initiate BaseBroker.")
             
     # =================== SESSION METHODS ==================
     
-    def start_session(self, email, password, api_key, use_encryption=True, print_answer=False):
+    def start_session(self, email=None, password=None, api_key=None, use_encryption=True, print_answer=False):
         """Starting a session with the broker."""
-        return session.start_session(email=email or self.email,
+        self.body, self.headers_dict, self.x_security_token, self.cst = session.start_session(email=email or self.email,
                                      password=password or self.enc_pass,
                                      api_key=api_key or self.api_key,
                                      use_encryption=use_encryption,
                                      print_answer=print_answer)
+        return 
+        
+    def end_session(self, X_SECURITY_TOKEN=None, CST=None):
+        return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
     
     # ==================== DATA METHODS ====================
     

@@ -18,11 +18,13 @@ class BaseBroker(ABC):
     # =================== SESSION METHODS ==================
     
     @abstractmethod
-    def start_session():
+    def start_session(email, password, api_key, use_encryption=True, print_answer=False):
+        """Start a new session with the broker."""
         pass
     
     @abstractmethod
-    def end_session():
+    def end_session(X_SECURITY_TOKEN, CST):
+        """End current session with the broker."""
         pass
     
     # ==================== DATA METHODS ====================

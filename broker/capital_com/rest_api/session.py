@@ -31,15 +31,16 @@ def start_session(email, password, api_key, use_encryption=True, print_answer=Fa
     Returns:
         Path to the trained model run
     """
+    logging.info("About to start a new session.")
     if use_encryption:
-        logging.info("Using encrypted password.")
+        logging.info("Using encrypted password to start session.")
         payload = json.dumps({
             "identifier": email,
             "password": password,
             "encryptedPassword": "true"
         })
     else:
-        logging.info("Using unecnrypted password!")
+        logging.info("Using unecnrypted password to start session!")
         payload = json.dumps({
             "identifier": email,
             "password": password,

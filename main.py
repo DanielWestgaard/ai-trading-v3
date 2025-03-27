@@ -12,10 +12,12 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    logger = log_utils.setup_logging(log_to_file=True)
+    logger = log_utils.setup_logging(log_to_file=False)
     
     if args.broker_func:
         broker = CapitalCom()  # Now you can instantiate it directly
+        broker.start_session()
+        broker.end_session()
 
 if __name__ == "__main__":
     exit(main())
