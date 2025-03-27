@@ -129,7 +129,7 @@ def on_close(ws, close_status_code, close_msg):
 
 # Related to API
 
-def get_account_id_by_name(json_data, account_name=mark_config.ACCOUNT_TEST):
+def get_account_id_by_name(json_data : json, account_name):
     """ Retrieves the account ID based on the account name. """
     # Parse the JSON string to a Python dictionary
     parsed_data = json.loads(json_data)

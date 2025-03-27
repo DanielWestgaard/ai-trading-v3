@@ -7,6 +7,7 @@ from datetime import datetime
 
 from broker.base_interface import BaseBroker
 import utils.broker_utils as br_util
+import config.market_config as mark_config
 import broker.capital_com.rest_api.account as account
 import broker.capital_com.rest_api.session as session
 import broker.capital_com.rest_api.trading as trading
@@ -25,8 +26,8 @@ class CapitalCom(BaseBroker):
             self.secrets, self.api_key, self.password, self.email = br_util.load_secrets()
             # Encrypting password
             self.enc_pass = session.encrypt_password(self.password, self.api_key)
-        except:
-            logging.info("Could not initiate BaseBroker.")
+        except Exception as e:
+            logging.info(f"Could not initiate BaseBroker with secrets and/or encrypted password. Error: {e}")
             
     # =================== SESSION METHODS ==================
     
@@ -41,6 +42,16 @@ class CapitalCom(BaseBroker):
         
     def end_session(self, X_SECURITY_TOKEN=None, CST=None):
         return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
+    
+    def session_details(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+        return session.session_details(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+    
+    def switch_active_account(self, account_id=None, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+        if account_id is None or self.all_accounts is None:
+            logging.info("AccountID and/or all_accounts is None. Initializing them now.")
+            self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+            self.account_id = br_util.get_account_id_by_name(self.all_accounts, mark_config.ACCOUNT_TEST)
+        return session.switch_active_account(self.account_id, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
     
     # ==================== DATA METHODS ====================
     
@@ -58,6 +69,10 @@ class CapitalCom(BaseBroker):
         return 0.0  # Return placeholder value
     
     # ==================== ACCOUNT METHODS ====================
+    
+    def list_all_accounts(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+        self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+        return self.all_accounts
     
     def get_account_balance(self) -> Dict:
         """Get account balance information."""

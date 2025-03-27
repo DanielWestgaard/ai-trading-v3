@@ -15,8 +15,12 @@ def main():
     logger = log_utils.setup_logging(log_to_file=False)
     
     if args.broker_func:
-        broker = CapitalCom()  # Now you can instantiate it directly
+        broker = CapitalCom()
         broker.start_session()
+        # broker.session_details(print_answer=True)
+        # broker.switch_active_account(print_answer=True)
+        # broker.list_all_accounts(print_answer=True)
+        
         broker.end_session()
 
 if __name__ == "__main__":

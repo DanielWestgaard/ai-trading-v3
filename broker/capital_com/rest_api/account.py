@@ -11,7 +11,7 @@ import config.market_config as config
 # Global variables
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 
-def list_all_accounts(X_SECURITY_TOKEN, CST, print_answer=False):
+def list_all_accounts(X_SECURITY_TOKEN, CST, print_answer):
     """Returns a list of accounts belonging to the logged-in client."""
     payload = ''
     headers = {
@@ -24,4 +24,6 @@ def list_all_accounts(X_SECURITY_TOKEN, CST, print_answer=False):
     if print_answer:
         parsed_data = json.loads(data.decode("utf-8"))
         print(json.dumps(parsed_data, indent=4))
+    else:
+        logging.info("Will not print out response of all accounts.")
     return data.decode("utf-8")

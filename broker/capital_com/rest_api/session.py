@@ -86,7 +86,7 @@ def end_session(X_SECURITY_TOKEN, CST):
     data = res.read()
     logging.info(f"Ended session: {data.decode('utf-8')}")
 
-def session_details(X_SECURITY_TOKEN, CST, print_answer=False):
+def session_details(X_SECURITY_TOKEN, CST, print_answer):
     """Returns the user's session details."""
     payload = ''
     headers = { 'X-SECURITY-TOKEN': X_SECURITY_TOKEN, 'CST': CST }
@@ -165,7 +165,7 @@ def encrypt_password(password, api_key):
     except Exception as e:
         raise RuntimeError(e)
 
-def switch_active_account(account_id, X_SECURITY_TOKEN, CST, print_answer=False):
+def switch_active_account(account_id, X_SECURITY_TOKEN, CST, print_answer):
     """Switch active account based on account ID."""
     payload = json.dumps({
         "accountId": account_id
