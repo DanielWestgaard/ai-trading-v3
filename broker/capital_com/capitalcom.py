@@ -44,6 +44,7 @@ class CapitalCom(BaseBroker):
         return self.body, self.headers_dict, self.x_security_token, self.cst  # Just in case I need to use them outside
         
     def end_session(self, X_SECURITY_TOKEN=None, CST=None):
+        """End the session with the broker."""
         return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
     
     def session_details(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
@@ -69,7 +70,7 @@ class CapitalCom(BaseBroker):
     
     def fetch_and_save_historical_prices(self, epic:str, resolution:str, 
                                     from_date:str, to_date:str,  # format 2022-02-24T00:00:00
-                                    output_file="test_historical_response.csv",
+                                    output_file=None,
                                     X_SECURITY_TOKEN=None, CST=None,
                                     print_answer=False, save_raw_data=False):
         return markets_info.fetch_and_save_historical_prices(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
@@ -79,6 +80,7 @@ class CapitalCom(BaseBroker):
     # ==================== ACCOUNT METHODS ====================
     
     def list_all_accounts(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+        """Returns a list of accounts belonging to the logged-in client."""
         self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
         return self.all_accounts
     
