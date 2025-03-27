@@ -24,7 +24,7 @@ conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 
 def historical_prices(X_SECURITY_TOKEN, CST,
                       epic, resolution, from_date, to_date,  # format 2022-02-24T00:00:00
-                      max=1000, print_answer=True):
+                      max, print_answer):
     """
     Returns historical prices for a particular instrument. The maximum number of the values in answer is max = 1000.
     
@@ -48,8 +48,9 @@ def historical_prices(X_SECURITY_TOKEN, CST,
     res = conn.getresponse()
     data = res.read()
 
-    parsed_data = json.loads(data.decode("utf-8"))
-    print(json.dumps(parsed_data, indent=4))
+    if print_answer:
+        parsed_data = json.loads(data.decode("utf-8"))
+        print(json.dumps(parsed_data, indent=4))
     return parsed_data
 
 

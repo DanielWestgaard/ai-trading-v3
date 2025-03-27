@@ -31,7 +31,7 @@ class BaseBroker(ABC):
     
     @abstractmethod
     def get_historical_data(self, 
-                           symbol: str, 
+                           epic: str, 
                            timeframe: str, 
                            start_date: datetime, 
                            end_date: Optional[datetime] = None) -> pd.DataFrame:
@@ -45,18 +45,6 @@ class BaseBroker(ABC):
             
         Returns:
             DataFrame with historical data
-        """
-        pass
-    
-    @abstractmethod
-    def get_latest_price(self, symbol: str) -> float:
-        """Get the latest price for a symbol.
-        
-        Args:
-            symbol: The market symbol
-            
-        Returns:
-            Latest price as float
         """
         pass
     

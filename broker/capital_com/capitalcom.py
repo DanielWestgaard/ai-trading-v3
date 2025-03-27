@@ -55,18 +55,14 @@ class CapitalCom(BaseBroker):
     
     # ==================== DATA METHODS ====================
     
-    def get_historical_data(self, X_SECURITY_TOKEN, CST,
-                           symbol: str,  # epic
-                           timeframe: str,  # resolution
-                           start_date: datetime,  # format 2022-02-24T00:00:00
-                           end_date: Optional[datetime] = None) -> pd.DataFrame:
+    def get_historical_data(self, epic:str, resolution:str, 
+                            from_date:str, to_date:str,  # format 2022-02-24T00:00:00
+                            X_SECURITY_TOKEN=None, CST=None,
+                            max=1000, print_answer=False):
         """Fetch historical OHLCV data."""
-        return markets_info.historical_prices(self)
-    
-    def get_latest_price(self, symbol: str) -> float:
-        """Get the latest price for a symbol."""
-        logging.info(f"Getting latest price for {symbol}")
-        return 0.0  # Return placeholder value
+        return markets_info.historical_prices(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
+                                              epic=epic, resolution=resolution, from_date=from_date, to_date=to_date,
+                                              max=max, print_answer=print_answer)
     
     # ==================== ACCOUNT METHODS ====================
     
