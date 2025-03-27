@@ -14,3 +14,5 @@ WEBSOCKET_URL = "wss://api-streaming-capital.backend-capital.com/connect"
 ACCOUNT_TEST = "USD_testing"
 ACCOUNT_MODEL = "USD_model"
 CAPCOM_RESPONSE_JSON_DIR = os.path.join(sys_config.BASE_DIR, 'broker', 'capital_com', 'rest_api', 'saved_responses')
+
+PRICE_DECIMALS = 5

@@ -215,11 +215,12 @@ def convert_json_to_ohlcv_csv(json_data, output_file):
             # Extract UTC timestamp (using snapshotTimeUTC for consistency)
             timestamp = price['snapshotTimeUTC']
             
-            # Calculate mid prices (average of bid and ask)
-            open_price = (price['openPrice']['bid'] + price['openPrice']['ask']) / 2
-            high_price = (price['highPrice']['bid'] + price['highPrice']['ask']) / 2
-            low_price = (price['lowPrice']['bid'] + price['lowPrice']['ask']) / 2
-            close_price = (price['closePrice']['bid'] + price['closePrice']['ask']) / 2
+            # Calculate mid prices (average of bid and ask) with rounding
+            decimals = mark_config.PRICE_DECIMALS  # Adjust based on the asset's typical price granularity
+            open_price = round((price['openPrice']['bid'] + price['openPrice']['ask']) / 2, decimals)
+            high_price = round((price['highPrice']['bid'] + price['highPrice']['ask']) / 2, decimals)
+            low_price = round((price['lowPrice']['bid'] + price['lowPrice']['ask']) / 2, decimals)
+            close_price = round((price['closePrice']['bid'] + price['closePrice']['ask']) / 2, decimals)
             volume = price['lastTradedVolume']
             
             # Write the row to the CSV
