@@ -12,6 +12,11 @@ DEFAULT_LOG_LEVEL = logging.INFO
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance"]
+BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
+
+# Capital.com related to data storage
+CAPCOM_BASE_DATA_DIR = os.path.join(BASE_DATA_DIR, 'capital_com')
+CAPCOM_RAW_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'raw')
 
 # Environments
 DEV_ENV = "development"

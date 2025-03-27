@@ -187,7 +187,7 @@ def process_positions(json_response):
 
 # Not sure where to place this method. Was thinking in the data processing pipeline, 
 # but could also be more of a utility func for when taking in live market data.
-def convert_json_to_ohlcv_csv(json_data, output_file="test.csv"):
+def convert_json_to_ohlcv_csv(json_data, output_file):
     """
     Converts the provided JSON price data to OHLCV format and saves it to a CSV file.
     

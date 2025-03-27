@@ -24,10 +24,13 @@ class CapitalCom(BaseBroker):
         try: 
             # Getting secrets
             self.secrets, self.api_key, self.password, self.email = br_util.load_secrets()
-            # Encrypting password
-            self.enc_pass = session.encrypt_password(self.password, self.api_key)
+            try:
+                # Encrypting password
+                self.enc_pass = session.encrypt_password(self.password, self.api_key)
+            except Exception as e:
+                logging.warning(f"Could not initiate BaseBroker with encrypted password. Error: {e}")
         except Exception as e:
-            logging.info(f"Could not initiate BaseBroker with secrets and/or encrypted password. Error: {e}")
+            logging.warning(f"Could not initiate BaseBroker with secrets. Error: {e}")
             
     # =================== SESSION METHODS ==================
     
@@ -38,7 +41,7 @@ class CapitalCom(BaseBroker):
                                      api_key=api_key or self.api_key,
                                      use_encryption=use_encryption,
                                      print_answer=print_answer)
-        return 
+        return self.body, self.headers_dict, self.x_security_token, self.cst  # Just in case I need to use them outside
         
     def end_session(self, X_SECURITY_TOKEN=None, CST=None):
         return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
@@ -63,6 +66,15 @@ class CapitalCom(BaseBroker):
         return markets_info.historical_prices(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
                                               epic=epic, resolution=resolution, from_date=from_date, to_date=to_date,
                                               max=max, print_answer=print_answer)
+    
+    def fetch_and_save_historical_prices(self, epic:str, resolution:str, 
+                                    from_date:str, to_date:str,  # format 2022-02-24T00:00:00
+                                    output_file="test_historical_response.csv",
+                                    X_SECURITY_TOKEN=None, CST=None,
+                                    print_answer=False, save_raw_data=False):
+        return markets_info.fetch_and_save_historical_prices(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
+                                                             epic=epic, resolution=resolution, from_date=from_date, to_date=to_date,
+                                                             output_file=output_file, print_answer=print_answer, save_raw_data=save_raw_data)
     
     # ==================== ACCOUNT METHODS ====================
     

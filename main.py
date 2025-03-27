@@ -20,9 +20,12 @@ def main():
         # broker.session_details(print_answer=True)
         # broker.switch_active_account(print_answer=True)
         # broker.list_all_accounts(print_answer=True)
-        broker.get_historical_data(epic="SILVER", resolution="MINUTE_5",
-                                   from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
-                                   print_answer=True)
+        # broker.get_historical_data(epic="SILVER", resolution="MINUTE_5",
+        #                            from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
+        #                            print_answer=True)
+        broker.fetch_and_save_historical_prices(epic="SILVER", resolution="MINUTE_5",
+                                                from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
+                                                print_answer=True, save_raw_data=True)
         
         broker.end_session()
 

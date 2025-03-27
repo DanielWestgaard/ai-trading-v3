@@ -12,11 +12,10 @@ from cryptography.hazmat.backends import default_backend
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-#from config.utils import load_secrets, setup_logging
 import config.market_config as config
 from utils.broker_utils import convert_json_to_ohlcv_csv
+import config.system_config as sys_config
+import config.market_config as mark_config
 
 
 # Global variables
@@ -145,8 +144,8 @@ def extended_historical_prices(X_SECURITY_TOKEN, CST, epic, resolution, from_dat
         return pd.DataFrame()
 
 def fetch_and_save_historical_prices(X_SECURITY_TOKEN, CST, epic, resolution, 
-                                    from_date, to_date, output_file="BigBoyTest_historical_prices.csv",
-                                    print_answer=False, save_raw_data=False):
+                                    from_date, to_date, output_file,
+                                    print_answer, save_raw_data):
     """
     Fetches historical price data over an extended period and saves it to a CSV file.
     
@@ -234,11 +233,12 @@ def fetch_and_save_historical_prices(X_SECURITY_TOKEN, CST, epic, resolution,
     
     # Save the raw JSON data if requested
     if save_raw_data:
-        raw_json_file = f"{output_file.split('.')[0]}_raw.json"
+        raw_json_file = os.path.join(mark_config.CAPCOM_RESPONSE_JSON_DIR, f"{output_file.split('.')[0]}_raw.json")
         with open(raw_json_file, 'w') as f:
             json.dump(complete_data, f, indent=4)
         logging.info(f"Raw data saved to {raw_json_file}")
     
+    output_file = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, output_file)
     # Save the data to OHLCV CSV format
     if all_prices:
         logging.info(f"Converting {len(all_prices)} data points to OHLCV format")
