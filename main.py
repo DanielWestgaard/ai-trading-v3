@@ -6,7 +6,8 @@ def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
-    parser.add_argument('--broker-func', action='store_true', default=True, help='Test all broker functionality')
+    parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
+    parser.add_argument('--clean', action='store_true', default=False, help='Test all broker functionality')
     
     return parser.parse_args()
 
