@@ -55,7 +55,6 @@ def historical_prices(X_SECURITY_TOKEN, CST,
 
 
 # These functions are not related to the capital.com API historical market prices, but handling it
-
 def fetch_and_save_historical_prices(X_SECURITY_TOKEN, CST, epic, resolution, 
                                     from_date, to_date, output_file,
                                     print_answer, save_raw_data):
