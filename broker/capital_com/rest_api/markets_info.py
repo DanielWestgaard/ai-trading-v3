@@ -16,6 +16,7 @@ import config.market_config as config
 from utils.broker_utils import convert_json_to_ohlcv_csv
 import config.system_config as sys_config
 import config.market_config as mark_config
+import utils.data_utils as data_utils
 
 
 # Global variables
@@ -238,7 +239,9 @@ def fetch_and_save_historical_prices(X_SECURITY_TOKEN, CST, epic, resolution,
             json.dump(complete_data, f, indent=4)
         logging.info(f"Raw data saved to {raw_json_file}")
     
-    output_file = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, output_file)
+    output_file_name = data_utils.generate_filename(symbol=epic, timeframe=resolution, 
+                                               start_date=from_date, end_date=to_date, is_raw=True)
+    output_file = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, output_file_name)
     # Save the data to OHLCV CSV format
     if all_prices:
         logging.info(f"Converting {len(all_prices)} data points to OHLCV format")
