@@ -18,7 +18,8 @@ class DataCleaner(BaseProcessor):
                  outlier_method: str = 'winsorize',
                  outlier_threshold: float = 3.0,
                  ensure_ohlc_validity: bool = True,
-                 resample_rule: Optional[str] = None):
+                 resample_rule: Optional[str] = None,
+                 preserve_original_case: bool = True):  # New parameter to preserve column case
         """
         Initialize the data cleaner with configuration parameters.
         
@@ -31,12 +32,20 @@ class DataCleaner(BaseProcessor):
             outlier_threshold: Threshold for outlier detection
             ensure_ohlc_validity: Fix invalid OHLC relationships
             resample_rule: Optional rule for resampling (e.g., '5min', '1h')
+            preserve_original_case: Whether to preserve the original case of column names
         """
         logging.info("Initiating data cleaning with configuration: %s", 
                      {"price_cols": price_cols, "volume_col": volume_col, 
                       "missing_method": missing_method, "outlier_method": outlier_method,
                       "outlier_threshold": outlier_threshold, "resample_rule": resample_rule})
         
+        # Store original column names for reference
+        self.original_price_cols = price_cols
+        self.original_volume_col = volume_col
+        self.original_timestamp_col = timestamp_col
+        self.preserve_original_case = preserve_original_case
+        
+        # Convert to lowercase for internal processing
         self.price_cols = [col.lower() for col in price_cols]
         self.volume_col = volume_col.lower()
         self.timestamp_col = timestamp_col.lower()
@@ -49,12 +58,19 @@ class DataCleaner(BaseProcessor):
         # Parameters to be learned during fit
         self._stats = {}
         
+        # Store original column to lowercase mapping
+        self.column_mapping = {}
+        
     def fit(self, data: pd.DataFrame) -> 'DataCleaner':
         """Learn parameters from the data for outlier detection"""
         logging.info("Fitting DataCleaner on dataset with shape %s", data.shape)
         df = data.copy()
         
-        # Convert column names to lowercase for consistency
+        # Store original column names mapping before converting to lowercase
+        if self.preserve_original_case:
+            self.column_mapping = {col.lower(): col for col in df.columns}
+        
+        # Convert column names to lowercase for internal processing
         df.columns = [col.lower() for col in df.columns]
         logging.debug("Converted column names to lowercase: %s", list(df.columns))
         
@@ -83,19 +99,29 @@ class DataCleaner(BaseProcessor):
         df = data.copy()
         
         try:
-            # Convert column names to lowercase for consistency
+            # Store original case before converting to lowercase 
+            if self.preserve_original_case:
+                self.column_mapping = {col.lower(): col for col in df.columns}
+            
+            # Convert column names to lowercase for consistent processing
             df.columns = [col.lower() for col in df.columns]
             
-            # Ensure the timestamp is the index
-            if self.timestamp_col in df.columns:
-                logging.debug("Setting %s as DataFrame index", self.timestamp_col)
+            # Make a temporary copy of the timestamp column if we need to set it as index
+            # This ensures we don't lose the original timestamp column
+            has_timestamp = self.timestamp_col in df.columns
+            if has_timestamp:
+                orig_timestamp_name = self.timestamp_col
+                
+                # Convert timestamp to datetime if not already
                 df[self.timestamp_col] = pd.to_datetime(df[self.timestamp_col])
-                df.set_index(self.timestamp_col, inplace=True)
-            else:
-                logging.warning("Timestamp column '%s' not found in data", self.timestamp_col)
+                
+                # Only set index temporarily for processing if needed for resampling
+                if self.resample_rule:
+                    logging.debug("Setting %s as temporary DataFrame index for resampling", self.timestamp_col)
+                    df = df.set_index(self.timestamp_col)
             
             # Ensure time continuity by resampling if requested
-            if self.resample_rule:
+            if self.resample_rule and isinstance(df.index, pd.DatetimeIndex):
                 logging.info("Resampling data with rule: %s", self.resample_rule)
                 original_shape = df.shape
                 df = self._ensure_time_continuity(df)
@@ -123,16 +149,32 @@ class DataCleaner(BaseProcessor):
                 df = self._ensure_ohlc_validity(df)
                 logging.debug("OHLC validity check completed")
             
-            # Reset index if needed
-            if self.timestamp_col not in df.columns:
+            # Reset index if it was set for processing
+            if self.resample_rule and isinstance(df.index, pd.DatetimeIndex):
                 logging.debug("Resetting index to include timestamp column")
-                df.reset_index(inplace=True)
+                df = df.reset_index()
+            
+            # Restore original column case if needed
+            if self.preserve_original_case:
+                # Create new column mapping that includes any new columns created during processing
+                new_mapping = {}
+                for col in df.columns:
+                    if col in self.column_mapping:
+                        # Use original case for existing columns
+                        new_mapping[col] = self.column_mapping[col]
+                    else:
+                        # Keep new columns as is
+                        new_mapping[col] = col
+                
+                # Rename columns to original case
+                df = df.rename(columns=new_mapping)
+                logging.debug("Restored original column case")
                 
             logging.info("Data transformation completed. Final shape: %s", df.shape)
             return df
         except Exception as e:
             logging.error("Transform failed: %s", str(e))
-            #raise DataProcessingError(f"Failed to transform data: {str(e)}") from e
+            raise
     
     def _handle_missing_values(self, df: pd.DataFrame, column_specific_methods=None) -> pd.DataFrame:
         """Handle missing values differently for price and volume"""
@@ -319,75 +361,4 @@ class DataCleaner(BaseProcessor):
         else:
             logging.debug("Skipping OHLC validity check, not all OHLC columns present")
             
-        return df
-    
-    def get_data_quality_metrics(self, df: pd.DataFrame) -> Dict:
-        """Calculate data quality metrics after cleaning"""
-        logging.info("Calculating data quality metrics")
-        #df = data.copy()
-        df.columns = [col.lower() for col in df.columns]
-        
-        metrics = {
-            "row_count": len(df),
-            "missing_values": {col: df[col].isna().sum() for col in df.columns},
-            "missing_percentage": {col: df[col].isna().mean() * 100 for col in df.columns},
-        }
-        
-        # Add price-specific metrics if available
-        price_cols = [col for col in self.price_cols if col in df.columns]
-        if price_cols:
-            # Calculate returns for volatility
-            if 'close' in df.columns:
-                df['returns'] = df['close'].pct_change()
-                metrics["volatility"] = df['returns'].std() * np.sqrt(252 * 24 * 60 / 5)  # Annualized for 5-min data
-                logging.debug("Calculated annualized volatility: %.4f", metrics["volatility"])
-                
-            # Count potential anomalies after cleaning
-            if self.outlier_method != 'none':
-                for col in price_cols:
-                    mean = df[col].mean()
-                    std = df[col].std()
-                    potential_outliers = abs((df[col] - mean) / std) > self.outlier_threshold
-                    metrics[f"{col}_potential_outliers"] = potential_outliers.sum()
-                    if potential_outliers.sum() > 0:
-                        logging.warning("Column %s still has %d potential outliers after cleaning", 
-                                       col, potential_outliers.sum())
-        
-        logging.info("Data quality metrics calculation completed")
-        return metrics
-
-    def handle_gaps(self, df, max_gap_minutes=15):
-        """Flag or handle large time gaps in data"""
-        logging.info("Checking for time gaps with threshold of %d minutes", max_gap_minutes)
-        df = df.copy()
-        
-        if not isinstance(df.index, pd.DatetimeIndex):
-            logging.warning("DataFrame index is not DatetimeIndex, converting timestamps")
-            if self.timestamp_col in df.columns:
-                df[self.timestamp_col] = pd.to_datetime(df[self.timestamp_col])
-                df.set_index(self.timestamp_col, inplace=True)
-            else:
-                logging.error("Cannot check for gaps: no timestamp column or DatetimeIndex available")
-                return df
-        
-        df['time_diff'] = df.index.to_series().diff().dt.total_seconds() / 60
-        large_gaps = df['time_diff'] > max_gap_minutes
-        gap_count = large_gaps.sum()
-        
-        if gap_count > 0:
-            largest_gap = df['time_diff'].max()
-            logging.warning("Found %d time gaps larger than %d minutes. Largest gap: %.2f minutes", 
-                           gap_count, max_gap_minutes, largest_gap)
-            
-            # Detailed logging of gaps
-            if gap_count < 10:  # Only log details for a reasonable number of gaps
-                for idx in df[large_gaps].index:
-                    gap_size = df.loc[idx, 'time_diff']
-                    prev_time = idx - pd.Timedelta(minutes=gap_size)
-                    logging.debug("Gap of %.2f minutes between %s and %s", 
-                                 gap_size, prev_time, idx)
-        else:
-            logging.info("No time gaps larger than %d minutes found", max_gap_minutes)
-            
-        df['gap_flag'] = large_gaps
         return df

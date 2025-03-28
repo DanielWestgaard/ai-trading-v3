@@ -14,7 +14,12 @@ class DataPipeline:
     def __init__(self):
         #self.config = config
         #self.loader = self._get_loader(config['loader'])
-        self.cleaner = DataCleaner()
+        self.cleaner = DataCleaner(
+            # Specify the exact column names from your raw data
+            price_cols=['Open', 'High', 'Low', 'Close'],
+            volume_col='Volume',
+            timestamp_col='Date',
+        )
         self.feature_generator = FeatureGenerator()
         self.normalizer = DataNormalizer()
         
@@ -28,12 +33,10 @@ class DataPipeline:
         """Execute the full pipeline"""
         # 1. Load data
         #raw_data = self.loader.load(source)
-        raw_data = pd.read_csv(raw_data)
+        raw_data = pd.read_csv(raw_data, parse_dates=['Date'])
         
         # 2. Clean data
-        #clean_data = self.cleaner.handle_missing_values(raw_data)
-        #clean_data = self.cleaner.remove_outliers(clean_data)
-        clean_data = self.cleaner.fit(raw_data)
+        self.cleaner.fit(raw_data)
         clean_data = self.cleaner.transform(raw_data)
         
         # 3. Generate features
@@ -45,8 +48,7 @@ class DataPipeline:
         
         # 5. Save processed data
         if target_path:
-            #normalized_data.to_csv(target_path)
-            clean_data.to_csv(os.path.join(target_path, 'test.csv'))
+            clean_data.to_csv(os.path.join(target_path, 'test.csv'), index=False)
             
         #return normalized_data
         return clean_data
