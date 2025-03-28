@@ -82,53 +82,57 @@ class DataCleaner(BaseProcessor):
         logging.info("Starting data transformation on dataset with shape %s", data.shape)
         df = data.copy()
         
-        # Convert column names to lowercase for consistency
-        df.columns = [col.lower() for col in df.columns]
-        
-        # Ensure the timestamp is the index
-        if self.timestamp_col in df.columns:
-            logging.debug("Setting %s as DataFrame index", self.timestamp_col)
-            df[self.timestamp_col] = pd.to_datetime(df[self.timestamp_col])
-            df.set_index(self.timestamp_col, inplace=True)
-        else:
-            logging.warning("Timestamp column '%s' not found in data", self.timestamp_col)
-        
-        # Ensure time continuity by resampling if requested
-        if self.resample_rule:
-            logging.info("Resampling data with rule: %s", self.resample_rule)
-            original_shape = df.shape
-            df = self._ensure_time_continuity(df)
-            logging.info("Resampling changed shape from %s to %s", original_shape, df.shape)
-        
-        # Handle missing values
-        missing_before = df.isna().sum().sum()
-        logging.info("Handling missing values with method: %s. Total missing values: %d", 
-                     self.missing_method, missing_before)
-        df = self._handle_missing_values(df)
-        missing_after = df.isna().sum().sum()
-        logging.info("Missing values after handling: %d (reduction: %d)", 
-                     missing_after, missing_before - missing_after)
-        
-        # Handle outliers
-        if self.outlier_method != 'none':
-            logging.info("Handling outliers with method: %s and threshold: %f", 
-                         self.outlier_method, self.outlier_threshold)
-            df = self._handle_outliers(df)
-            logging.debug("Outlier handling completed")
-        
-        # Ensure OHLC validity (High ≥ Open ≥ Close ≥ Low)
-        if self.ensure_ohlc_validity:
-            logging.info("Ensuring OHLC validity")
-            df = self._ensure_ohlc_validity(df)
-            logging.debug("OHLC validity check completed")
-        
-        # Reset index if needed
-        if self.timestamp_col not in df.columns:
-            logging.debug("Resetting index to include timestamp column")
-            df.reset_index(inplace=True)
+        try:
+            # Convert column names to lowercase for consistency
+            df.columns = [col.lower() for col in df.columns]
             
-        logging.info("Data transformation completed. Final shape: %s", df.shape)
-        return df
+            # Ensure the timestamp is the index
+            if self.timestamp_col in df.columns:
+                logging.debug("Setting %s as DataFrame index", self.timestamp_col)
+                df[self.timestamp_col] = pd.to_datetime(df[self.timestamp_col])
+                df.set_index(self.timestamp_col, inplace=True)
+            else:
+                logging.warning("Timestamp column '%s' not found in data", self.timestamp_col)
+            
+            # Ensure time continuity by resampling if requested
+            if self.resample_rule:
+                logging.info("Resampling data with rule: %s", self.resample_rule)
+                original_shape = df.shape
+                df = self._ensure_time_continuity(df)
+                logging.info("Resampling changed shape from %s to %s", original_shape, df.shape)
+            
+            # Handle missing values
+            missing_before = df.isna().sum().sum()
+            logging.info("Handling missing values with method: %s. Total missing values: %d", 
+                        self.missing_method, missing_before)
+            df = self._handle_missing_values(df)
+            missing_after = df.isna().sum().sum()
+            logging.info("Missing values after handling: %d (reduction: %d)", 
+                        missing_after, missing_before - missing_after)
+            
+            # Handle outliers
+            if self.outlier_method != 'none':
+                logging.info("Handling outliers with method: %s and threshold: %f", 
+                            self.outlier_method, self.outlier_threshold)
+                df = self._handle_outliers(df)
+                logging.debug("Outlier handling completed")
+            
+            # Ensure OHLC validity (High ≥ Open ≥ Close ≥ Low)
+            if self.ensure_ohlc_validity:
+                logging.info("Ensuring OHLC validity")
+                df = self._ensure_ohlc_validity(df)
+                logging.debug("OHLC validity check completed")
+            
+            # Reset index if needed
+            if self.timestamp_col not in df.columns:
+                logging.debug("Resetting index to include timestamp column")
+                df.reset_index(inplace=True)
+                
+            logging.info("Data transformation completed. Final shape: %s", df.shape)
+            return df
+        except Exception as e:
+            logging.error("Transform failed: %s", str(e))
+            #raise DataProcessingError(f"Failed to transform data: {str(e)}") from e
     
     def _handle_missing_values(self, df: pd.DataFrame, column_specific_methods=None) -> pd.DataFrame:
         """Handle missing values differently for price and volume"""
@@ -317,10 +321,10 @@ class DataCleaner(BaseProcessor):
             
         return df
     
-    def get_data_quality_metrics(self, data: pd.DataFrame) -> Dict:
+    def get_data_quality_metrics(self, df: pd.DataFrame) -> Dict:
         """Calculate data quality metrics after cleaning"""
         logging.info("Calculating data quality metrics")
-        df = data.copy()
+        #df = data.copy()
         df.columns = [col.lower() for col in df.columns]
         
         metrics = {

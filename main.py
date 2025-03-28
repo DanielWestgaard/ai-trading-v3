@@ -37,10 +37,7 @@ def main():
         broker.end_session()
 
     if args.data_pipeline:
-        data_pipe = DataCleaner()
-        data_dir = pd.read_csv(data_config.TESTING_RAW_FILE)
-        data_pipe.fit(data_dir)
-        data_pipe.transform(data_dir)
+        data_pipeline = DataPipeline()
 
 if __name__ == "__main__":
     exit(main())
