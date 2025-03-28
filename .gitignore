@@ -3,3 +3,4 @@ secrets/secrets.txt
 __pycache__
 #data/storage/capital_com/raw
 broker/capital_com/rest_api/saved_responses/
+data/storage/capital_com/processed

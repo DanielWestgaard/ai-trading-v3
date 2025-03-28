@@ -38,6 +38,7 @@ def main():
 
     if args.data_pipeline:
         data_pipeline = DataPipeline()
+        data_pipeline.run()
 
 if __name__ == "__main__":
     exit(main())
