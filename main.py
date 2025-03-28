@@ -1,19 +1,25 @@
 import argparse
+import pandas as pd
+
+from data.pipelines.data_pipeline import DataPipeline
+from data.processors.cleaner import DataCleaner
 import utils.logging_utils as log_utils
 from broker.capital_com.capitalcom import CapitalCom
+import config.data_config as data_config
+import config.system_config as sys_config
 
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
     parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
-    parser.add_argument('--clean', action='store_true', default=False, help='Test all broker functionality')
+    parser.add_argument('--data-pipeline', action='store_true', default=True, help='Run data processing pipeline')
     
     return parser.parse_args()
 
 def main():
     args = parse_arguments()
-    logger = log_utils.setup_logging(log_to_file=False)
+    logger = log_utils.setup_logging(log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
@@ -29,6 +35,12 @@ def main():
                                                 print_answer=False)
         
         broker.end_session()
+
+    if args.data_pipeline:
+        data_pipe = DataCleaner()
+        data_dir = pd.read_csv(data_config.TESTING_RAW_FILE)
+        data_pipe.fit(data_dir)
+        data_pipe.transform(data_dir)
 
 if __name__ == "__main__":
     exit(main())

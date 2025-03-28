@@ -1,6 +1,9 @@
 import datetime
+import logging
 import re
 import os
+
+import config.market_config as mark_config
 
 def generate_filename(symbol, timeframe, start_date, end_date, is_raw=True, 
                      data_source=None, processing_info=None, extension='csv'):
@@ -122,6 +125,21 @@ def get_file_path(filename, base_dir=None, create_dirs=True):
     
     # Return the full file path
     return os.path.join(dir_path, filename)
+
+def save_data_file(type:str, filename:str, location:str, content):
+    logging.info("Saving file...")
+    
+    # Ensure the directory exists
+    os.makedirs(location, exist_ok=True)
+
+    # Create the full file path
+    file_path = os.path.join(location, filename)
+
+    # Write content to file
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.write(content)
+
+    print(f"File saved at: {file_path}")
 
 # Example usage
 if __name__ == "__main__":

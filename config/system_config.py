@@ -7,6 +7,7 @@ import os
 DEFAULT_LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
 DEFAULT_DATE_FORMAT = '%d-%m-%Y %H:%M:%S'
 DEFAULT_LOG_LEVEL = logging.INFO
+DEBUG_LOG_LEVEL = logging.DEBUG
 
 # Directories
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

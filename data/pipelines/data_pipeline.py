@@ -1,3 +1,5 @@
+import pandas as pd
+
 from data.loaders.broker_loader import CapitalComLoader
 from data.processors.cleaner import DataCleaner
 from data.features.feature_generator import FeatureGenerator
@@ -8,7 +10,7 @@ class DataPipeline:
     """Coordinates the entire data processing pipeline"""
     def __init__(self, config):
         self.config = config
-        self.loader = self._get_loader(config['loader'])
+        #self.loader = self._get_loader(config['loader'])
         self.cleaner = DataCleaner()
         self.feature_generator = FeatureGenerator()
         self.normalizer = DataNormalizer()
@@ -22,7 +24,8 @@ class DataPipeline:
     def run(self, source, target_path=None):
         """Execute the full pipeline"""
         # 1. Load data
-        raw_data = self.loader.load(source)
+        #raw_data = self.loader.load(source)
+        raw_data = pd.read_csv()
         
         # 2. Clean data
         clean_data = self.cleaner.handle_missing_values(raw_data)
