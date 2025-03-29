@@ -19,6 +19,7 @@ BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
 CAPCOM_BASE_DATA_DIR = os.path.join(BASE_DATA_DIR, 'capital_com')
 CAPCOM_RAW_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'raw')
 CAPCOM_PROCESSED_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'processed')
+CAPCOM_VIS_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'visualizations')
 
 # Environments
 DEV_ENV = "development"

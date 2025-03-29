@@ -39,7 +39,8 @@ def main():
     if args.data_pipeline:
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
-        result = data_pipeline.run(save_intermediate=False)
+        result, saved_file = data_pipeline.run(save_intermediate=False)
+        
 
 if __name__ == "__main__":
     exit(main())

@@ -275,3 +275,9 @@ if __name__ == "__main__":
     )
     print(f"Processed data filename: {processed_filename}")
     # Output: processed_normalized_AAPL_1d_20230101_20231231_yahoo.csv
+    
+    
+# TODO: Create a file that creates a filename for a file based on the processed file it's based on.
+# Ex. processed_GBPUSD_m5_20240101_20250101.csv gets meta_ in the beginning, model_performance and feature_importance (as they will be saved based on it).
+def filename_based_on_processed_datafile():
+    pass
