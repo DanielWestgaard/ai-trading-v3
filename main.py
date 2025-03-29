@@ -38,7 +38,20 @@ def main():
 
     if args.data_pipeline:
         data_pipeline = DataPipeline()
-        data_pipeline.run()
+        # Run pipeline with intermediate saves for inspection
+        result = data_pipeline.run(save_intermediate=True)
+        
+        # Print sample of final results
+        print("\nSample of normalized data:")
+        print(result.head())
+        
+        # Verify column types and missing values
+        print("\nMissing values per column:")
+        print(result.isna().sum())
+        
+        # Check data ranges after normalization
+        print("\nNormalized data statistics:")
+        print(result.describe())
 
 if __name__ == "__main__":
     exit(main())
