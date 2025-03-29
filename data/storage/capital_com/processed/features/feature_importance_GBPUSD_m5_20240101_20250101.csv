@@ -1,0 +1,52 @@
+feature,importance,category
+low_return,0.057844484620077075,Transformed Price
+ema_200,0.04723881497346526,Moving Averages
+price_accel,0.042375223281830146,Other
+dist_to_resistance_20,0.041149658149857424,Other
+bollinger_lower,0.04095350785604931,Price Other
+stoch_d,0.04003792052237638,Oscillators
+high_return,0.03790346375476604,Transformed Price
+stoch_k,0.03673802858657002,Oscillators
+volume,0.033565549698095956,Volume
+volatility_5,0.03199522404958682,Volatility
+gk_volatility,0.03141369477531562,Volatility
+macd_hist,0.029750485013984546,Oscillators
+open_return,0.02952331444886107,Transformed Price
+roc_10,0.029465017444017666,Other
+roc_20,0.028909276184578937,Other
+dist_to_resistance_10,0.02866963057064572,Other
+roc_5,0.028205739745834478,Other
+roc_1,0.026778864423946735,Other
+dist_to_support_10,0.02357802414892436,Other
+volatility_10,0.022300464754394976,Volatility
+rsi_14,0.022220423887344444,Oscillators
+volatility_30,0.020282425409171533,Volatility
+macd,0.019404121324955326,Oscillators
+volatility_20,0.019200689025807634,Volatility
+low_original,0.018896211482357476,Raw Price
+close_original,0.018762349486578164,Raw Price
+macd_signal,0.01735636608566452,Oscillators
+dist_to_support_20,0.01397409991329463,Other
+ema_50,0.01301651667483945,Moving Averages
+sma_200,0.012892383207870011,Moving Averages
+atr_14,0.012479796853806898,Volatility
+bollinger_upper,0.012030164971141968,Other
+sma_50,0.011620238496783147,Moving Averages
+normalized_atr,0.01030554478182674,Volatility
+open_original,0.009286096990403206,Raw Price
+high_original,0.009102858347030713,Raw Price
+sma_5,0.008763321561986486,Moving Averages
+sma_10,0.00858347626512338,Moving Averages
+ema_5,0.00820238925834434,Moving Averages
+ema_10,0.00795137401607703,Moving Averages
+ema_20,0.005997867136359624,Moving Averages
+resistance_20,0.004963886827695352,Other
+hour_of_day,0.004928201137983768,Time
+sma_20,0.004828379599743951,Moving Averages
+bollinger_middle,0.0041621577496886875,Other
+support_20,0.004159157516969582,Other
+resistance_10,0.004002016812672471,Other
+support_10,0.0038977364321315724,Other
+day_of_week,0.00033336174316931646,Time
+month,0.0,Time
+quarter,0.0,Other

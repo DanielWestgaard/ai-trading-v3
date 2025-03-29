@@ -11,12 +11,13 @@ import time
 import matplotlib.pyplot as plt
 
 import config.system_config as sys_config
+from utils import data_utils
 
 
 class FeatureSelector(BaseProcessor):
     """
     Selects the most important features based on feature importance scores.
-    Using Random Forest feature importance with time series cross-validation
+    Using Random Forest feature importance with time series cross-validation.
     
     This component fits at the end of the pipeline, after normalization,
     to select the most relevant features for modeling.
@@ -34,7 +35,8 @@ class FeatureSelector(BaseProcessor):
                  lookback=1,
                  n_splits=5,
                  save_visualizations=True,
-                 output_dir=None):
+                 output_dir=None,
+                 processed_file_path=None):
         """
         Initialize the feature selector.
         
@@ -51,6 +53,7 @@ class FeatureSelector(BaseProcessor):
             n_splits: Number of folds for time series cross-validation
             save_visualizations: Whether to save feature importance visualizations
             output_dir: Directory to save visualizations and metadata
+            processed_file_path: Path to the processed data file (for naming derived files)
         """
         self.target_col = target_col
         self.selection_method = selection_method
@@ -64,6 +67,7 @@ class FeatureSelector(BaseProcessor):
         self.n_splits = n_splits
         self.save_visualizations = save_visualizations
         self.output_dir = output_dir
+        self.processed_file_path = processed_file_path
         
         # State to be learned during fit
         self.selected_features = None
@@ -107,36 +111,41 @@ class FeatureSelector(BaseProcessor):
         self.performance_df = fold_df
         
         # 2. Save visualizations if requested
-        if self.save_visualizations and self.output_dir:
-            os.makedirs(self.output_dir, exist_ok=True)
+        if self.save_visualizations:
+            # Create output directory if it doesn't exist
+            if self.output_dir:
+                os.makedirs(self.output_dir, exist_ok=True)
+            
+            # Determine file paths based on processed file path
+            feature_imp_viz_path = self._get_output_path('feature_importance', 'png')
+            category_imp_viz_path = self._get_output_path('category_importance', 'png')
+            feature_imp_csv_path = self._get_output_path('feature_importance', 'csv')
+            model_perf_path = self._get_output_path('model_performance', 'csv')
             
             # Feature importance bar chart
-            viz_file = os.path.join(sys_config.CAPCOM_VIS_DATA_DIR, 'feature_importance.png')
             self.visualize_feature_importance(
                 importance_df=importance_df,
                 top_n=30,
-                output_path=viz_file,
+                output_path=feature_imp_viz_path,
                 show_figure=False
             )
-            logging.info(f"Saved feature importance visualization to {viz_file}")
+            logging.info(f"Saved feature importance visualization to {feature_imp_viz_path}")
             
             # Category importance pie chart
-            cat_viz_file = os.path.join(self.output_dir, 'category_importance.png')
             self.visualize_category_importance(
                 importance_df=importance_df,
-                output_path=cat_viz_file,
+                output_path=category_imp_viz_path,
                 show_figure=False
             )
-            logging.info(f"Saved category importance visualization to {cat_viz_file}")
+            logging.info(f"Saved category importance visualization to {category_imp_viz_path}")
             
             # Save importance scores to CSV
-            csv_file = os.path.join(self.output_dir, 'feature_importance.csv')
-            importance_df.to_csv(csv_file, index=False)
-            logging.info(f"Saved feature importance scores to {csv_file}")
+            importance_df.to_csv(feature_imp_csv_path, index=False)
+            logging.info(f"Saved feature importance scores to {feature_imp_csv_path}")
             
             # Save cross-validation performance
-            perf_file = os.path.join(self.output_dir, 'model_performance.csv')
-            fold_df.to_csv(perf_file, index=False)
+            fold_df.to_csv(model_perf_path, index=False)
+            logging.info(f"Saved model performance metrics to {model_perf_path}")
         
         # 3. Select features based on the specified method
         self.selected_features = self._select_features(importance_df)
@@ -152,6 +161,22 @@ class FeatureSelector(BaseProcessor):
                 logging.info(f"  - {category}: {len(features)} features")
         
         return self
+    
+    def _get_output_path(self, file_type, extension):
+        """Generate an output path for derived files with consistent naming"""
+        if self.processed_file_path:
+            # Use the utility function to generate a consistent path
+            return data_utils.get_derived_file_path(
+                self.processed_file_path,
+                file_type,
+                base_dir=self.output_dir,
+                extension=extension
+            )
+        else:
+            # Fallback to simple path in output directory
+            if not self.output_dir:
+                self.output_dir = sys_config.CAPCOM_PROCESSED_DATA_DIR
+            return os.path.join(self.output_dir, f"{file_type}.{extension}")
     
     def transform(self, data):
         """

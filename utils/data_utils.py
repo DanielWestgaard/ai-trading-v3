@@ -2,11 +2,12 @@ import datetime
 import logging
 import re
 import os
-
+from pathlib import Path
 import pandas as pd
 
 import config.market_config as mark_config
 import config.system_config as sys_config
+
 
 def generate_filename(symbol, timeframe, start_date, end_date, is_raw=True, 
                      data_source=None, processing_info=None, extension='csv'):
@@ -281,3 +282,107 @@ if __name__ == "__main__":
 # Ex. processed_GBPUSD_m5_20240101_20250101.csv gets meta_ in the beginning, model_performance and feature_importance (as they will be saved based on it).
 def filename_based_on_processed_datafile():
     pass
+
+def extract_file_metadata(filename):
+    """
+    Extract metadata from a raw or processed filename.
+    
+    Parameters:
+    -----------
+    filename : str
+        The filename to parse (can be a full path)
+        
+    Returns:
+    --------
+    dict
+        Dictionary containing extracted metadata like instrument, timeframe, dates
+    """
+    # Get just the filename if full path was provided
+    filename = os.path.basename(filename)
+    
+    # Use regex to extract components from filenames like:
+    # raw_GBPUSD_m5_20240101_20250101.csv or
+    # processed_GBPUSD_m5_20240101_20250101.csv
+    pattern = r'(?:raw|processed|meta)_([A-Z]+)_([a-z0-9]+)_(\d+)_(\d+)(?:\..*)?'
+    match = re.match(pattern, filename)
+    
+    if not match:
+        logging.warning(f"Could not extract metadata from filename: {filename}")
+        return None
+    
+    # Extract the components
+    instrument, timeframe, start_date, end_date = match.groups()
+    
+    return {
+        'instrument': instrument,
+        'timeframe': timeframe,
+        'start_date': start_date,
+        'end_date': end_date,
+        'is_raw': filename.startswith('raw_'),
+        'is_processed': filename.startswith('processed_'),
+        'is_meta': filename.startswith('meta_'),
+        'base_name': f"{instrument}_{timeframe}_{start_date}_{end_date}"
+    }
+
+def generate_derived_filename(processed_file, file_type, extension='csv'):
+    """
+    Generate a filename for a derived file based on a processed data file.
+    
+    Parameters:
+    -----------
+    processed_file : str
+        Path to the processed file that this is derived from
+    file_type : str
+        Type of derived file (e.g., 'feature_importance', 'category_importance', 'model_performance')
+    extension : str
+        File extension (without the dot)
+    
+    Returns:
+    --------
+    str
+        The derived filename
+    """
+    # Extract metadata from the processed filename
+    metadata = extract_file_metadata(processed_file)
+    if not metadata:
+        # Fallback to simple naming if extraction fails
+        base_name = os.path.splitext(os.path.basename(processed_file))[0]
+        return f"{file_type}_{base_name}.{extension}"
+    
+    # Create derived filename with the pattern: file_type_BASE_NAME.extension
+    return f"{file_type}_{metadata['base_name']}.{extension}"
+
+def get_derived_file_path(processed_file, file_type, base_dir=None, sub_dir=None, extension='csv'):
+    """Get the full path for a derived file."""
+    # Generate the derived filename
+    filename = generate_derived_filename(processed_file, file_type, extension)
+    
+    # Determine the base directory
+    if not base_dir:
+        base_dir = os.path.dirname(processed_file)
+    
+    # Create the full directory path
+    if sub_dir:
+        dir_path = os.path.join(base_dir, sub_dir)
+    else:
+        # Don't add another subdirectory if we're already in the correct category directory
+        current_dir = os.path.basename(base_dir)
+        if (file_type in ['feature_importance', 'category_importance'] and current_dir == 'features') or \
+           (file_type in ['model_performance'] and current_dir == 'performance'):
+            dir_path = base_dir
+        # Otherwise use the default subdirectory logic
+        elif file_type in ['feature_importance', 'category_importance', 'selected_features']:
+            dir_path = os.path.join(base_dir, 'features')
+        elif file_type in ['model_performance', 'prediction_results', 'backtest_results']:
+            dir_path = os.path.join(base_dir, 'performance')
+        elif file_type in ['meta', 'metadata']:
+            dir_path = base_dir  # Keep metadata in same directory as processed file
+        else:
+            # Default subdirectory based on file type
+            dir_path = os.path.join(base_dir, file_type.split('_')[0] + 's')
+    
+    # Ensure the directory exists
+    os.makedirs(dir_path, exist_ok=True)
+    
+    # Return the full file path
+    return os.path.join(dir_path, filename)

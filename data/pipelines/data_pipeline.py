@@ -7,14 +7,14 @@ from data.processors.cleaner import DataCleaner
 from data.features.feature_generator import FeatureGenerator
 from data.features.feature_preparator import FeaturePreparator
 from data.processors.normalizer import DataNormalizer
-from data.features.feature_selector import FeatureSelector  # Import the new class
+from data.features.feature_selector import FeatureSelector
 import config.data_config as data_config
 import config.system_config as sys_config
 from utils import data_utils
 
 
 class DataPipeline:
-    """Coordinates the entire data processing pipeline with empirical feature approach"""
+    """Coordinates the entire data processing pipeline with improved file organization"""
     
     def __init__(self, 
                  feature_treatment_mode='advanced',
@@ -49,7 +49,7 @@ class DataPipeline:
             price_cols=['Open', 'High', 'Low', 'Close'],
             volume_col='Volume',
             timestamp_col='Date',
-            preserve_original_prices=True,  # Always True for empirical approach
+            preserve_original_prices=True,
             price_transform_method=price_transform_method,
             treatment_mode=feature_treatment_mode
         )
@@ -57,29 +57,45 @@ class DataPipeline:
         # Configure the normalizer
         self.normalizer = DataNormalizer(other_method=normalization_method)
         
-        # Configure the feature selector
-        self.feature_selector = FeatureSelector(
-            target_col=target_column,
-            selection_method=feature_selection_method,
-            importance_threshold=feature_importance_threshold,
-            save_visualizations=True,
-            output_dir=os.path.join(sys_config.CAPCOM_PROCESSED_DATA_DIR, 'feature_selection')
-        )
+        # Feature selector will be configured during run() when we know the output directory
+        self.feature_selector = None
+        self.feature_selection_method = feature_selection_method
+        self.feature_importance_threshold = feature_importance_threshold
+        self.target_column = target_column
         
     def run(self, source=None, target_path=sys_config.CAPCOM_PROCESSED_DATA_DIR, 
             raw_data=data_config.TESTING_RAW_FILE, save_intermediate=False,
-            run_feature_selection=True):  # Added parameter
-        """Execute the full pipeline with empirical feature approach"""
+            run_feature_selection=True):
+        """Execute the full pipeline with improved file organization"""
         # Configure logging
         logging.info("Starting data pipeline execution with empirical feature approach")
         
         # 1. Load data
-        logging.info("Loading raw data")
+        logging.info(f"Loading raw data from {raw_data}")
         raw_data_df = pd.read_csv(raw_data, parse_dates=['Date'])
         logging.info(f"Loaded raw data with shape: {raw_data_df.shape}")
         
-        if save_intermediate and target_path:
-            data_utils.save_data_file(raw_data_df, "raw", "raw_data.csv")
+        # Extract metadata from raw filename for consistent naming
+        raw_metadata = data_utils.extract_file_metadata(raw_data)
+        if not raw_metadata:
+            logging.warning("Could not extract metadata from raw filename. Using default naming.")
+            instrument = "UNKNOWN"
+            timeframe = "UNKNOWN"
+            date_range = "UNKNOWN"
+        else:
+            instrument = raw_metadata['instrument']
+            timeframe = raw_metadata['timeframe']
+            date_range = f"{raw_metadata['start_date']}_{raw_metadata['end_date']}"
+            logging.info(f"Processing {instrument} {timeframe} data from {raw_metadata['start_date']} to {raw_metadata['end_date']}")
+        
+        # Ensure target directories exist
+        os.makedirs(target_path, exist_ok=True)
+        
+        if save_intermediate:
+            # Save raw data with consistent naming
+            raw_save_path = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, f"raw_{instrument}_{timeframe}_{date_range}.csv")
+            raw_data_df.to_csv(raw_save_path, index=False)
+            logging.info(f"Saved raw data to {raw_save_path}")
         
         # 2. Clean data
         logging.info("Cleaning data")
@@ -87,8 +103,11 @@ class DataPipeline:
         clean_data = self.cleaner.transform(raw_data_df)
         logging.info(f"Cleaned data shape: {clean_data.shape}")
         
-        if save_intermediate and target_path:
-            data_utils.save_data_file(clean_data, "clean", "clean_data.csv")
+        if save_intermediate:
+            clean_file_path = os.path.join(target_path, 'clean', f"clean_{instrument}_{timeframe}_{date_range}.csv")
+            os.makedirs(os.path.dirname(clean_file_path), exist_ok=True)
+            clean_data.to_csv(clean_file_path, index=False)
+            logging.info(f"Saved cleaned data to {clean_file_path}")
         
         # 3. Generate features
         logging.info("Generating features")
@@ -96,22 +115,23 @@ class DataPipeline:
         featured_data = self.feature_generator.transform(clean_data)
         logging.info(f"Generated features. New shape: {featured_data.shape}")
         
-        if save_intermediate and target_path:
-            data_utils.save_data_file(featured_data, "featured", "featured_data.csv")
+        if save_intermediate:
+            featured_file_path = os.path.join(target_path, 'features', f"featured_{instrument}_{timeframe}_{date_range}.csv")
+            os.makedirs(os.path.dirname(featured_file_path), exist_ok=True)
+            featured_data.to_csv(featured_file_path, index=False)
+            logging.info(f"Saved featured data to {featured_file_path}")
         
         # 4. Prepare features
-        logging.info("Preparing features for modeling (keeping raw OHLC)")
+        logging.info("Preparing features for modeling")
         self.feature_preparator.fit(featured_data)
         prepared_data = self.feature_preparator.transform(featured_data)
         logging.info(f"Prepared features. New shape: {prepared_data.shape}")
         
-        # Log the price-related columns for reference
-        price_cols = [col for col in prepared_data.columns 
-                     if any(x in col.lower() for x in ['open', 'high', 'low', 'close'])]
-        logging.info(f"Price-related columns ({len(price_cols)}): {', '.join(price_cols[:10])}...")
-        
-        if save_intermediate and target_path:
-            data_utils.save_data_file(prepared_data, "prepared", "prepared_data.csv")
+        if save_intermediate:
+            prepared_file_path = os.path.join(target_path, 'prepared', f"prepared_{instrument}_{timeframe}_{date_range}.csv")
+            os.makedirs(os.path.dirname(prepared_file_path), exist_ok=True)
+            prepared_data.to_csv(prepared_file_path, index=False)
+            logging.info(f"Saved prepared data to {prepared_file_path}")
         
         # 5. Normalize
         logging.info("Normalizing data")
@@ -119,36 +139,73 @@ class DataPipeline:
         normalized_data = self.normalizer.transform(prepared_data)
         logging.info(f"Normalized data. Shape: {normalized_data.shape}")
         
-        if save_intermediate and target_path:
-            data_utils.save_data_file(normalized_data, "normalized", "normalized_data.csv")
-            
-        # 6. Feature selection (optional)
+        if save_intermediate:
+            normalized_file_path = os.path.join(target_path, 'normalized', f"normalized_{instrument}_{timeframe}_{date_range}.csv")
+            os.makedirs(os.path.dirname(normalized_file_path), exist_ok=True)
+            normalized_data.to_csv(normalized_file_path, index=False)
+            logging.info(f"Saved normalized data to {normalized_file_path}")
+        
+        # 6. Save processed data first so we have the filename for feature selection outputs
+        processed_filename = f"processed_{instrument}_{timeframe}_{date_range}.csv"
+        processed_file_path = os.path.join(target_path, processed_filename)
+        
+        # 7. Feature selection (optional)
         selected_data = normalized_data
         if run_feature_selection:
+            # Create feature directories
+            features_dir = os.path.join(target_path, 'features')
+            os.makedirs(features_dir, exist_ok=True)
+            
+            # Configure feature selector with consistent file naming
+            self.feature_selector = FeatureSelector(
+                target_col=self.target_column,
+                selection_method=self.feature_selection_method,
+                importance_threshold=self.feature_importance_threshold,
+                save_visualizations=True,
+                output_dir=features_dir,
+                processed_file_path=processed_file_path  # Pass the processed file path for naming
+            )
+            
             logging.info("Performing feature selection")
             self.feature_selector.fit(normalized_data)
             selected_data = self.feature_selector.transform(normalized_data)
             logging.info(f"Selected features. Final shape: {selected_data.shape}")
         
-        # 7. Save processed data
-        if target_path:
-            file_path = data_utils.save_financial_data(selected_data, "processed", raw_filename=raw_data)
-            # Also save a metadata file with column descriptions
-            self._save_feature_metadata(selected_data, target_path, file_path)
-            logging.info(f"Saved final processed data to {file_path}")
+        # Save the processed data
+        selected_data.to_csv(processed_file_path, index=False)
+        logging.info(f"Saved final processed data to {processed_file_path}")
+        
+        # 8. Save metadata about features
+        metadata_path = data_utils.get_derived_file_path(
+            processed_file_path, 
+            'meta', 
+            extension='csv'
+        )
+        
+        metadata_df = self._create_feature_metadata(selected_data)
+        metadata_df.to_csv(metadata_path, index=False)
+        logging.info(f"Saved feature metadata to {metadata_path}")
+        
+        # 9. Save selected features list if feature selection was run
+        if run_feature_selection and hasattr(self.feature_selector, 'selected_features'):
+            features_file = data_utils.get_derived_file_path(
+                processed_file_path,
+                'selected_features',
+                sub_dir='features',
+                extension='txt'
+            )
             
-            # Save selected features list for future reference
-            if run_feature_selection and hasattr(self.feature_selector, 'selected_features'):
-                features_file = os.path.join(os.path.dirname(file_path), 'selected_features.txt')
-                with open(features_file, 'w') as f:
-                    f.write('\n'.join(self.feature_selector.selected_features))
-                logging.info(f"Saved list of {len(self.feature_selector.selected_features)} selected features to {features_file}")
+            os.makedirs(os.path.dirname(features_file), exist_ok=True)
+            with open(features_file, 'w') as f:
+                f.write('\n'.join(self.feature_selector.selected_features))
+                
+            logging.info(f"Saved list of {len(self.feature_selector.selected_features)} selected features to {features_file}")
         
         # Return the fully processed data and path
-        return selected_data, file_path
+        return selected_data, processed_file_path
     
-    def _save_feature_metadata(self, df, target_path, processed_filename):
-        """Save metadata about the features for reference"""
+    def _create_feature_metadata(self, df):
+        """Create metadata about the features for reference"""
         # Categorize features
         feature_categories = {
             'raw_price': [],
@@ -191,12 +248,6 @@ class DataPipeline:
         
         metadata_df = pd.DataFrame(metadata)
         metadata_df = metadata_df.sort_values(['category', 'column'])
-        
-        filename = os.path.basename(processed_filename)
-        # Save metadata
-        metadata_path = os.path.join(target_path, f"meta_{filename}")
-        metadata_df.to_csv(metadata_path, index=False)
-        logging.info(f"Saved feature metadata to {metadata_path}")
         
         # Log feature category summary
         category_summary = metadata_df.groupby('category').size().to_dict()
