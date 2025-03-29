@@ -39,7 +39,7 @@ def main():
     if args.data_pipeline:
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
-        result = data_pipeline.run(save_intermediate=True)
+        result = data_pipeline.run(save_intermediate=False)
         
         # Print sample of final results
         print("\nSample of normalized data:")

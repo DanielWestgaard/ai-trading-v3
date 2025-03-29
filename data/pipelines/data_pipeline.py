@@ -116,7 +116,7 @@ class DataPipeline:
         
         # 6. Save processed data
         if target_path:
-            data_utils.save_data_file(normalized_data, "processed", "final_model_data.csv")
+            data_utils.save_financial_data(normalized_data, "processed", raw_filename=raw_data)
             logging.info(f"Saved final processed data to {target_path}")
         
         # Return the fully processed data

@@ -95,6 +95,104 @@ def generate_filename(symbol, timeframe, start_date, end_date, is_raw=True,
     
     return filename
 
+# More enhanced and should be more widely used
+def save_financial_data(data, file_type, **kwargs):
+    """
+    Save financial data as either raw or processed files.
+    
+    Parameters:
+    -----------
+    data : pd.DataFrame
+        The data to be saved
+    file_type : str
+        Type of data: 'raw' or 'processed'
+    **kwargs :
+        For raw files:
+            symbol, timeframe, start_date, end_date : required for filename generation
+            data_source, extension : optional for filename generation
+            location : optional directory to save file
+            
+        For processed files:
+            raw_filename : required - the original raw filename (can be a full path)
+            processing_info : optional - additional processing information
+            location : optional directory to save file
+    
+    Returns:
+    --------
+    str
+        The path to the saved file
+    """
+    import os
+    import logging
+    import re
+    
+    # Generate filename based on file_type
+    if file_type == 'raw':
+        # Validate required parameters for raw files
+        required_params = ['symbol', 'timeframe', 'start_date', 'end_date']
+        missing = [p for p in required_params if p not in kwargs]
+        if missing:
+            raise ValueError(f"Missing required parameters for raw file: {', '.join(missing)}")
+        
+        # Generate raw filename
+        filename = generate_filename(
+            symbol=kwargs['symbol'],
+            timeframe=kwargs['timeframe'],
+            start_date=kwargs['start_date'],
+            end_date=kwargs['end_date'],
+            is_raw=True,
+            data_source=kwargs.get('data_source'),
+            extension=kwargs.get('extension', 'csv')
+        )
+        
+        # Set location for raw files
+        location = kwargs.get('location', sys_config.CAPCOM_RAW_DATA_DIR)
+        
+    elif file_type == 'processed':
+        # Validate we have a raw filename for processed files
+        if 'raw_filename' not in kwargs or not kwargs['raw_filename']:
+            raise ValueError("Raw filename is required for processed files")
+        
+        # Extract just the filename if a full path is provided
+        raw_filename = os.path.basename(kwargs['raw_filename'])
+        
+        # Validate it's a raw filename
+        if not raw_filename.startswith("raw_"):
+            raise ValueError("Raw filename must start with 'raw_'")
+        
+        # Convert to processed filename
+        filename = raw_filename.replace("raw_", "processed_", 1)
+        
+        # Add processing info if provided
+        if processing_info := kwargs.get('processing_info'):
+            # Split into base name and extension
+            name_parts = filename.rsplit('.', 1)
+            base_name = name_parts[0]
+            extension = name_parts[1] if len(name_parts) > 1 else 'csv'
+            
+            # Sanitize and add processing info
+            sanitized_info = re.sub(r'[^\w]', '_', processing_info)
+            filename = f"{base_name}_{sanitized_info}.{extension}"
+        
+        # Set location for processed files
+        location = kwargs.get('location', sys_config.CAPCOM_PROCESSED_DATA_DIR)
+        
+    else:
+        raise ValueError(f"Invalid file_type: {file_type}. Must be 'raw' or 'processed'")
+    
+    # Ensure directory exists
+    os.makedirs(location, exist_ok=True)
+    
+    # Create full file path
+    file_path = os.path.join(location, filename)
+    
+    # Save data to file
+    data.to_csv(file_path, index=False)
+    
+    # Log and return file path
+    logging.info(f"File saved at: {file_path}")
+    return file_path
+
 def get_file_path(filename, base_dir=None, create_dirs=True):
     """
     Generate a full path for a file and optionally create the directories.
@@ -129,6 +227,7 @@ def get_file_path(filename, base_dir=None, create_dirs=True):
     # Return the full file path
     return os.path.join(dir_path, filename)
 
+# Have a more enhanced version, but sometimes simpler might be better to use at that time
 def save_data_file(data:pd.DataFrame, type:str, filename:str, location:str=None):
     logging.info("Saving file...")
     
