@@ -192,15 +192,18 @@ class FeaturePreparator(BaseProcessor):
                     self._window_sizes[f"max_{window_type}"] = default_sizes[window_type]
     
     def _transform_prices(self, df):
-        """
-        Transform price columns based on the specified method
-        """
+        """Transform price columns while preserving original values"""
         result = df.copy()
         
         # Ensure we have price columns
         price_cols_in_data = [col for col in self.price_cols if col in result.columns]
         if not price_cols_in_data:
             return result
+        
+        # MAKE COPIES of original price columns with _original suffix
+        # This ensures they're preserved even if something else removes them
+        for col in price_cols_in_data:
+            result[f"{col}_original"] = result[col].copy()
         
         # Apply the specified transformation
         if self.price_transform_method == 'returns':
@@ -224,10 +227,20 @@ class FeaturePreparator(BaseProcessor):
                     result[f"{col}_pct_change"] = (result[col] / first_value - 1) * 100
                 else:
                     result[f"{col}_pct_change"] = 0
+                    
+        elif self.price_transform_method == 'multi':
+            # Apply multiple transformations for comparison
+            for col in price_cols_in_data:
+                # Returns
+                result[f"{col}_return"] = result[col].pct_change()
+                
+                # Log transform
+                min_val = result[col].min()
+                offset = 0 if min_val > 0 else abs(min_val) + 1e-8
+                result[f"{col}_log"] = np.log(result[col] + offset)
         
-        # Remove original price columns if not preserving them
-        if not self.preserve_original_prices:
-            result = result.drop(columns=price_cols_in_data)
+        # Original price columns are always preserved
+        logging.info(f"Preserving original OHLC values for empirical feature selection")
         
         return result
     

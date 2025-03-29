@@ -186,21 +186,22 @@ class DataCleaner(BaseProcessor):
                 missing_count = df[col].isna().sum()
                 if missing_count > 0:
                     logging.debug("Column %s has %d missing values (%.2f%%)", 
-                                 col, missing_count, (missing_count/len(df))*100)
+                                col, missing_count, (missing_count/len(df))*100)
                     
                 if self.missing_method == 'ffill':
-                    df[col] = df[col].fillna(method='ffill')
+                    # Using direct ffill and bfill methods instead of deprecated fillna(method=...)
+                    df[col] = df[col].ffill()
                     # Handle case where first values might be NaN
-                    df[col] = df[col].fillna(method='bfill')
+                    df[col] = df[col].bfill()
                 elif self.missing_method == 'interpolate':
                     df[col] = df[col].interpolate(method='time')
                     # Handle endpoints
-                    df[col] = df[col].fillna(method='ffill').fillna(method='bfill')
+                    df[col] = df[col].ffill().bfill()
                 
                 remaining_missing = df[col].isna().sum()
                 if remaining_missing > 0:
                     logging.warning("Column %s still has %d missing values after %s", 
-                                   col, remaining_missing, self.missing_method)
+                                col, remaining_missing, self.missing_method)
         
         # For volume, fill NaNs with 0 as it's often the correct value for no trading
         if self.volume_col in df.columns:
