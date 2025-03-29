@@ -3,6 +3,8 @@ import logging
 import re
 import os
 
+import pandas as pd
+
 import config.market_config as mark_config
 import config.system_config as sys_config
 
@@ -127,21 +129,24 @@ def get_file_path(filename, base_dir=None, create_dirs=True):
     # Return the full file path
     return os.path.join(dir_path, filename)
 
-def save_data_file(content, type:str, location:str, filename:str=None):
+def save_data_file(data:pd.DataFrame, type:str, filename:str, location:str=None):
     logging.info("Saving file...")
     
-    if type == 'processed':
-    # Ensure the directory exists
-        os.makedirs(sys_config.CAPCOM_PROCESSED_DATA_DIR, exist_ok=True)
-        # Create the full file path
-        file_path = os.path.join(sys_config.CAPCOM_PROCESSED_DATA_DIR, filename)
+    if location is None:
+        if type == 'processed':
+            location = sys_config.CAPCOM_PROCESSED_DATA_DIR
+        else:  # raw
+            location = sys_config.CAPCOM_RAW_DATA_DIR
     else:
-        os.makedirs(sys_config.CAPCOM_RAW_DATA_DIR, exist_ok=True)
-        file_path = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, filename)
+        location = location
+        
+    # Ensure the directory exists
+    os.makedirs(location, exist_ok=True)
+    # Create the full file path
+    file_path = os.path.join(location, filename)
     
     # Write content to file
-    with open(file_path, 'w', encoding='utf-8') as file:
-        file.write(content)
+    data.to_csv(file_path, index=False)
 
     logging.info(f"File saved at: {file_path}")
 

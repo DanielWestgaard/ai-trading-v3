@@ -7,6 +7,7 @@ from data.features.feature_generator import FeatureGenerator
 from data.processors.normalizer import DataNormalizer
 import config.data_config as data_config
 import config.system_config as sys_config
+from utils import data_utils
 
 
 class DataPipeline:
@@ -48,7 +49,8 @@ class DataPipeline:
         
         # 5. Save processed data
         if target_path:
-            clean_data.to_csv(os.path.join(target_path, 'test.csv'), index=False)
+            #clean_data.to_csv(os.path.join(target_path, 'test.csv'), index=False)
+            data_utils.save_data_file(clean_data, "raw", "testing.csv")
             
         #return normalized_data
         return clean_data
