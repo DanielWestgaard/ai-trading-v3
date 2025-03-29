@@ -1,52 +1,51 @@
 feature,importance,category
-low_return,0.057844484620077075,Transformed Price
-ema_200,0.04723881497346526,Moving Averages
-price_accel,0.042375223281830146,Other
-dist_to_resistance_20,0.041149658149857424,Other
-bollinger_lower,0.04095350785604931,Price Other
-stoch_d,0.04003792052237638,Oscillators
-high_return,0.03790346375476604,Transformed Price
-stoch_k,0.03673802858657002,Oscillators
-volume,0.033565549698095956,Volume
-volatility_5,0.03199522404958682,Volatility
-gk_volatility,0.03141369477531562,Volatility
-macd_hist,0.029750485013984546,Oscillators
-open_return,0.02952331444886107,Transformed Price
-roc_10,0.029465017444017666,Other
-roc_20,0.028909276184578937,Other
-dist_to_resistance_10,0.02866963057064572,Other
-roc_5,0.028205739745834478,Other
-roc_1,0.026778864423946735,Other
-dist_to_support_10,0.02357802414892436,Other
-volatility_10,0.022300464754394976,Volatility
-rsi_14,0.022220423887344444,Oscillators
-volatility_30,0.020282425409171533,Volatility
-macd,0.019404121324955326,Oscillators
-volatility_20,0.019200689025807634,Volatility
-low_original,0.018896211482357476,Raw Price
-close_original,0.018762349486578164,Raw Price
-macd_signal,0.01735636608566452,Oscillators
-dist_to_support_20,0.01397409991329463,Other
-ema_50,0.01301651667483945,Moving Averages
-sma_200,0.012892383207870011,Moving Averages
-atr_14,0.012479796853806898,Volatility
-bollinger_upper,0.012030164971141968,Other
-sma_50,0.011620238496783147,Moving Averages
-normalized_atr,0.01030554478182674,Volatility
-open_original,0.009286096990403206,Raw Price
-high_original,0.009102858347030713,Raw Price
-sma_5,0.008763321561986486,Moving Averages
-sma_10,0.00858347626512338,Moving Averages
-ema_5,0.00820238925834434,Moving Averages
-ema_10,0.00795137401607703,Moving Averages
-ema_20,0.005997867136359624,Moving Averages
-resistance_20,0.004963886827695352,Other
-hour_of_day,0.004928201137983768,Time
-sma_20,0.004828379599743951,Moving Averages
-bollinger_middle,0.0041621577496886875,Other
-support_20,0.004159157516969582,Other
-resistance_10,0.004002016812672471,Other
-support_10,0.0038977364321315724,Other
-day_of_week,0.00033336174316931646,Time
-month,0.0,Time
-quarter,0.0,Other
+gk_volatility,0.051806011841850186,Volatility
+volume,0.04685902234055855,Volume
+high_return,0.04177667012878979,Transformed Price
+open_return,0.04162328747470004,Transformed Price
+low_return,0.041332492436967634,Transformed Price
+volatility_5,0.03840726706855961,Volatility
+price_accel,0.03704397600213445,Other
+roc_5,0.03465826419509811,Other
+roc_1,0.03438844404713381,Other
+volatility_10,0.034222945563936846,Volatility
+volatility_20,0.031913731637471285,Volatility
+volatility_30,0.03170759078719923,Volatility
+macd_signal,0.030208742950380778,Oscillators
+macd_hist,0.030018951276752748,Oscillators
+roc_10,0.02974698054185389,Other
+roc_20,0.02911414233528064,Other
+dist_to_support_20,0.028955605186459177,Other
+dist_to_resistance_10,0.0272665724652163,Other
+rsi_14,0.026955271412438326,Oscillators
+normalized_atr,0.02687350147610173,Volatility
+stoch_d,0.026103818537152025,Oscillators
+dist_to_resistance_20,0.025672488591487387,Other
+dist_to_support_10,0.02550026852161808,Other
+macd,0.024535670918539573,Oscillators
+atr_14,0.024455008751239987,Volatility
+stoch_k,0.02050986721206576,Oscillators
+hour_of_day,0.01652193595360657,Time
+ema_200,0.016391661648298965,Moving Averages
+day_of_week,0.009875449036274669,Time
+bollinger_upper,0.008999066279527294,Other
+bollinger_lower,0.008326567155678219,Price Other
+sma_50,0.007653208869220514,Moving Averages
+month,0.00738206616421225,Time
+ema_50,0.006657673192913119,Moving Averages
+low_original,0.006267882476322729,Raw Price
+close_original,0.00596970807741483,Raw Price
+open_original,0.00565167908773025,Raw Price
+high_original,0.0055824219257760155,Raw Price
+resistance_20,0.005227851196137623,Other
+sma_5,0.005079300621865223,Moving Averages
+resistance_10,0.0050625630412790765,Other
+support_10,0.0047932332923098005,Other
+support_20,0.004765400806363062,Other
+sma_10,0.004682050172653394,Moving Averages
+sma_20,0.004629786987868214,Moving Averages
+ema_20,0.0043768316566770975,Moving Averages
+ema_5,0.004349697504033127,Moving Averages
+bollinger_middle,0.00406824783932497,Other
+ema_10,0.003990565930677378,Moving Averages
+quarter,0.0020385573828497366,Other
