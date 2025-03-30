@@ -6,3 +6,5 @@ matplotlib
 seaborn
 scikit-learn
 tensorflow
+cryptography
+scipy

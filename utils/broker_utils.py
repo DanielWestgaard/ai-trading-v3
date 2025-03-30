@@ -8,7 +8,8 @@ import json
 # Add the parent directory to the path for imports
 #sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import config.system_config as config
+import config.system_config as sys_config
+import config.market_config as mark_config
 
 
 def load_secrets_alpaca(file_path="secrets/secrets.txt"):
@@ -35,7 +36,7 @@ def load_secrets(file_path="secrets/secrets.txt"):
     Returns:
         secrets{}, API_KEY_CAP, PASSWORD_CAP, EMAIL
     """
-    desired_keys = {"API_KEY_CAP", "PASSWORD_CAP", "EMAIL", "ENCRYPTION_KEY_CAP"}
+    desired_keys = {"API_KEY_CAP", "PASSWORD_CAP", "EMAIL"}
     secrets = {}
     
     with open(file_path, "r") as file:
@@ -49,7 +50,7 @@ def load_secrets(file_path="secrets/secrets.txt"):
     api_key = secrets.get('API_KEY_CAP')
     password = secrets.get('PASSWORD_CAP')
     email = secrets.get('EMAIL')
-    encryption_key = secrets.get('ENCRYPTION_KEY_CAP')
+    logging.info(f"Loaded credentials. Length: {len(secrets)}")
 
     return secrets, api_key, password, email
 
@@ -128,7 +129,7 @@ def on_close(ws, close_status_code, close_msg):
 
 # Related to API
 
-def get_account_id_by_name(json_data, account_name=config.ACCOUNT_TEST):
+def get_account_id_by_name(json_data : json, account_name):
     """ Retrieves the account ID based on the account name. """
     # Parse the JSON string to a Python dictionary
     parsed_data = json.loads(json_data)
@@ -186,7 +187,7 @@ def process_positions(json_response):
 
 # Not sure where to place this method. Was thinking in the data processing pipeline, 
 # but could also be more of a utility func for when taking in live market data.
-def convert_json_to_ohlcv_csv(json_data, output_file="test.csv"):
+def convert_json_to_ohlcv_csv(json_data, output_file):
     """
     Converts the provided JSON price data to OHLCV format and saves it to a CSV file.
     
@@ -214,11 +215,12 @@ def convert_json_to_ohlcv_csv(json_data, output_file="test.csv"):
             # Extract UTC timestamp (using snapshotTimeUTC for consistency)
             timestamp = price['snapshotTimeUTC']
             
-            # Use bid prices (could be modified to use ask or average)
-            open_price = price['openPrice']['bid']
-            high_price = price['highPrice']['bid']
-            low_price = price['lowPrice']['bid']
-            close_price = price['closePrice']['bid']
+            # Calculate mid prices (average of bid and ask) with rounding
+            decimals = mark_config.PRICE_DECIMALS  # Adjust based on the asset's typical price granularity
+            open_price = round((price['openPrice']['bid'] + price['openPrice']['ask']) / 2, decimals)
+            high_price = round((price['highPrice']['bid'] + price['highPrice']['ask']) / 2, decimals)
+            low_price = round((price['lowPrice']['bid'] + price['lowPrice']['ask']) / 2, decimals)
+            close_price = round((price['closePrice']['bid'] + price['closePrice']['ask']) / 2, decimals)
             volume = price['lastTradedVolume']
             
             # Write the row to the CSV
