@@ -14,9 +14,12 @@ import pandas as pd
 # Add parent directory to path so we can import modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# Use absolute imports instead of relative
 from backtesting.backtest_runner import BacktestRunner
 from backtesting.strategies.simple_ma_crossover import SimpleMovingAverageCrossover, MACDStrategy
 from backtesting.data.market_data import CSVMarketData, PipelineMarketData
+import utils.logging_utils as log_utils
+import config.system_config as sys_config
 
 
 def parse_args():
@@ -45,11 +48,7 @@ def main():
     args = parse_args()
     
     # Set up logging
-    log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    logging = log_utils.setup_logging(log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
     
     # Create output directory
     output_dir = args.output_dir or os.path.join(os.getcwd(), 'backtest_results')
@@ -59,7 +58,7 @@ def main():
     runner = BacktestRunner(
         config_path=args.config,
         output_dir=output_dir,
-        log_level=log_level
+        log_level=sys_config.DEBUG_LOG_LEVEL
     )
     
     # If config file was provided, run backtest from config

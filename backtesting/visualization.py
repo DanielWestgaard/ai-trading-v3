@@ -371,10 +371,10 @@ class BacktestVisualizer:
         return fig
     
     def plot_monthly_returns(self,
-                           equity_data,
-                           figsize=None,
-                           cmap: str = 'RdYlGn',
-                           save_filename: Optional[str] = 'monthly_returns.png'):
+                            equity_data,
+                            figsize=None,
+                            cmap: str = 'RdYlGn',
+                            save_filename: Optional[str] = 'monthly_returns.png'):
         """
         Plot monthly returns as a heatmap.
         
@@ -398,7 +398,20 @@ class BacktestVisualizer:
         # Validate data
         if len(equity_df) == 0 or 'equity' not in equity_df.columns:
             self.logger.warning("No valid equity data for plotting monthly returns")
-            return
+            
+            # Create a simple figure with a message
+            fig, ax = plt.subplots(figsize=figsize or self.figsize)
+            ax.text(0.5, 0.5, "Insufficient data for monthly returns heatmap", 
+                    ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            
+            # Save if requested
+            if save_filename and self.savefig_dir:
+                filepath = os.path.join(self.savefig_dir, save_filename)
+                fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
+                self.logger.info(f"Saved placeholder figure to {filepath}")
+            
+            return fig
         
         # Make sure we have timestamp column
         if 'timestamp' not in equity_df.columns:
@@ -416,62 +429,119 @@ class BacktestVisualizer:
         
         # Calculate monthly returns
         monthly_equity = equity_df.groupby(['year', 'month'])['equity'].last().reset_index()
+        
+        # Check if we have enough data for monthly returns
+        if len(monthly_equity) <= 1:
+            self.logger.warning("Not enough data for monthly returns - need at least two months")
+            
+            # Create a simple figure with a message
+            fig, ax = plt.subplots(figsize=figsize or self.figsize)
+            ax.text(0.5, 0.5, "Insufficient data for monthly returns heatmap\n(need at least two months of data)", 
+                    ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            
+            # Save if requested
+            if save_filename and self.savefig_dir:
+                filepath = os.path.join(self.savefig_dir, save_filename)
+                fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
+                self.logger.info(f"Saved placeholder figure to {filepath}")
+            
+            return fig
+        
+        # Calculate returns
         monthly_equity['prev_equity'] = monthly_equity['equity'].shift(1)
         monthly_equity['return'] = monthly_equity['equity'] / monthly_equity['prev_equity'] - 1
         
+        # Drop the first row which has NaN return
+        monthly_equity = monthly_equity.dropna(subset=['return'])
+        
+        # Check if we still have data after calculating returns
+        if len(monthly_equity) == 0:
+            self.logger.warning("No valid returns data after calculations")
+            
+            # Create a simple figure with a message
+            fig, ax = plt.subplots(figsize=figsize or self.figsize)
+            ax.text(0.5, 0.5, "Insufficient data for monthly returns heatmap\n(no valid returns)", 
+                    ha='center', va='center', fontsize=14)
+            ax.axis('off')
+            
+            # Save if requested
+            if save_filename and self.savefig_dir:
+                filepath = os.path.join(self.savefig_dir, save_filename)
+                fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
+                self.logger.info(f"Saved placeholder figure to {filepath}")
+            
+            return fig
+        
         # Create a pivot table for the heatmap
-        heatmap_data = monthly_equity.pivot_table(
-            index='year',
-            columns='month',
-            values='return'
-        )
-        
-        # Replace month numbers with names
-        month_names = {
-            1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
-            7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
-        }
-        heatmap_data.columns = [month_names[m] for m in heatmap_data.columns]
-        
-        # Calculate yearly returns
-        yearly_returns = []
-        for year in heatmap_data.index:
-            year_data = monthly_equity[monthly_equity['year'] == year]
-            if len(year_data) > 0:
-                start_equity = year_data['equity'].iloc[0] / (1 + year_data['return'].iloc[0])
-                end_equity = year_data['equity'].iloc[-1]
-                yearly_return = end_equity / start_equity - 1
-                yearly_returns.append(yearly_return)
-            else:
-                yearly_returns.append(np.nan)
-        
-        # Add yearly returns as a column
-        heatmap_data['Year'] = yearly_returns
-        
-        # Create the figure
-        fig, ax = plt.subplots(figsize=figsize or self.figsize)
-        
-        # Create the heatmap
-        sns.heatmap(
-            heatmap_data * 100,  # Convert to percentage
-            cmap=cmap,
-            annot=True,
-            fmt='.1f',
-            center=0,
-            linewidths=1,
-            ax=ax,
-            cbar_kws={'label': 'Monthly Return (%)'}
-        )
-        
-        # Format axes
-        ax.set_title('Monthly Returns (%)', fontsize=16)
-        
-        # Tight layout
-        fig.tight_layout()
+        try:
+            heatmap_data = monthly_equity.pivot_table(
+                index='year',
+                columns='month',
+                values='return'
+            )
+            
+            # Check if we have a valid pivot table with data
+            if heatmap_data.empty or heatmap_data.size == 0:
+                raise ValueError("Empty pivot table for heatmap")
+            
+            # Replace month numbers with names
+            month_names = {
+                1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun',
+                7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
+            }
+            heatmap_data.columns = [month_names[m] for m in heatmap_data.columns]
+            
+            # Calculate yearly returns
+            yearly_returns = []
+            for year in heatmap_data.index:
+                year_data = monthly_equity[monthly_equity['year'] == year]
+                if len(year_data) > 0:
+                    start_equity = year_data['equity'].iloc[0] / (1 + year_data['return'].iloc[0])
+                    end_equity = year_data['equity'].iloc[-1]
+                    yearly_return = end_equity / start_equity - 1
+                    yearly_returns.append(yearly_return)
+                else:
+                    yearly_returns.append(np.nan)
+            
+            # Add yearly returns as a column
+            heatmap_data['Year'] = yearly_returns
+            
+            # Create the figure
+            fig, ax = plt.subplots(figsize=figsize or self.figsize)
+            
+            # Create the heatmap
+            sns.heatmap(
+                heatmap_data * 100,  # Convert to percentage
+                cmap=cmap,
+                annot=True,
+                fmt='.1f',
+                center=0,
+                linewidths=1,
+                ax=ax,
+                cbar_kws={'label': 'Monthly Return (%)'}
+            )
+            
+            # Format axes
+            ax.set_title('Monthly Returns (%)', fontsize=16)
+            
+            # Tight layout
+            fig.tight_layout()
+            
+        except Exception as e:
+            self.logger.warning(f"Error creating monthly returns heatmap: {str(e)}")
+            
+            # Create a simple figure with a message
+            fig, ax = plt.subplots(figsize=figsize or self.figsize)
+            ax.text(0.5, 0.5, f"Could not create monthly returns heatmap\n({str(e)})", 
+                    ha='center', va='center', fontsize=14)
+            ax.axis('off')
         
         # Save if requested
-        if save_filename:
-            self._save_figure(fig, save_filename)
+        if save_filename and self.savefig_dir:
+            filepath = os.path.join(self.savefig_dir, save_filename)
+            fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
+            self.logger.info(f"Saved figure to {filepath}")
         
         return fig
     

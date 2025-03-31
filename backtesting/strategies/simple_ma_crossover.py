@@ -83,10 +83,12 @@ class SimpleMovingAverageCrossover(BaseStrategy):
             self.historical_data[symbol] = pd.DataFrame()
         
         timestamp = data.get('Date', data.get('date', datetime.now()))
-        self.historical_data[symbol] = self.historical_data[symbol].append(
-            {'timestamp': timestamp, 'price': price},
-            ignore_index=True
-        )
+        
+        # Create a new row as a DataFrame and use concat instead of append
+        new_row = pd.DataFrame({'timestamp': [timestamp], 'price': [price]})
+        
+        # Use concat instead of append (which is deprecated in newer pandas versions)
+        self.historical_data[symbol] = pd.concat([self.historical_data[symbol], new_row], ignore_index=True)
         
         # We need at least long_window data points
         if len(self.historical_data[symbol]) < self.params['long_window']:
@@ -255,10 +257,12 @@ class MACDStrategy(BaseStrategy):
         
         # Store data in historical DataFrame
         timestamp = data.get('Date', data.get('date', datetime.now()))
-        self.historical_data[symbol] = self.historical_data[symbol].append(
-            {'timestamp': timestamp, 'price': price},
-            ignore_index=True
-        )
+        
+        # Create a new row as a DataFrame and use concat instead of append
+        new_row = pd.DataFrame({'timestamp': [timestamp], 'price': [price]})
+        
+        # Use concat instead of append (which is deprecated in newer pandas versions)
+        self.historical_data[symbol] = pd.concat([self.historical_data[symbol], new_row], ignore_index=True)
         
         # We need at least slow_period + signal_period data points
         min_periods = self.params['slow_period'] + self.params['signal_period']

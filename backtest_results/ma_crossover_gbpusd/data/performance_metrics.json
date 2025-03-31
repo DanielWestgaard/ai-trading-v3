@@ -1,0 +1,15 @@
+{
+    "initial_equity": 10000.0,
+    "final_equity": 10000.0,
+    "total_return_pct": 0.0,
+    "annualized_return_pct": 0.0,
+    "trading_days": 1,
+    "trading_months": 0.03333333333333333,
+    "annualized_volatility_pct": NaN,
+    "sharpe_ratio": NaN,
+    "sortino_ratio": NaN,
+    "max_drawdown_pct": 0.0,
+    "max_drawdown_duration": 0,
+    "calmar_ratio": 0,
+    "risk_free_rate_pct": 0.0
+}
