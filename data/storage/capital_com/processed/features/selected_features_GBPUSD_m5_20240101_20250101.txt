@@ -26,7 +26,10 @@ atr_14
 stoch_k
 hour_of_day
 ema_200
+open_original
+high_original
+low_original
+close_original
 day_of_week
 sma_50
 bollinger_lower
-low_original

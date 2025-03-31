@@ -4,7 +4,10 @@ dist_to_resistance_20,patterns,0,0.0
 dist_to_support_10,patterns,0,0.0
 dist_to_support_20,patterns,0,0.0
 bollinger_lower,raw_price,0,0.0
+close_original,raw_price,0,0.0
+high_original,raw_price,0,0.0
 low_original,raw_price,0,0.0
+open_original,raw_price,0,0.0
 ema_200,technical,0,0.0
 macd,technical,0,0.0
 macd_hist,technical,0,0.0
