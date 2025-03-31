@@ -165,6 +165,20 @@ class PerformanceTracker:
         else:
             trades_df = trades
         
+        # Check if we have the required columns
+        required_columns = ['pnl']
+        missing_columns = [col for col in required_columns if col not in trades_df.columns]
+        
+        if missing_columns:
+            self.logger.warning(f"Missing required columns: {missing_columns}. Available columns: {list(trades_df.columns)}")
+            return {
+                "total_trades": len(trades_df),
+                "winning_trades": 0,
+                "losing_trades": 0,
+                "win_rate_pct": 0,
+                "error": "Missing required columns for trade metrics calculation"
+            }
+    
         # Calculate basic trade statistics
         num_trades = len(trades_df)
         winning_trades = trades_df[trades_df['pnl'] > 0]

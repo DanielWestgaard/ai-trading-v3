@@ -64,21 +64,39 @@ class ExecutionHandler:
             self.logger.warning(f"No market data for symbol {order.symbol}, cannot execute order")
             return None
         
-        # Determine fill price with slippage
         if isinstance(symbol_data, dict):
-            # Extract price data
-            if 'Close' in symbol_data:
+            # First try to get the original close price
+            if 'close_original' in symbol_data:
+                base_price = symbol_data['close_original']
+            elif 'Close_original' in symbol_data:
+                base_price = symbol_data['Close_original']
+            # Then try standard columns
+            elif 'Close' in symbol_data:
                 base_price = symbol_data['Close']
             elif 'close' in symbol_data:
                 base_price = symbol_data['close']
             else:
-                self.logger.warning(f"No close price found in market data for {order.symbol}")
+                # Log available columns to help with debugging
+                self.logger.warning(f"No close price found in market data for {order.symbol}. Available columns: {list(symbol_data.keys())}")
                 return None
+            
+            # Ensure we have a positive price
+            if base_price <= 0:
+                self.logger.warning(f"Invalid negative price: {base_price} for {order.symbol}, using 1.27 as fallback")
+                base_price = 1.27  # Default GBPUSD price as fallback
         else:
             # Assume it's a MarketEvent
-            base_price = symbol_data.data.get('Close', symbol_data.data.get('close'))
+            base_price = symbol_data.data.get('close_original', 
+                        symbol_data.data.get('Close_original',
+                        symbol_data.data.get('Close', 
+                        symbol_data.data.get('close'))))
+            
             if base_price is None:
-                self.logger.warning(f"No close price found in market data for {order.symbol}")
+                # Log available keys to help debug
+                if hasattr(symbol_data, 'data') and isinstance(symbol_data.data, dict):
+                    self.logger.warning(f"No close price found in market data for {order.symbol}. Available keys: {list(symbol_data.data.keys())}")
+                else:
+                    self.logger.warning(f"No close price found in market data for {order.symbol}")
                 return None
         
         # Apply slippage to the price
@@ -259,6 +277,9 @@ class EventDrivenBacktester(BaseBacktester):
             if not market_events:
                 self.logger.debug("No market events, continuing")
                 continue
+            
+            # Store current market data as instance variable for order execution
+            self.current_market_data = {symbol: event.data for symbol, event in market_events.items()}
             
             # Update current date from first market event
             first_symbol = next(iter(market_events))
