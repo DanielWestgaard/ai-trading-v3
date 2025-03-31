@@ -67,6 +67,13 @@ class SimpleMovingAverageCrossover(BaseStrategy):
         # Get price data
         if self.params['use_close']:
             price = data.get('Close', data.get('close'))
+            # If not found, try with _original suffix
+            if price is None:
+                price = data.get('close_original')    
+            # If still not found, print available columns for debugging
+            if price is None:
+                self.logger.warning(f"Price data not found. Available columns: {list(data.keys())}")
+                return None, None
         else:
             # Use typical price (H+L+C)/3
             high = data.get('High', data.get('high'))

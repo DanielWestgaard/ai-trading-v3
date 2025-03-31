@@ -8,7 +8,8 @@
             "long_window": 50,
             "use_sma": true,
             "use_close": true,
-            "signal_threshold": 0.0
+            "signal_threshold": 0.0,
+            "price_column": "close_original"
         }
     },
     "market_data": {

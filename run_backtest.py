@@ -48,7 +48,7 @@ def main():
     args = parse_args()
     
     # Set up logging
-    logging = log_utils.setup_logging(log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
+    logging = log_utils.setup_logging(log_to_file=False, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     # Create output directory
     output_dir = args.output_dir or os.path.join(os.getcwd(), 'backtest_results')
