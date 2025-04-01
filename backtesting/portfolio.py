@@ -349,7 +349,7 @@ class Portfolio:
             
             # Update cash (add the position value - commission)
             self.cash += price * position.quantity - commission
-            
+
             position.pnl = realized_pnl
             # Add realized P&L to equity
             self.equity += realized_pnl - commission
@@ -421,21 +421,24 @@ class Portfolio:
                 data = market_data[symbol]
                 timestamp = data.get("timestamp", datetime.now())
                 
-                # Get current price (try original data columns first)
+                # Get current price using same priority as execution handler
+                price_columns = ['close_raw', 'Close_raw', 'close_original', 'Close_original', 'close', 'Close']
                 current_price = None
-                if 'close_original' in data:
-                    current_price = data['close_original']
-                elif 'Close_original' in data:
-                    current_price = data['Close_original']
-                elif 'Close' in data:
-                    current_price = data['Close']
-                elif 'close' in data:
-                    current_price = data['close']
+                
+                for col in price_columns:
+                    if col in data:
+                        current_price = data[col]
+                        break
                 
                 if current_price is None:
                     self.logger.warning(f"No price data found for {symbol}")
                     continue
                 
+                # Ensure positive price
+                if current_price <= 0:
+                    self.logger.warning(f"Invalid non-positive price: {current_price} for {symbol}")
+                    continue
+                    
                 # Update unrealized P&L
                 position.update_unrealized_pnl(current_price)
                 total_unrealized_pnl += position.unrealized_pnl

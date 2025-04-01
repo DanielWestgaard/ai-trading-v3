@@ -64,26 +64,34 @@ class ExecutionHandler:
             self.logger.warning(f"No market data for symbol {order.symbol}, cannot execute order")
             return None
         
+        # Determine fill price with slippage
         if isinstance(symbol_data, dict):
-            # First try to get the original close price
-            if 'close_original' in symbol_data:
-                base_price = symbol_data['close_original']
-            elif 'Close_original' in symbol_data:
-                base_price = symbol_data['Close_original']
-            # Then try standard columns
-            elif 'Close' in symbol_data:
-                base_price = symbol_data['Close']
-            elif 'close' in symbol_data:
-                base_price = symbol_data['close']
-            else:
-                # Log available columns to help with debugging
-                self.logger.warning(f"No close price found in market data for {order.symbol}. Available columns: {list(symbol_data.keys())}")
-                return None
+            # Look for price columns in priority order
+            price_columns = [
+                'close_raw',        # First priority: raw unmodified price
+                'Close_raw',        
+                'close_original',   # Second priority: original prices 
+                'Close_original',
+                'close',            # Last resort: normalized prices
+                'Close'
+            ]
             
-            # Ensure we have a positive price
+            # Try each column until we find a valid price
+            base_price = None
+            for col in price_columns:
+                if col in symbol_data:
+                    base_price = symbol_data[col]
+                    self.logger.info(f"Using {col} price for {order.symbol}: {base_price}")
+                    break
+            
+            if base_price is None:
+                self.logger.warning(f"No price column found for {order.symbol}. Available columns: {list(symbol_data.keys())}")
+                return None
+                
+            # Ensure price is positive and reasonable for forex
             if base_price <= 0:
-                self.logger.warning(f"Invalid negative price: {base_price} for {order.symbol}, using 1.27 as fallback")
-                base_price = 1.27  # Default GBPUSD price as fallback
+                self.logger.warning(f"Invalid non-positive price: {base_price} for {order.symbol}")
+                return None
         else:
             # Assume it's a MarketEvent
             base_price = symbol_data.data.get('close_original', 
