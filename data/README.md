@@ -83,3 +83,83 @@ processed_data, output_path = pipeline.run(
 9. **Cross-Asset Features**: Develop features that capture relationships between different markets and asset classes
 
 The pipeline's modular design makes it straightforward to extend with new data sources, feature engineering techniques, and optimization methods as trading strategies evolve.
+
+# Understanding Walk-Forward Testing in Your ML Trading System
+## Where This Fits in Your Pipeline
+Your current system has this flow:
+```
+CopyRaw Data → Data Cleaning → Feature Generation → Feature Preparation → Normalization → Feature Selection → Processed Data
+```
+The walk-forward testing component sits after this pipeline as a bridge between your data processing and your trading strategy:
+```
+CopyRaw Data → Data Pipeline → Processed Data → Walk-Forward Testing → Trading Strategy → Backtesting
+```
+It's essentially a framework that ensures your model training and evaluation follow best practices for time series data.
+
+## Working with a Keras Model
+Integrating a Keras model is straightforward! Here's what that would look like
+```
+import tensorflow as tf
+from data.features.time_series_ml import WalkForwardAnalysis, MLModelStrategy
+
+# 1. DEFINE YOUR KERAS MODEL FUNCTIONS
+def create_model():
+    model = tf.keras.Sequential([
+        tf.keras.layers.Dense(64, activation='relu', input_shape=(len(features),)),
+        tf.keras.layers.Dense(32, activation='relu'),
+        tf.keras.layers.Dense(1)  # Output layer for regression
+    ])
+    model.compile(optimizer='adam', loss='mse')
+    return model
+
+def train_model(model, data, features, target):
+    X = data[features].values
+    y = data[target].values
+    # Normalize inputs if needed
+    model.fit(X, y, epochs=50, verbose=0)
+    return model
+
+def predict(model, data, features):
+    X = data[features].values
+    # Normalize inputs if needed
+    return model.predict(X).flatten()
+
+# 2. RUN WALK-FORWARD ANALYSIS
+wfa = WalkForwardAnalysis(
+    train_period='1M',
+    test_period='1W',
+    output_dir='results/keras_analysis'
+)
+
+results = wfa.run_model_analysis(
+    data=processed_data,
+    features=features,
+    target_column='target_return',
+    model_factory=create_model,
+    train_func=train_model,
+    predict_func=predict
+)
+
+# 3. USING A SAVED KERAS MODEL
+# If you already have a trained .keras model:
+def load_saved_model():
+    return tf.keras.models.load_model('models/my_model.keras')
+
+# Then use with the strategy framework:
+def create_strategy(model):
+    return MLModelStrategy(
+        model=model,
+        features=features,
+        prediction_type='regression',
+        threshold=0.0005  # Adjust based on your model's output range
+    )
+
+# Run backtesting with your saved model
+results = wfa.run_strategy_analysis(
+    data=processed_data,
+    features=features,
+    model_factory=load_saved_model,  # This will load your saved model
+    train_func=lambda m, d, f: m,    # No training needed, model is pre-trained
+    strategy_factory=create_strategy
+)
+```
