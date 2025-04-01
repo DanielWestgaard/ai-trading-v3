@@ -76,13 +76,18 @@ def main():
             X = data[features]
             return model.predict(X)
 
+        features = [
+            'ema_200', 'sma_50', 'rsi_14', 'macd_signal',  # Technical indicators
+            'open_return', 'high_return', 'low_return', 'close_return'  # Normalized returns
+        ]
+        
         # Run the analysis with automated target creation
         results = wfa.run_model_analysis(
             data=data,
-            features=['ema_200', 'sma_50', 'rsi_14', 'macd_signal'],
+            features=features,
             create_target=True,
             target_type='return',
-            source_column='close_original',
+            source_column='close_raw',
             horizon=10,
             model_factory=create_model,
             train_func=train_model,
