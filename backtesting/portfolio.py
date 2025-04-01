@@ -94,11 +94,10 @@ class Position:
         self.exit_time = exit_time
         self.exit_reason = reason
         
-        # Make sure prices make sense
-        if self.entry_price <= 0:
-            self.entry_price = 1.27  # Use realistic value
-        if exit_price <= 0:
-            exit_price = 1.28  # Use realistic value
+        # Validate prices are positive
+        if self.entry_price <= 0 or exit_price <= 0:
+            self.logger.warning(f"Invalid prices in position close: entry={self.entry_price}, exit={exit_price}")
+            # Still continue with calculation as we're closing the position
         
         # Calculate realized P&L
         if self.direction == "LONG":

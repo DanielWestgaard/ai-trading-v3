@@ -2,9 +2,9 @@
     "backtest_id": "indicator_crossover_gbpusd",
     "strategy": "IndicatorCrossoverStrategy",
     "initial_capital": 10000.0,
-    "final_equity": 10000.0010291,
-    "return": 1.029100000771166e-05,
-    "total_trades": 1,
-    "execution_time": 0.014856100082397461,
-    "timestamp": "2025-04-01 10:42:16"
+    "final_equity": 9999.899444977793,
+    "return": -0.001005550222066276,
+    "total_trades": 63,
+    "execution_time": 2.784763813018799,
+    "timestamp": "2025-04-01 11:59:20"
 }
