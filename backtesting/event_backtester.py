@@ -386,9 +386,19 @@ class EventDrivenBacktester(BaseBacktester):
         self.logger.debug(f"Processing signal: {signal}")
         
         # Create corresponding order
-        if signal.signal_type.value in ["BUY", "SELL"]:
+        if signal.signal_type.value in ["BUY", "SELL", "REVERSE"]:
             # Determine order side
-            order_side = OrderSide.BUY if signal.signal_type.value == "BUY" else OrderSide.SELL
+            if signal.signal_type.value == "BUY":
+                order_side = OrderSide.BUY
+            elif signal.signal_type.value == "SELL":
+                order_side = OrderSide.SELL
+            elif signal.signal_type.value == "REVERSE":
+                # For REVERSE, check current position and do the opposite
+                current_position = self.portfolio.get_position(signal.symbol)
+                if current_position and current_position.direction == "LONG":
+                    order_side = OrderSide.SELL
+                else:
+                    order_side = OrderSide.BUY
             
             # Simple fixed quantity for now
             quantity = 1.0
@@ -406,7 +416,7 @@ class EventDrivenBacktester(BaseBacktester):
             # Add order to queue
             self.add_event(order)
             self.logger.debug(f"Created order from signal: {order}")
-    
+                
     def process_order(self, order: OrderEvent):
         """
         Process an order event by simulating execution.
@@ -454,6 +464,16 @@ class EventDrivenBacktester(BaseBacktester):
         Args:
             fill: Fill event
         """
+        # Get position if available
+        position = None
+        if hasattr(self.portfolio, 'get_position'):
+            position = self.portfolio.get_position(fill.symbol)
+        
+        # Calculate PnL if this is a closing trade
+        pnl = 0.0
+        if position and hasattr(position, 'pnl'):
+            pnl = position.pnl
+        
         trade = {
             "symbol": fill.symbol,
             "timestamp": fill.timestamp,
@@ -461,7 +481,8 @@ class EventDrivenBacktester(BaseBacktester):
             "price": fill.fill_price,
             "side": fill.order_side.value,
             "commission": fill.commission,
-            "order_id": fill.order_id
+            "order_id": fill.order_id,
+            "pnl": pnl  # Add PnL field
         }
         
         self.trade_history.append(trade)

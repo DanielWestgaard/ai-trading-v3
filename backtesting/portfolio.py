@@ -350,6 +350,7 @@ class Portfolio:
             # Update cash (add the position value - commission)
             self.cash += price * position.quantity - commission
             
+            position.pnl = realized_pnl
             # Add realized P&L to equity
             self.equity += realized_pnl - commission
             
