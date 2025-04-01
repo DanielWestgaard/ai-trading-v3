@@ -224,9 +224,14 @@ class FeatureSelector(BaseProcessor):
             List of selected feature names
         """
         # Define essential columns that must be preserved regardless of importance
-        essential_columns = ['open_original', 'high_original', 'low_original', 'close_original', 
-                            'Open', 'High', 'Low', 'Close', 'open', 'high', 'low', 'close', 
-                            'Date', 'date', 'timestamp']
+        essential_columns = [
+            # Essential raw price columns
+            'open_raw', 'high_raw', 'low_raw', 'close_raw',
+            # Essential transformed columns
+            'open_original', 'high_original', 'low_original', 'close_original', 
+            # Other essentials 
+            'Date', 'date', 'timestamp'
+        ]
         
         # Find which essential columns actually exist in our data
         available_essential_columns = [col for col in essential_columns 
