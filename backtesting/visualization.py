@@ -18,8 +18,7 @@ class BacktestVisualizer:
                  style: str = 'seaborn-v0_8-darkgrid',
                  palette: str = 'viridis',
                  savefig_dir: Optional[str] = None,
-                 dpi: int = 300,
-                 logger=None):
+                 dpi: int = 300):
         """
         Initialize the backtest visualizer.
         
@@ -36,7 +35,6 @@ class BacktestVisualizer:
         self.palette = palette
         self.savefig_dir = savefig_dir
         self.dpi = dpi
-        self.logger = logger or self._setup_logger()
         
         # Set the plotting style
         plt.style.use(style)
@@ -45,29 +43,14 @@ class BacktestVisualizer:
         # Create save directory if specified
         if self.savefig_dir and not os.path.exists(self.savefig_dir):
             os.makedirs(self.savefig_dir)
-            self.logger.info(f"Created directory for figures: {self.savefig_dir}")
-    
-    def _setup_logger(self) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger(f"{__name__}.BacktestVisualizer")
-        logger.setLevel(logging.INFO)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
+            logging.info(f"Created directory for figures: {self.savefig_dir}")
     
     def _save_figure(self, fig, filename: str):
         """Save figure if savefig_dir is specified."""
         if self.savefig_dir:
             filepath = os.path.join(self.savefig_dir, filename)
             fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
-            self.logger.info(f"Saved figure to {filepath}")
+            logging.info(f"Saved figure to {filepath}")
     
     def plot_equity_curve(self, 
                          equity_data,
@@ -90,7 +73,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info("Plotting equity curve")
+        logging.info("Plotting equity curve")
         
         # Convert to DataFrame if needed
         if isinstance(equity_data, list):
@@ -100,12 +83,12 @@ class BacktestVisualizer:
         
         # Validate data
         if len(equity_df) == 0 or 'equity' not in equity_df.columns:
-            self.logger.warning("No valid equity data for plotting")
+            logging.warning("No valid equity data for plotting")
             return
         
         # Make sure we have timestamp column
         if 'timestamp' not in equity_df.columns:
-            self.logger.warning("No timestamp column in equity curve, using index")
+            logging.warning("No timestamp column in equity curve, using index")
             equity_df['timestamp'] = pd.date_range(
                 start='2000-01-01', periods=len(equity_df), freq='D'
             )
@@ -236,7 +219,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info(f"Plotting top {top_n} drawdowns")
+        logging.info(f"Plotting top {top_n} drawdowns")
         
         # Convert to DataFrame if needed
         if isinstance(equity_data, list):
@@ -246,12 +229,12 @@ class BacktestVisualizer:
         
         # Validate data
         if len(equity_df) == 0 or 'equity' not in equity_df.columns:
-            self.logger.warning("No valid equity data for plotting drawdowns")
+            logging.warning("No valid equity data for plotting drawdowns")
             return
         
         # Make sure we have timestamp column
         if 'timestamp' not in equity_df.columns:
-            self.logger.warning("No timestamp column in equity curve, using index")
+            logging.warning("No timestamp column in equity curve, using index")
             equity_df['timestamp'] = pd.date_range(
                 start='2000-01-01', periods=len(equity_df), freq='D'
             )
@@ -387,7 +370,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info("Plotting monthly returns heatmap")
+        logging.info("Plotting monthly returns heatmap")
         
         # Convert to DataFrame if needed
         if isinstance(equity_data, list):
@@ -397,7 +380,7 @@ class BacktestVisualizer:
         
         # Validate data
         if len(equity_df) == 0 or 'equity' not in equity_df.columns:
-            self.logger.warning("No valid equity data for plotting monthly returns")
+            logging.warning("No valid equity data for plotting monthly returns")
             
             # Create a simple figure with a message
             fig, ax = plt.subplots(figsize=figsize or self.figsize)
@@ -409,13 +392,13 @@ class BacktestVisualizer:
             if save_filename and self.savefig_dir:
                 filepath = os.path.join(self.savefig_dir, save_filename)
                 fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
-                self.logger.info(f"Saved placeholder figure to {filepath}")
+                logging.info(f"Saved placeholder figure to {filepath}")
             
             return fig
         
         # Make sure we have timestamp column
         if 'timestamp' not in equity_df.columns:
-            self.logger.warning("No timestamp column in equity curve, using index")
+            logging.warning("No timestamp column in equity curve, using index")
             equity_df['timestamp'] = pd.date_range(
                 start='2000-01-01', periods=len(equity_df), freq='D'
             )
@@ -432,7 +415,7 @@ class BacktestVisualizer:
         
         # Check if we have enough data for monthly returns
         if len(monthly_equity) <= 1:
-            self.logger.warning("Not enough data for monthly returns - need at least two months")
+            logging.warning("Not enough data for monthly returns - need at least two months")
             
             # Create a simple figure with a message
             fig, ax = plt.subplots(figsize=figsize or self.figsize)
@@ -444,7 +427,7 @@ class BacktestVisualizer:
             if save_filename and self.savefig_dir:
                 filepath = os.path.join(self.savefig_dir, save_filename)
                 fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
-                self.logger.info(f"Saved placeholder figure to {filepath}")
+                logging.info(f"Saved placeholder figure to {filepath}")
             
             return fig
         
@@ -457,7 +440,7 @@ class BacktestVisualizer:
         
         # Check if we still have data after calculating returns
         if len(monthly_equity) == 0:
-            self.logger.warning("No valid returns data after calculations")
+            logging.warning("No valid returns data after calculations")
             
             # Create a simple figure with a message
             fig, ax = plt.subplots(figsize=figsize or self.figsize)
@@ -469,7 +452,7 @@ class BacktestVisualizer:
             if save_filename and self.savefig_dir:
                 filepath = os.path.join(self.savefig_dir, save_filename)
                 fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
-                self.logger.info(f"Saved placeholder figure to {filepath}")
+                logging.info(f"Saved placeholder figure to {filepath}")
             
             return fig
         
@@ -529,7 +512,7 @@ class BacktestVisualizer:
             fig.tight_layout()
             
         except Exception as e:
-            self.logger.warning(f"Error creating monthly returns heatmap: {str(e)}")
+            logging.warning(f"Error creating monthly returns heatmap: {str(e)}")
             
             # Create a simple figure with a message
             fig, ax = plt.subplots(figsize=figsize or self.figsize)
@@ -541,7 +524,7 @@ class BacktestVisualizer:
         if save_filename and self.savefig_dir:
             filepath = os.path.join(self.savefig_dir, save_filename)
             fig.savefig(filepath, dpi=self.dpi, bbox_inches='tight')
-            self.logger.info(f"Saved figure to {filepath}")
+            logging.info(f"Saved figure to {filepath}")
         
         return fig
     
@@ -564,7 +547,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info(f"Plotting {period} return distribution")
+        logging.info(f"Plotting {period} return distribution")
         
         # Convert to DataFrame if needed
         if isinstance(equity_data, list):
@@ -574,12 +557,12 @@ class BacktestVisualizer:
         
         # Validate data
         if len(equity_df) == 0 or 'equity' not in equity_df.columns:
-            self.logger.warning("No valid equity data for plotting return distribution")
+            logging.warning("No valid equity data for plotting return distribution")
             return
         
         # Make sure we have timestamp column
         if 'timestamp' not in equity_df.columns:
-            self.logger.warning("No timestamp column in equity curve, using index")
+            logging.warning("No timestamp column in equity curve, using index")
             equity_df['timestamp'] = pd.date_range(
                 start='2000-01-01', periods=len(equity_df), freq='D'
             )
@@ -695,7 +678,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info("Plotting trade analysis")
+        logging.info("Plotting trade analysis")
         
         # Convert to DataFrame if needed
         if isinstance(trades_data, list):
@@ -705,7 +688,7 @@ class BacktestVisualizer:
         
         # Validate data
         if len(trades_df) == 0:
-            self.logger.warning("No trade data for plotting")
+            logging.warning("No trade data for plotting")
             return
         
         # Create figure with subplots
@@ -856,7 +839,7 @@ class BacktestVisualizer:
         Returns:
             Matplotlib figure
         """
-        self.logger.info("Creating performance dashboard")
+        logging.info("Creating performance dashboard")
         
         # Use larger figure size for dashboard
         dashboard_figsize = figsize or (16, 12)
@@ -1142,7 +1125,7 @@ class BacktestVisualizer:
             # Format the plot
             ax.set_title('Monthly Returns (%)', fontsize=14)
         except Exception as e:
-            self.logger.warning(f"Error creating monthly returns heatmap: {str(e)}")
+            logging.warning(f"Error creating monthly returns heatmap: {str(e)}")
             ax.set_title('Monthly Returns (Error in calculation)', fontsize=14)
     
     def _plot_trade_stats_in_dashboard(self, ax, trades_data):

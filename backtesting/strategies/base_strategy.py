@@ -22,7 +22,6 @@ class BaseStrategy(ABC):
         """
         self.symbols = symbols
         self.params = params or {}
-        self.logger = logger or self._setup_logger()
         
         # State tracking
         self.current_positions = {symbol: 0 for symbol in symbols}
@@ -32,27 +31,13 @@ class BaseStrategy(ABC):
         # Initialize strategy
         self.initialize()
         
-    def _setup_logger(self) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
-        logger.setLevel(logging.INFO)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
     
     def initialize(self):
         """
         Initialize strategy state. Called once at strategy creation.
         Override this method to set up any initial state or calculations.
         """
-        self.logger.info(f"Initializing {self.__class__.__name__} for symbols {self.symbols}")
+        logging.info(f"Initializing {self.__class__.__name__} for symbols {self.symbols}")
     
     @abstractmethod
     def generate_signals(self, data_point, portfolio) -> List[Optional[SignalEvent]]:
@@ -114,9 +99,9 @@ class BaseStrategy(ABC):
         """
         if symbol in self.current_positions:
             self.current_positions[symbol] = quantity
-            self.logger.debug(f"Updated position for {symbol}: {quantity}")
+            logging.debug(f"Updated position for {symbol}: {quantity}")
         else:
-            self.logger.warning(f"Symbol {symbol} not in strategy symbol list")
+            logging.warning(f"Symbol {symbol} not in strategy symbol list")
     
     def get_parameters(self) -> Dict[str, Any]:
         """
@@ -135,13 +120,13 @@ class BaseStrategy(ABC):
             params: New parameters
         """
         self.params.update(params)
-        self.logger.info(f"Updated strategy parameters: {params}")
+        logging.info(f"Updated strategy parameters: {params}")
     
     def on_backtest_start(self):
         """Called when a backtest is started."""
-        self.logger.info(f"Starting backtest with {self.__class__.__name__}")
+        logging.info(f"Starting backtest with {self.__class__.__name__}")
     
     def on_backtest_end(self):
         """Called when a backtest is completed."""
-        self.logger.info(f"Completed backtest with {self.__class__.__name__}")
-        self.logger.info(f"Generated {len(self.signals_generated)} signals")
+        logging.info(f"Completed backtest with {self.__class__.__name__}")
+        logging.info(f"Generated {len(self.signals_generated)} signals")

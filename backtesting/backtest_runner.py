@@ -30,8 +30,7 @@ class BacktestRunner:
     
     def __init__(self, 
                 config_path: Optional[str] = None,
-                output_dir: Optional[str] = None,
-                log_level: int = logging.INFO):
+                output_dir: Optional[str] = None):
         """
         Initialize the backtest runner.
         
@@ -40,14 +39,11 @@ class BacktestRunner:
             output_dir: Directory for storing results
             log_level: Logging level
         """
-        # Setup logging
-        self.logger = self._setup_logger(log_level)
-        self.logger.info("Initializing backtest runner")
         
         # Setup output directory
         self.output_dir = output_dir or os.path.join(os.getcwd(), 'backtest_results')
         os.makedirs(self.output_dir, exist_ok=True)
-        self.logger.info(f"Output directory: {self.output_dir}")
+        logging.info(f"Output directory: {self.output_dir}")
         
         # Load configuration if provided
         self.config = {}
@@ -62,21 +58,6 @@ class BacktestRunner:
         # Components
         self.visualizer = BacktestVisualizer(savefig_dir=self.output_dir)
     
-    def _setup_logger(self, log_level: int) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger("BacktestRunner")
-        logger.setLevel(log_level)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(log_level)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
-    
     def load_config(self, config_path: str):
         """
         Load configuration from a JSON file.
@@ -87,9 +68,9 @@ class BacktestRunner:
         try:
             with open(config_path, 'r') as f:
                 self.config = json.load(f)
-            self.logger.info(f"Loaded configuration from {config_path}")
+            logging.info(f"Loaded configuration from {config_path}")
         except Exception as e:
-            self.logger.error(f"Error loading configuration: {str(e)}")
+            logging.error(f"Error loading configuration: {str(e)}")
             self.config = {}
     
     def save_config(self, config_path: Optional[str] = None):
@@ -105,9 +86,9 @@ class BacktestRunner:
         try:
             with open(config_path, 'w') as f:
                 json.dump(self.config, f, indent=4)
-            self.logger.info(f"Saved configuration to {config_path}")
+            logging.info(f"Saved configuration to {config_path}")
         except Exception as e:
-            self.logger.error(f"Error saving configuration: {str(e)}")
+            logging.error(f"Error saving configuration: {str(e)}")
     
     def _load_class_from_path(self, class_path: str) -> type:
         """
@@ -124,7 +105,7 @@ class BacktestRunner:
             module = importlib.import_module(module_path)
             return getattr(module, class_name)
         except Exception as e:
-            self.logger.error(f"Error loading class {class_path}: {str(e)}")
+            logging.error(f"Error loading class {class_path}: {str(e)}")
             raise
     
     def load_strategy(self, strategy_config: Dict[str, Any]):
@@ -149,10 +130,10 @@ class BacktestRunner:
             strategy_class = self._load_class_from_path(class_path)
             symbols = parameters.pop('symbols', ['SPY'])
             strategy = strategy_class(symbols=symbols, params=parameters)
-            self.logger.info(f"Loaded strategy: {strategy_class.__name__}")
+            logging.info(f"Loaded strategy: {strategy_class.__name__}")
             return strategy
         except Exception as e:
-            self.logger.error(f"Error creating strategy: {str(e)}")
+            logging.error(f"Error creating strategy: {str(e)}")
             raise
     
     def load_market_data(self, data_config: Dict[str, Any]):
@@ -207,7 +188,7 @@ class BacktestRunner:
                 raise ValueError(f"Unknown market data type: {data_type}")
                 
         except Exception as e:
-            self.logger.error(f"Error loading market data: {str(e)}")
+            logging.error(f"Error loading market data: {str(e)}")
             raise
     
     def create_backtest(self, 
@@ -275,7 +256,7 @@ class BacktestRunner:
         self.backtests[backtest_id] = backtest_config
         self.current_backtest = backtest_id
         
-        self.logger.info(f"Created backtest: {backtest_id}")
+        logging.info(f"Created backtest: {backtest_id}")
         return backtest_config
     
     def run_backtest(self, 
@@ -320,7 +301,7 @@ class BacktestRunner:
         )
         
         # Run the backtest
-        self.logger.info(f"Running backtest: {backtest_id}")
+        logging.info(f"Running backtest: {backtest_id}")
         start_time = time.time()
         
         results = engine.run(
@@ -329,7 +310,7 @@ class BacktestRunner:
         )
         
         execution_time = time.time() - start_time
-        self.logger.info(f"Backtest completed in {execution_time:.2f} seconds")
+        logging.info(f"Backtest completed in {execution_time:.2f} seconds")
         
         # Add execution time to results
         results['execution_time'] = execution_time
@@ -355,7 +336,7 @@ class BacktestRunner:
             backtest_id: Backtest identifier
         """
         if backtest_id not in self.results:
-            self.logger.warning(f"No results found for backtest: {backtest_id}")
+            logging.warning(f"No results found for backtest: {backtest_id}")
             return
         
         results = self.results[backtest_id]
@@ -411,7 +392,7 @@ class BacktestRunner:
                 save_filename='performance_dashboard.png'
             )
         
-        self.logger.info(f"Generated performance reports for {backtest_id}")
+        logging.info(f"Generated performance reports for {backtest_id}")
     
     def _save_results(self, backtest_id: str):
         """
@@ -421,7 +402,7 @@ class BacktestRunner:
             backtest_id: Backtest identifier
         """
         if backtest_id not in self.results:
-            self.logger.warning(f"No results found for backtest: {backtest_id}")
+            logging.warning(f"No results found for backtest: {backtest_id}")
             return
         
         results = self.results[backtest_id]
@@ -472,7 +453,7 @@ class BacktestRunner:
         with open(os.path.join(results_dir, 'summary.json'), 'w') as f:
             json.dump(summary, f, indent=4)
         
-        self.logger.info(f"Saved results for {backtest_id}")
+        logging.info(f"Saved results for {backtest_id}")
     
     def compare_backtests(self, 
                         backtest_ids: List[str],
@@ -490,7 +471,7 @@ class BacktestRunner:
             DataFrame with comparison results
         """
         if not backtest_ids:
-            self.logger.warning("No backtests to compare")
+            logging.warning("No backtests to compare")
             return pd.DataFrame()
         
         # Default metrics to compare
@@ -506,7 +487,7 @@ class BacktestRunner:
         
         for backtest_id in backtest_ids:
             if backtest_id not in self.results:
-                self.logger.warning(f"No results found for backtest: {backtest_id}")
+                logging.warning(f"No results found for backtest: {backtest_id}")
                 continue
             
             results = self.results[backtest_id]
@@ -536,7 +517,7 @@ class BacktestRunner:
         # Save comparison if output path provided
         if output_path and not comparison_df.empty:
             comparison_df.to_csv(output_path, index=False)
-            self.logger.info(f"Saved backtest comparison to {output_path}")
+            logging.info(f"Saved backtest comparison to {output_path}")
         
         return comparison_df
     
@@ -558,7 +539,7 @@ class BacktestRunner:
             Matplotlib figure
         """
         if not backtest_ids:
-            self.logger.warning("No backtests to compare")
+            logging.warning("No backtests to compare")
             return None
         
         # Create figure
@@ -567,7 +548,7 @@ class BacktestRunner:
         # Plot each equity curve
         for backtest_id in backtest_ids:
             if backtest_id not in self.results:
-                self.logger.warning(f"No results found for backtest: {backtest_id}")
+                logging.warning(f"No results found for backtest: {backtest_id}")
                 continue
             
             results = self.results[backtest_id]
@@ -597,7 +578,7 @@ class BacktestRunner:
         # Save if path provided
         if save_path:
             fig.savefig(save_path, dpi=300, bbox_inches='tight')
-            self.logger.info(f"Saved equity comparison to {save_path}")
+            logging.info(f"Saved equity comparison to {save_path}")
         
         return fig
     
@@ -616,7 +597,7 @@ class BacktestRunner:
             backtest_id = self.current_backtest
         
         if backtest_id not in self.results:
-            self.logger.warning(f"No results found for backtest: {backtest_id}")
+            logging.warning(f"No results found for backtest: {backtest_id}")
             return {}
         
         results = self.results[backtest_id]
@@ -709,7 +690,7 @@ class BacktestRunner:
             # Load summary
             summary_path = os.path.join(results_dir, 'data', 'summary.json')
             if not os.path.exists(summary_path):
-                self.logger.warning(f"Summary file not found: {summary_path}")
+                logging.warning(f"Summary file not found: {summary_path}")
                 return {}
             
             with open(summary_path, 'r') as f:
@@ -756,9 +737,9 @@ class BacktestRunner:
             # Store the results
             self.results[backtest_id] = results
             
-            self.logger.info(f"Loaded results for {backtest_id}")
+            logging.info(f"Loaded results for {backtest_id}")
             return results
             
         except Exception as e:
-            self.logger.error(f"Error loading results: {str(e)}")
+            logging.error(f"Error loading results: {str(e)}")
             return {}

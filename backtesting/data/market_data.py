@@ -22,25 +22,9 @@ class MarketData(ABC):
             logger: Custom logger (if None, creates default)
         """
         self.symbols = symbols
-        self.logger = logger or self._setup_logger()
         self.current_idx = 0
         self.data = {}
         
-    def _setup_logger(self) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
-        logger.setLevel(logging.INFO)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
-    
     @abstractmethod
     def load_data(self):
         """Load market data."""
@@ -59,7 +43,7 @@ class MarketData(ABC):
     def reset(self):
         """Reset the data iterator."""
         self.current_idx = 0
-        self.logger.info("Reset market data iterator")
+        logging.info("Reset market data iterator")
     
     def get_length(self) -> int:
         """
@@ -130,7 +114,7 @@ class CSVMarketData(MarketData):
     
     def load_data(self):
         """Load market data from CSV files."""
-        self.logger.info(f"Loading market data from {self.csv_dir}")
+        logging.info(f"Loading market data from {self.csv_dir}")
         
         for symbol in self.symbols:
             # Look for CSV files matching the symbol
@@ -138,12 +122,12 @@ class CSVMarketData(MarketData):
             files = glob.glob(pattern)
             
             if not files:
-                self.logger.warning(f"No CSV files found for symbol {symbol}")
+                logging.warning(f"No CSV files found for symbol {symbol}")
                 continue
             
             # Use the first file found for the symbol
             file_path = files[0]
-            self.logger.info(f"Loading {symbol} data from {file_path}")
+            logging.info(f"Loading {symbol} data from {file_path}")
             
             try:
                 # Load the CSV file
@@ -164,9 +148,9 @@ class CSVMarketData(MarketData):
                 # Store the data
                 self.data[symbol] = df
                 
-                self.logger.info(f"Loaded {len(df)} data points for {symbol}")
+                logging.info(f"Loaded {len(df)} data points for {symbol}")
             except Exception as e:
-                self.logger.error(f"Error loading data for {symbol}: {str(e)}")
+                logging.error(f"Error loading data for {symbol}: {str(e)}")
         
         # Align dates across all symbols
         self._align_dates()
@@ -174,7 +158,7 @@ class CSVMarketData(MarketData):
     def _align_dates(self):
         """Align dates across all symbols to ensure consistent iteration."""
         if not self.data:
-            self.logger.warning("No data loaded, cannot align dates")
+            logging.warning("No data loaded, cannot align dates")
             return
         
         # Get dates from each symbol
@@ -185,7 +169,7 @@ class CSVMarketData(MarketData):
         # Find common dates if there are multiple symbols
         if len(symbol_dates) > 1:
             common_dates = set.intersection(*symbol_dates.values())
-            self.logger.info(f"Found {len(common_dates)} common dates across all symbols")
+            logging.info(f"Found {len(common_dates)} common dates across all symbols")
         else:
             # If there's only one symbol, use all its dates
             symbol = list(self.data.keys())[0]
@@ -197,7 +181,7 @@ class CSVMarketData(MarketData):
         # Filter data to only include common dates
         for symbol, df in self.data.items():
             self.data[symbol] = df[df[self.date_col].dt.date.isin(self.dates)].reset_index(drop=True)
-            self.logger.info(f"Filtered {symbol} data to {len(self.data[symbol])} points with common dates")
+            logging.info(f"Filtered {symbol} data to {len(self.data[symbol])} points with common dates")
     
     def get_next(self) -> Optional[Dict[str, MarketEvent]]:
         """
@@ -284,22 +268,22 @@ class DataFrameMarketData(MarketData):
     def load_data(self):
         """Data is already loaded, just validate it."""
         if not self.data:
-            self.logger.warning("No data provided")
+            logging.warning("No data provided")
             return
         
         for symbol, df in self.data.items():
             if self.date_col not in df.columns:
-                self.logger.error(f"Date column '{self.date_col}' not found in data for {symbol}")
+                logging.error(f"Date column '{self.date_col}' not found in data for {symbol}")
             else:
                 # Ensure date column is datetime
                 if not pd.api.types.is_datetime64_any_dtype(df[self.date_col]):
-                    self.logger.info(f"Converting {self.date_col} to datetime for {symbol}")
+                    logging.info(f"Converting {self.date_col} to datetime for {symbol}")
                     self.data[symbol][self.date_col] = pd.to_datetime(df[self.date_col])
     
     def _align_dates(self):
         """Align dates across all symbols to ensure consistent iteration."""
         if not self.data:
-            self.logger.warning("No data loaded, cannot align dates")
+            logging.warning("No data loaded, cannot align dates")
             return
         
         # Get dates from each symbol
@@ -310,7 +294,7 @@ class DataFrameMarketData(MarketData):
         # Find common dates if there are multiple symbols
         if len(symbol_dates) > 1:
             common_dates = set.intersection(*symbol_dates.values())
-            self.logger.info(f"Found {len(common_dates)} common dates across all symbols")
+            logging.info(f"Found {len(common_dates)} common dates across all symbols")
         else:
             # If there's only one symbol, use all its dates
             symbol = list(self.data.keys())[0]
@@ -322,7 +306,7 @@ class DataFrameMarketData(MarketData):
         # Filter data to only include common dates
         for symbol, df in self.data.items():
             self.data[symbol] = df[df[self.date_col].dt.date.isin(self.dates)].reset_index(drop=True)
-            self.logger.info(f"Filtered {symbol} data to {len(self.data[symbol])} points with common dates")
+            logging.info(f"Filtered {symbol} data to {len(self.data[symbol])} points with common dates")
     
     def get_next(self) -> Optional[Dict[str, MarketEvent]]:
         """Implementation identical to CSVMarketData."""
@@ -374,8 +358,7 @@ class PipelineMarketData(DataFrameMarketData):
     def __init__(self, 
                 processed_data_path: str,
                 symbols: List[str] = None,
-                date_col: str = 'Date',
-                logger=None):
+                date_col: str = 'Date'):
         """
         Initialize pipeline market data handler.
         
@@ -385,7 +368,6 @@ class PipelineMarketData(DataFrameMarketData):
             date_col: Name of date column
             logger: Custom logger
         """
-        self.logger = logger or self._setup_logger()
         self.processed_data_path = processed_data_path
         self.date_col = date_col
         
@@ -406,7 +388,7 @@ class PipelineMarketData(DataFrameMarketData):
                 symbol = "UNKNOWN"
                 symbols = [symbol]
             
-            self.logger.info(f"No symbols provided, using {symbol}")
+            logging.info(f"No symbols provided, using {symbol}")
             
             # Create data dictionary with the single symbol
             data = {symbol: df}
@@ -416,11 +398,11 @@ class PipelineMarketData(DataFrameMarketData):
             data = {symbol: df.copy() for symbol in symbols}
         
         # Initialize parent class
-        super().__init__(data, date_col, logger)
+        super().__init__(data, date_col)
     
     def _load_processed_data(self) -> pd.DataFrame:
         """Load processed data from file."""
-        self.logger.info(f"Loading processed data from {self.processed_data_path}")
+        logging.info(f"Loading processed data from {self.processed_data_path}")
         
         try:
             df = pd.read_csv(self.processed_data_path)
@@ -429,11 +411,11 @@ class PipelineMarketData(DataFrameMarketData):
             if self.date_col in df.columns:
                 df[self.date_col] = pd.to_datetime(df[self.date_col])
             else:
-                self.logger.warning(f"Date column '{self.date_col}' not found in processed data")
+                logging.warning(f"Date column '{self.date_col}' not found in processed data")
             
-            self.logger.info(f"Loaded {len(df)} data points from processed data")
+            logging.info(f"Loaded {len(df)} data points from processed data")
             return df
         except Exception as e:
-            self.logger.error(f"Error loading processed data: {str(e)}")
+            logging.error(f"Error loading processed data: {str(e)}")
             # Return empty DataFrame as fallback
             return pd.DataFrame()

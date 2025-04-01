@@ -4,11 +4,12 @@ from typing import List, Optional
 
 from backtesting.strategies.base_strategy import BaseStrategy
 from backtesting.events import SignalEvent, SignalType
+import logging
 
 class IndicatorCrossoverStrategy(BaseStrategy):
     """Strategy that uses pre-calculated technical indicators."""
     
-    def __init__(self, symbols, params=None, logger=None):
+    def __init__(self, symbols, params=None):
         # Default parameters
         default_params = {
             'fast_indicator': 'ema_20',  # Use existing EMAs instead of calculating new ones
@@ -24,12 +25,12 @@ class IndicatorCrossoverStrategy(BaseStrategy):
         else:
             params = default_params
         
-        super().__init__(symbols, params, logger)
+        super().__init__(symbols, params)
         self.current_position = {symbol: 0 for symbol in symbols}
     
     def initialize(self):
         """Initialize strategy."""
-        self.logger.info(f"Initializing {self.__class__.__name__} with indicators: "
+        logging.info(f"Initializing {self.__class__.__name__} with indicators: "
                          f"{self.params['fast_indicator']} and {self.params['slow_indicator']}")
     
     def generate_signals(self, market_data, portfolio):
@@ -46,8 +47,8 @@ class IndicatorCrossoverStrategy(BaseStrategy):
             # Check if indicators exist in the data
             if fast_indicator not in data.data or slow_indicator not in data.data:
                 if not hasattr(self, 'missing_indicators_logged'):
-                    self.logger.warning(f"Indicators not found: {fast_indicator} or {slow_indicator}")
-                    self.logger.info(f"Available columns: {list(data.data.keys())}")
+                    logging.warning(f"Indicators not found: {fast_indicator} or {slow_indicator}")
+                    logging.info(f"Available columns: {list(data.data.keys())}")
                     self.missing_indicators_logged = True
                 continue
             
@@ -95,6 +96,6 @@ class IndicatorCrossoverStrategy(BaseStrategy):
             
             if signal:
                 signals.append(signal)
-                self.logger.info(f"Generated signal: {signal}")
+                logging.info(f"Generated signal: {signal}")
         
         return signals

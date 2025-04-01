@@ -36,7 +36,6 @@ class ExecutionHandler:
         self.rejection_probability = rejection_probability
         self.fill_latency_ms = fill_latency_ms
         self.partial_fills = partial_fills
-        self.logger = logger or logging.getLogger(__name__)
     
     def execute_order(self, order: OrderEvent, market_data: Dict[str, Any]) -> Optional[FillEvent]:
         """
@@ -51,7 +50,7 @@ class ExecutionHandler:
         """
         # Check for rejection
         if np.random.random() < self.rejection_probability:
-            self.logger.info(f"Order rejected: {order}")
+            logging.info(f"Order rejected: {order}")
             return None
         
         # Simulate latency
@@ -61,7 +60,7 @@ class ExecutionHandler:
         # Get market data for the symbol
         symbol_data = market_data.get(order.symbol)
         if not symbol_data:
-            self.logger.warning(f"No market data for symbol {order.symbol}, cannot execute order")
+            logging.warning(f"No market data for symbol {order.symbol}, cannot execute order")
             return None
         
         # Determine fill price with slippage
@@ -81,16 +80,16 @@ class ExecutionHandler:
             for col in price_columns:
                 if col in symbol_data:
                     base_price = symbol_data[col]
-                    self.logger.info(f"Using {col} price for {order.symbol}: {base_price}")
+                    logging.info(f"Using {col} price for {order.symbol}: {base_price}")
                     break
             
             if base_price is None:
-                self.logger.warning(f"No price column found for {order.symbol}. Available columns: {list(symbol_data.keys())}")
+                logging.warning(f"No price column found for {order.symbol}. Available columns: {list(symbol_data.keys())}")
                 return None
                 
             # Ensure price is positive and reasonable for forex
             if base_price <= 0:
-                self.logger.warning(f"Invalid non-positive price: {base_price} for {order.symbol}")
+                logging.warning(f"Invalid non-positive price: {base_price} for {order.symbol}")
                 return None
         else:
             # Assume it's a MarketEvent
@@ -102,9 +101,9 @@ class ExecutionHandler:
             if base_price is None:
                 # Log available keys to help debug
                 if hasattr(symbol_data, 'data') and isinstance(symbol_data.data, dict):
-                    self.logger.warning(f"No close price found in market data for {order.symbol}. Available keys: {list(symbol_data.data.keys())}")
+                    logging.warning(f"No close price found in market data for {order.symbol}. Available keys: {list(symbol_data.data.keys())}")
                 else:
-                    self.logger.warning(f"No close price found in market data for {order.symbol}")
+                    logging.warning(f"No close price found in market data for {order.symbol}")
                 return None
         
         # Apply slippage to the price
@@ -124,7 +123,7 @@ class ExecutionHandler:
             remaining=0.0
         )
         
-        self.logger.info(f"Order executed: {order} -> {fill}")
+        logging.info(f"Order executed: {order} -> {fill}")
         return fill
     
     def _apply_slippage(self, base_price: float, order: OrderEvent) -> float:
@@ -205,8 +204,7 @@ class EventDrivenBacktester(BaseBacktester):
                 execution_handler_cls=None,
                 commission_model=None,
                 slippage_model="fixed",
-                slippage_params=None,
-                logger=None):
+                slippage_params=None):
         """
         Initialize the event-driven backtester.
         
@@ -224,17 +222,13 @@ class EventDrivenBacktester(BaseBacktester):
             initial_capital=initial_capital,
             portfolio_cls=portfolio_cls,
             performance_tracker_cls=performance_tracker_cls,
-            execution_handler_cls=execution_handler_cls,
-            logger=logger
-        )
+            execution_handler_cls=execution_handler_cls)
         
         # Create execution handler if not provided
         if not self.execution_handler:
             self.execution_handler = ExecutionHandler(
                 slippage_model=slippage_model,
-                slippage_params=slippage_params,
-                logger=self.logger
-            )
+                slippage_params=slippage_params)
         
         # Set commission model
         self.commission_model = commission_model
@@ -270,9 +264,9 @@ class EventDrivenBacktester(BaseBacktester):
         self.trade_history = []
         
         # Log start of backtest
-        self.logger.info(f"Starting backtest with {strategy.__class__.__name__}")
-        self.logger.info(f"Initial capital: {self.initial_capital}")
-        self.logger.info(f"Market data: {len(market_data.get_symbols())} symbols, {market_data.get_length()} data points")
+        logging.info(f"Starting backtest with {strategy.__class__.__name__}")
+        logging.info(f"Initial capital: {self.initial_capital}")
+        logging.info(f"Market data: {len(market_data.get_symbols())} symbols, {market_data.get_length()} data points")
         
         # Initialize strategy
         strategy.on_backtest_start()
@@ -283,7 +277,7 @@ class EventDrivenBacktester(BaseBacktester):
             market_events = market_data.get_next()
             
             if not market_events:
-                self.logger.debug("No market events, continuing")
+                logging.debug("No market events, continuing")
                 continue
             
             # Store current market data as instance variable for order execution
@@ -300,9 +294,9 @@ class EventDrivenBacktester(BaseBacktester):
                 break
             
             if verbose:
-                self.logger.info(f"Processing data for {self.current_date}")
+                logging.info(f"Processing data for {self.current_date}")
             else:
-                self.logger.debug(f"Processing data for {self.current_date}")
+                logging.debug(f"Processing data for {self.current_date}")
             
             # Add market events to queue
             for symbol, event in market_events.items():
@@ -346,9 +340,9 @@ class EventDrivenBacktester(BaseBacktester):
             "strategy_params": strategy.get_parameters()
         }
         
-        self.logger.info(f"Backtest completed for {strategy.__class__.__name__}")
-        self.logger.info(f"Final equity: {self.portfolio.equity:.2f} (Return: {self.results['return']:.2f}%)")
-        self.logger.info(f"Total trades: {self.results['total_trades']}")
+        logging.info(f"Backtest completed for {strategy.__class__.__name__}")
+        logging.info(f"Final equity: {self.portfolio.equity:.2f} (Return: {self.results['return']:.2f}%)")
+        logging.info(f"Total trades: {self.results['total_trades']}")
         
         return self.results
     
@@ -391,7 +385,7 @@ class EventDrivenBacktester(BaseBacktester):
         Args:
             signal: Signal event
         """
-        self.logger.debug(f"Processing signal: {signal}")
+        logging.debug(f"Processing signal: {signal}")
         
         # Create corresponding order
         if signal.signal_type.value in ["BUY", "SELL", "REVERSE"]:
@@ -423,7 +417,7 @@ class EventDrivenBacktester(BaseBacktester):
             
             # Add order to queue
             self.add_event(order)
-            self.logger.debug(f"Created order from signal: {order}")
+            logging.debug(f"Created order from signal: {order}")
                 
     def process_order(self, order: OrderEvent):
         """
@@ -432,13 +426,13 @@ class EventDrivenBacktester(BaseBacktester):
         Args:
             order: Order event
         """
-        self.logger.debug(f"Processing order: {order}")
+        logging.debug(f"Processing order: {order}")
         
         # Get current market data for the symbol
         if hasattr(self, 'current_market_data') and self.current_market_data:
             market_data = self.current_market_data
         else:
-            self.logger.warning("No current market data available, using empty dict")
+            logging.warning("No current market data available, using empty dict")
             market_data = {}
         
         # Execute the order
@@ -448,7 +442,7 @@ class EventDrivenBacktester(BaseBacktester):
             # Add fill event to queue
             self.add_event(fill)
         else:
-            self.logger.warning(f"Order not filled: {order}")
+            logging.warning(f"Order not filled: {order}")
     
     def process_fill(self, fill: FillEvent):
         """
@@ -457,7 +451,7 @@ class EventDrivenBacktester(BaseBacktester):
         Args:
             fill: Fill event
         """
-        self.logger.debug(f"Processing fill: {fill}")
+        logging.debug(f"Processing fill: {fill}")
         
         # Update portfolio
         self.portfolio.process_fill(fill)

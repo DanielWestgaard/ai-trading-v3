@@ -17,8 +17,7 @@ class BaseBacktester(ABC):
                 initial_capital: float = 10000.0,
                 portfolio_cls=None,
                 performance_tracker_cls=None,
-                execution_handler_cls=None,
-                logger=None):
+                execution_handler_cls=None):
         """
         Initialize the backtester with configuration.
         
@@ -31,21 +30,17 @@ class BaseBacktester(ABC):
         """
         self.initial_capital = initial_capital
         
-        # Setup logging
-        self.logger = logger or self._setup_logger()
-        self.logger.info(f"Initializing backtester with {initial_capital} initial capital")
-        
         # Create portfolio
         self.portfolio_cls = portfolio_cls or Portfolio
-        self.portfolio = self.portfolio_cls(initial_capital=initial_capital, logger=self.logger)
+        self.portfolio = self.portfolio_cls(initial_capital=initial_capital, logger=logging)
         
         # Create performance tracker
         self.performance_tracker_cls = performance_tracker_cls or PerformanceTracker
-        self.performance_tracker = self.performance_tracker_cls(logger=self.logger)
+        self.performance_tracker = self.performance_tracker_cls(logger=logging)
         
         # Create execution handler
         self.execution_handler_cls = execution_handler_cls
-        self.execution_handler = None if not execution_handler_cls else execution_handler_cls(logger=self.logger)
+        self.execution_handler = None if not execution_handler_cls else execution_handler_cls(logger=logging)
         
         # Initialize event queue
         self.events = []
@@ -57,21 +52,6 @@ class BaseBacktester(ABC):
         # State tracking
         self.current_date = None
         self.is_running = False
-        
-    def _setup_logger(self) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.INFO)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
     
     @abstractmethod
     def run(self, strategy, data, **kwargs):
@@ -106,7 +86,7 @@ class BaseBacktester(ABC):
             event: The event to add
         """
         self.events.append(event)
-        self.logger.debug(f"Added {event.type} event to queue, queue length: {len(self.events)}")
+        logging.debug(f"Added {event.type} event to queue, queue length: {len(self.events)}")
     
     def generate_signals(self, strategy, data_point):
         """
@@ -124,7 +104,7 @@ class BaseBacktester(ABC):
         if signals:
             for signal in signals:
                 self.add_event(signal)
-                self.logger.info(f"Generated signal: {signal}")
+                logging.info(f"Generated signal: {signal}")
         
         return signals
     
@@ -166,7 +146,7 @@ class BaseBacktester(ABC):
         # If output path provided, save report to file
         if output_path:
             self._save_report(report_data, output_path)
-            self.logger.info(f"Backtest report saved to {output_path}")
+            logging.info(f"Backtest report saved to {output_path}")
             return None
         
         return report_data
