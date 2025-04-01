@@ -191,10 +191,8 @@ For a comprehensive evaluation, look at:
 ## Example: Implementing a Keras ML Model Strategy
 
 Here's a more detailed example of how to implement a ML model strategy:
-
-
-
-
+- backtesting/strategies/ml_model_strategy.py
+- config/ml_model_backtest_config.json
 
 </thinking>
 
