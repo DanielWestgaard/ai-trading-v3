@@ -1,0 +1,51 @@
+02-04-2025 15:54:16 - INFO - Logging system initialized. Environment: development
+02-04-2025 15:54:17 - INFO - Starting model training and backtesting workflow
+02-04-2025 15:54:17 - INFO - Loading data from data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+02-04-2025 15:54:18 - INFO - Data loaded with shape: (74693, 41)
+02-04-2025 15:54:18 - INFO - Date range: 2024-01-02 00:35:00 to 2024-12-31 21:55:00
+02-04-2025 15:54:18 - INFO - Training model with configuration:
+02-04-2025 15:54:18 - INFO - {
+  "model_type": "xgboost",
+  "prediction_type": "classification",
+  "target": null,
+  "features": null,
+  "prediction_horizon": 1,
+  "test_size": 0.2,
+  "cross_validate": true,
+  "scale_features": true,
+  "model_params": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "objective": "binary:logistic",
+    "eval_metric": "auc",
+    "random_state": 42
+  }
+}
+02-04-2025 15:54:18 - WARNING - Target column 'None' not found. Looking for alternatives...
+02-04-2025 15:54:18 - INFO - Using 'open_return' as target instead.
+02-04-2025 15:54:18 - INFO - Auto-selected 39 features
+02-04-2025 15:54:18 - INFO - Data prepared: 59754 training samples, 14939 test samples
+02-04-2025 15:54:18 - INFO - Training xgboost model...
+02-04-2025 15:54:18 - INFO - XGBoost model trained with 59754 samples
+02-04-2025 15:54:18 - INFO - Model evaluation metrics: {'accuracy': 0.9592342191579089, 'precision': 0.9579788605310647, 'recall': 0.9633182112767337, 'f1': 0.9606411167840755, 'roc_auc': np.float64(0.9941668927439248)}
+02-04-2025 15:54:18 - INFO - Model saved to model_storage/xgboost_20250402_155418_20250402_155418.pkl
+02-04-2025 15:54:19 - INFO - Feature importance plot saved to model_storage/xgboost_20250402_155418_feature_importance.png
+02-04-2025 15:54:19 - INFO - Prediction plot saved to ml_model_results/xgboost_predictions_20250402_155419.png
+02-04-2025 15:54:19 - INFO - Performing cross-validation
+02-04-2025 15:54:19 - ERROR - Error in workflow: Argument 'other' has incorrect type (expected datetime.datetime, got Timedelta)
+Traceback (most recent call last):
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/run_model_backtest.py", line 173, in main
+    model, trainer = train_model(df, model_config)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/run_model_backtest.py", line 62, in train_model
+    cv_results = trainer.cross_validate(df)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/models/model_trainer.py", line 256, in cross_validate
+    splits = splitter.split(data)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/data/features/time_series_ml.py", line 219, in split
+    total_range = (end_date - start_date - train_period - test_period)
+  File "offsets.pyx", line 481, in pandas._libs.tslibs.offsets.BaseOffset.__rsub__
+  File "offsets.pyx", line 463, in pandas._libs.tslibs.offsets.BaseOffset.__add__
+  File "offsets.pyx", line 127, in pandas._libs.tslibs.offsets.apply_wraps.wrapper
+TypeError: Argument 'other' has incorrect type (expected datetime.datetime, got Timedelta)
