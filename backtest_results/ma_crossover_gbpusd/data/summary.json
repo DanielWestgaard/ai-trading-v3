@@ -1,0 +1,10 @@
+{
+    "backtest_id": "ma_crossover_gbpusd",
+    "strategy": "SimpleMovingAverageCrossover",
+    "initial_capital": 10000.0,
+    "final_equity": 10000.0,
+    "return": 0.0,
+    "total_trades": 0,
+    "execution_time": 2.8401880264282227,
+    "timestamp": "2025-03-31 19:03:15"
+}

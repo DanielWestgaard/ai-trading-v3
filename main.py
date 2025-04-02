@@ -1,5 +1,6 @@
 import argparse
 import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
 
 from data.pipelines.data_pipeline import DataPipeline
 from data.processors.cleaner import DataCleaner
@@ -13,7 +14,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
     parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
-    parser.add_argument('--data-pipeline', action='store_true', default=True, help='Run data processing pipeline')
+    parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
+    parser.add_argument('--backtest', action='store_true', default=False, help='Run backtesting')
+    parser.add_argument('--walk-forward-analysis', action='store_true', default=True, 
+                        help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     
     return parser.parse_args()
 
@@ -40,6 +44,55 @@ def main():
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
+    
+    if args.backtest:
+        # Call run_backtest.py or integrate it into here
+        pass
+    
+    if args.walk_forward_analysis:
+        from data.features.time_series_ml import WalkForwardAnalysis
+
+        # Load your processed data
+        data = pd.read_csv("data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv", 
+                        parse_dates=['date'])
+
+        # Initialize the walk-forward analyzer
+        wfa = WalkForwardAnalysis(
+            train_period='1M',   # 1 month training window
+            test_period='1W',    # 1 week testing window
+            output_dir='walk_forward_results'
+        )
+
+        # Define your model creation and training functions
+        def create_model():
+            return RandomForestRegressor(n_estimators=100)
+
+        def train_model(model, data, features, target):
+            X = data[features]
+            y = data[target]
+            return model.fit(X, y)
+
+        def predict(model, data, features):
+            X = data[features]
+            return model.predict(X)
+
+        features = [
+            'ema_200', 'sma_50', 'rsi_14', 'macd_signal',  # Technical indicators
+            'open_return', 'high_return', 'low_return', 'close_return'  # Normalized returns
+        ]
+        
+        # Run the analysis with automated target creation
+        results = wfa.run_model_analysis(
+            data=data,
+            features=features,
+            create_target=True,
+            target_type='return',
+            source_column='close_raw',
+            horizon=10,
+            model_factory=create_model,
+            train_func=train_model,
+            predict_func=predict
+        )
         
 
 if __name__ == "__main__":

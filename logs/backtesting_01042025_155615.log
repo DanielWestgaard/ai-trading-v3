@@ -1,0 +1,676 @@
+01-04-2025 15:56:15 - INFO - Logging system initialized. Environment: development
+01-04-2025 15:56:15 - INFO - Output directory: /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results
+01-04-2025 15:56:15 - INFO - Loaded configuration from config/indicator_strategy_config.json
+01-04-2025 15:56:15 - INFO - Running backtest from configuration: config/indicator_strategy_config.json
+01-04-2025 15:56:15 - INFO - Initializing IndicatorCrossoverStrategy with indicators: ema_200 and sma_50
+01-04-2025 15:56:15 - INFO - Loaded strategy: IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Loading processed data from data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+01-04-2025 15:56:15 - INFO - Loaded 74693 data points from processed data
+01-04-2025 15:56:15 - INFO - Filtered GBPUSD data to 74693 points with common dates
+01-04-2025 15:56:15 - INFO - Created backtest: indicator_crossover_gbpusd
+01-04-2025 15:56:15 - INFO - Running backtest: indicator_crossover_gbpusd
+01-04-2025 15:56:15 - INFO - Running backtest: indicator_crossover_gbpusd
+01-04-2025 15:56:15 - INFO - Reset market data iterator
+01-04-2025 15:56:15 - INFO - Starting backtest with IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Initial capital: 10000.0
+01-04-2025 15:56:15 - INFO - Market data: 1 symbols, 313 data points
+01-04-2025 15:56:15 - INFO - Starting backtest with IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: BUY GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26215
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26215
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26215
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26215
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26723
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26723
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: 0.005079999999999973
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26723
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27141
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27486
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27486
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: 0.003450000000000175
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27486
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27441
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27441
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27441
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27441
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26778
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26778
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: -0.006630000000000136
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26778
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27087
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27087
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27087
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27087
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27141
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: 0.0005399999999999849
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26795
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26795
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26795
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26795
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.27503
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27503
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: 0.007080000000000197
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27503
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26344
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26344
+01-04-2025 15:56:15 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26344
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26344
+01-04-2025 15:56:15 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:15 - INFO - Using close_raw price for GBPUSD: 1.26029
+01-04-2025 15:56:15 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26029
+01-04-2025 15:56:15 - INFO - Closed position: GBPUSD, PnL: -0.003149999999999986
+01-04-2025 15:56:15 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26029
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25883
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25883
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25883
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25883
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25991
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25991
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.001080000000000192
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25991
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25877
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25877
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25877
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25877
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26238
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26238
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.003610000000000113
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26238
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26255
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26255
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26255
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26255
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2658
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.2658
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.003249999999999975
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.2658
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.28191
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.28191
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.28191
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.28191
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27957
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27957
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.0023400000000000087
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27957
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27419
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27419
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27419
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27419
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27158
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27158
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.002610000000000001
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27158
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26611
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26611
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26611
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26611
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26375
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26375
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.0023600000000001398
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26375
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26259
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26259
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26259
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26259
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26153
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26153
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.001060000000000061
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26153
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26295
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26295
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26295
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26295
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26368
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26368
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0007299999999998974
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26368
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25453
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25453
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25453
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25453
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2574
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.2574
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.00287000000000015
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.2574
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26381
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26381
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26381
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26381
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26292
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26292
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.0008900000000000574
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26292
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25353
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25353
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25353
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25353
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25509
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25509
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0015600000000000058
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25509
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.24432
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.24432
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.24432
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.24432
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.24491
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.24491
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0005899999999998684
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.24491
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.24357
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.24357
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.24357
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.24357
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2428922
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.2428922
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.0006778000000000617
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.2428922
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.24863
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.24863
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.24863
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.24863
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25541
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25541
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.006780000000000008
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25541
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2491
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.2491
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.2491
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.2491
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.25338
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25338
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0042799999999998395
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25338
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2552
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.2552
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.2552
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.2552
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.24914
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.24914
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.006060000000000176
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.24914
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27207
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27207
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27207
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27207
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27374
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27374
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0016700000000000603
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27374
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27557
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27557
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27557
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27557
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27304
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27304
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.0025300000000001432
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27304
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27703
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27703
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27703
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27703
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.2795
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.2795
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: 0.0024699999999999722
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.2795
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27279
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27279
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27279
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27279
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27258
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27258
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.00021000000000004349
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27258
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27568
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27568
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27568
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27568
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.27141
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:16 - INFO - Closed position: GBPUSD, PnL: -0.004269999999999996
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27141
+01-04-2025 15:56:16 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:16 - INFO - Using close_raw price for GBPUSD: 1.26595
+01-04-2025 15:56:16 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26595
+01-04-2025 15:56:16 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26595
+01-04-2025 15:56:16 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26595
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26852
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26852
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0025700000000001832
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26852
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26205
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26205
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26205
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26205
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26569
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26569
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0036400000000000876
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26569
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26456
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26456
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26456
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26456
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26897
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26897
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.004410000000000025
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26897
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28144
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.28144
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.28144
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.28144
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28548
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.28548
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0040400000000000436
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.28548
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.2968
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.2968
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.2968
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.2968
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29758
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.29758
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0007800000000000029
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.29758
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29458
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29458
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29458
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29458
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29326
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.29326
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.0013199999999999878
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.29326
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28648
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.28648
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.0035199999999999676
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.28648
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28348
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.28348
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.28348
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.28348
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28543
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.28543
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0019500000000001183
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.28543
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.27226
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27226
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27226
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27226
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28084
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.28084
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.008580000000000032
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.28084
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.26875
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26875
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26875
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26875
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.27433
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27433
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.005579999999999918
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27433
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28241
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.28241
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.28241
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.28241
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.28602
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.28602
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.003609999999999891
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.28602
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.3095
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.3095
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.3095
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.3095
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.32165
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.32165
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.012149999999999883
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.32165
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.319
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.319
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.319
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.319
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.32553
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.32553
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.006530000000000147
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.32553
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31947
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.31947
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.31947
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.31947
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31431
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.31431
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.005159999999999831
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.31431
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31254
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.31254
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.31254
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.31254
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30795
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30795
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.004590000000000094
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30795
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.3037
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.3037
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.3037
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.3037
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31319
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.31319
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.009489999999999998
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.31319
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31238
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.31238
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.31238
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.31238
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.32092
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.32092
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.008539999999999992
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.32092
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31669
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.31669
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.31669
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.31669
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.32803
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.32803
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.011340000000000128
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.32803
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.3321
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.3321
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.3321
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.3321
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.33818
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.33818
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.006079999999999863
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.33818
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.33741
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.33741
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.33741
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.33741
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.31007
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.31007
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.02733999999999992
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.31007
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.3069
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.3069
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.3069
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.3069
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30658
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30658
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.00031999999999987594
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30658
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30429
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.30429
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.30429
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.30429
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30638
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30638
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.0020900000000001473
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30638
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30641
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.30641
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.30641
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.30641
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30184
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30184
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.004569999999999963
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30184
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29824
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29824
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29824
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29824
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29717
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.29717
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: -0.0010700000000001264
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.29717
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.29644
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29644
+01-04-2025 15:56:17 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29644
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29644
+01-04-2025 15:56:17 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:17 - INFO - Using close_raw price for GBPUSD: 1.30144
+01-04-2025 15:56:17 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30144
+01-04-2025 15:56:17 - INFO - Closed position: GBPUSD, PnL: 0.004999999999999893
+01-04-2025 15:56:17 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30144
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.29574
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29574
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29574
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29574
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.2952
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.2952
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: -0.0005399999999999849
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.2952
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.29509
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29509
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29509
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29509
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.30372
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.30372
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.008629999999999916
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.30372
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.28876
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.28876
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.28876
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.28876
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.29829
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.29829
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.009530000000000038
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.29829
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.29091
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.29091
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.29091
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.29091
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.26754
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26754
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: -0.023370000000000113
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26754
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.26533
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26533
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26533
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26533
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25903
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25903
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: -0.006299999999999972
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25903
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25358
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25358
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25358
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25358
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25745
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25745
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.00387000000000004
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25745
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.26574
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.26574
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.26574
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.26574
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.26768
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26768
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.0019399999999998307
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26768
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.27382
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27382
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27382
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27382
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.27744
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.27744
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.0036199999999999566
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.27744
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.2674
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.2674
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.2674
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.2674
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.26933
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.26933
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.0019299999999999873
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.26933
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25744
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25744
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25744
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25744
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25671
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25671
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: -0.0007299999999998974
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25671
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25317
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25317
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25317
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25317
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25449
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: SELL 1.0 GBPUSD (MARKET) -> FILL: SELL 1.0 GBPUSD @ 1.25449
+01-04-2025 15:56:18 - INFO - Closed position: GBPUSD, PnL: 0.00132000000000021
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: SELL 1.0 GBPUSD @ 1.25449
+01-04-2025 15:56:18 - INFO - Generated signal: SIGNAL: REVERSE GBPUSD (strength: 1.0) from IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Using close_raw price for GBPUSD: 1.25467
+01-04-2025 15:56:18 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.25467
+01-04-2025 15:56:18 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.25467
+01-04-2025 15:56:18 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.25467
+01-04-2025 15:56:18 - INFO - Completed backtest with IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Generated 127 signals
+01-04-2025 15:56:18 - INFO - Calculating performance metrics
+01-04-2025 15:56:18 - INFO - Backtest completed for IndicatorCrossoverStrategy
+01-04-2025 15:56:18 - INFO - Final equity: 9999.90 (Return: -0.00%)
+01-04-2025 15:56:18 - INFO - Total trades: 63
+01-04-2025 15:56:18 - INFO - Backtest completed in 2.92 seconds
+01-04-2025 15:56:18 - INFO - Plotting equity curve
+01-04-2025 15:56:19 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/equity_curve.png
+01-04-2025 15:56:19 - INFO - Plotting top 5 drawdowns
+01-04-2025 15:56:19 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/drawdowns.png
+01-04-2025 15:56:19 - INFO - Plotting monthly returns heatmap
+01-04-2025 15:56:19 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/monthly_returns.png
+01-04-2025 15:56:19 - INFO - Plotting D return distribution
+01-04-2025 15:56:20 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/return_distribution.png
+01-04-2025 15:56:20 - INFO - Plotting trade analysis
+01-04-2025 15:56:20 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+01-04-2025 15:56:20 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+01-04-2025 15:56:20 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/trade_analysis.png
+01-04-2025 15:56:20 - INFO - Creating performance dashboard
+01-04-2025 15:56:21 - INFO - Saved figure to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd/reports/performance_dashboard.png
+01-04-2025 15:56:21 - INFO - Generated performance reports for indicator_crossover_gbpusd
+01-04-2025 15:56:21 - INFO - Saved results for indicator_crossover_gbpusd
+01-04-2025 15:56:21 - INFO - Backtest completed. Results saved to /Users/dmartinsen/pers-prog/ai-trading-v3/backtest_results/indicator_crossover_gbpusd

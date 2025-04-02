@@ -12,7 +12,7 @@ DEBUG_LOG_LEVEL = logging.DEBUG
 # Directories
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_LOGS_DIR = os.path.join(BASE_DIR, 'logs')
-DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance"]
+DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance", "backtesting"]
 BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
 
 # Capital.com related to data storage

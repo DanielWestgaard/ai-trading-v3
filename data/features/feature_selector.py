@@ -215,7 +215,7 @@ class FeatureSelector(BaseProcessor):
     
     def _select_features(self, importance_df):
         """
-        Select features based on the specified method.
+        Select features based on the specified method, ensuring price data is always included.
         
         Args:
             importance_df: DataFrame with feature importance scores
@@ -223,6 +223,26 @@ class FeatureSelector(BaseProcessor):
         Returns:
             List of selected feature names
         """
+        # Define essential columns that must be preserved regardless of importance
+        essential_columns = [
+            # Essential raw price columns
+            'open_raw', 'high_raw', 'low_raw', 'close_raw',
+            # Essential transformed columns
+            'open_original', 'high_original', 'low_original', 'close_original', 
+            # Other essentials 
+            'Date', 'date', 'timestamp'
+        ]
+        
+        # Find which essential columns actually exist in our data
+        available_essential_columns = [col for col in essential_columns 
+                                    if col in importance_df['feature'].values]
+        
+        if available_essential_columns:
+            logging.info(f"Preserving essential price columns: {available_essential_columns}")
+        else:
+            logging.warning("No essential price columns found in the dataset!")
+        
+        # Select features based on the method specified
         if self.selection_method == 'top_n':
             # Select top N features
             n = self.n_features or min(self.max_features, len(importance_df) // 2)
@@ -263,18 +283,23 @@ class FeatureSelector(BaseProcessor):
             # Cap at max_features
             if len(selected) > self.max_features:
                 selected = sorted_df.head(self.max_features)['feature'].tolist()
-                
+                    
         else:
             # Default to top 20% of features
             n = min(self.max_features, max(self.min_features, int(len(importance_df) * 0.2)))
             selected = importance_df.head(n)['feature'].tolist()
         
+        # Add the essential columns to the selection, ensuring no duplicates
+        for col in available_essential_columns:
+            if col not in selected:
+                selected.append(col)
+                logging.info(f"Added essential column {col} to selected features")
+        
         # Apply category balancing if requested
         if self.category_balance and 'category' in importance_df.columns:
             selected = self._balance_feature_categories(importance_df, selected)
         
-        return selected
-    
+        return selected    
     def _balance_feature_categories(self, importance_df, initial_selection):
         """
         Balance feature selection across categories.

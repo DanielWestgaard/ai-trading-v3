@@ -71,7 +71,10 @@ class DataNormalizer(BaseProcessor):
         df.columns = [col.lower() for col in df.columns]
         
         for col in df.columns:
-            if col in self.price_cols:
+            # Skip raw price columns - never normalize these
+            if col.endswith('_raw'):
+                result[col] = df[col]
+            elif col in self.price_cols:
                 self._transform_column(df, result, col, self.price_method)
             elif col == self.volume_col:
                 self._transform_column(df, result, col, self.volume_method)

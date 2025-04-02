@@ -1,0 +1,5 @@
+{
+    "fast_indicator": "ema_200",
+    "slow_indicator": "sma_50",
+    "signal_threshold": 0.005
+}

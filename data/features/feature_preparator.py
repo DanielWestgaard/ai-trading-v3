@@ -200,6 +200,10 @@ class FeaturePreparator(BaseProcessor):
         if not price_cols_in_data:
             return result
         
+        # Preserve raw prices: These will never be normalized or modified
+        for col in price_cols_in_data:
+            result[f"{col}_raw"] = result[col].copy()
+        
         # MAKE COPIES of original price columns with _original suffix
         # This ensures they're preserved even if something else removes them
         for col in price_cols_in_data:
