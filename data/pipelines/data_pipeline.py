@@ -22,7 +22,8 @@ class DataPipeline:
                  normalization_method='zscore',
                  feature_selection_method='threshold',
                  feature_importance_threshold=0.01,
-                 target_column='close_return'):
+                 target_column='close_return',
+                 preserve_target=True):
         """
         Initialize the data pipeline with configuration.
         
@@ -33,6 +34,7 @@ class DataPipeline:
             feature_selection_method: Method for feature selection ('threshold', 'top_n', 'cumulative')
             feature_importance_threshold: Importance threshold for feature selection
             target_column: Target column for prediction (influences feature selection)
+            preserve_target: Whether to always preserve the target column
         """
         # Configure the cleaner
         self.cleaner = DataCleaner(
@@ -62,6 +64,7 @@ class DataPipeline:
         self.feature_selection_method = feature_selection_method
         self.feature_importance_threshold = feature_importance_threshold
         self.target_column = target_column
+        self.preserve_target = preserve_target
         
     def run(self, source=None, target_path=sys_config.CAPCOM_PROCESSED_DATA_DIR, 
             raw_data=data_config.TESTING_RAW_FILE, save_intermediate=False,
@@ -163,13 +166,22 @@ class DataPipeline:
                 importance_threshold=self.feature_importance_threshold,
                 save_visualizations=True,
                 output_dir=features_dir,
-                processed_file_path=processed_file_path  # Pass the processed file path for naming
+                processed_file_path=processed_file_path,
+                preserve_target=self.preserve_target
             )
             
             logging.info("Performing feature selection")
             self.feature_selector.fit(normalized_data)
             selected_data = self.feature_selector.transform(normalized_data)
             logging.info(f"Selected features. Final shape: {selected_data.shape}")
+            
+            # Ensure target column is preserved
+            if self.preserve_target and self.target_column not in selected_data.columns:
+                if self.target_column in normalized_data.columns:
+                    logging.warning(f"Target column '{self.target_column}' was removed during feature selection. Re-adding it.")
+                    selected_data[self.target_column] = normalized_data[self.target_column]
+                else:
+                    logging.error(f"Target column '{self.target_column}' not found in normalized data. Cannot preserve it.")
         
         # Save the processed data
         selected_data.to_csv(processed_file_path, index=False)

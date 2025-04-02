@@ -23,6 +23,7 @@ stoch_k,technical,0,0.0
 day_of_week,time,0,0.0
 hour_of_day,time,0,0.0
 month,time,0,0.0
+close_return,transformed_price,0,0.0
 high_return,transformed_price,0,0.0
 low_return,transformed_price,0,0.0
 open_return,transformed_price,0,0.0
