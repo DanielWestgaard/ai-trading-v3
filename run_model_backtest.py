@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # Set up logging
 from utils.logging_utils import setup_logging
-logger = setup_logging(name="model_backtest", type="model_backtest")
+logger = setup_logging(name="model_backtest", type="model_backtest", log_to_file=False)
 
 # Import custom modules
 from models.model_trainer import ModelTrainer
