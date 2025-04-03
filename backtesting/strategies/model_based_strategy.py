@@ -43,24 +43,20 @@ class ModelBasedStrategy(BaseStrategy):
         self.predictions = {symbol: [] for symbol in symbols}
         self.prediction_history = {symbol: [] for symbol in symbols}
         self.position_history = {symbol: 0 for symbol in symbols}
-        
-        # Set up logging
-        self.logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
-        self.logger.info(f"Initialized model-based strategy with {model.__class__.__name__}")
     
     def initialize(self):
         """Initialize the strategy."""
-        self.logger.info("Initializing model-based strategy")
+        logging.info("Initializing model-based strategy")
         
         # Check if model is loaded
         if not hasattr(self.model, 'is_fitted') or not self.model.is_fitted:
-            self.logger.warning("Model is not fitted. Strategy may not generate signals.")
+            logging.warning("Model is not fitted. Strategy may not generate signals.")
     
     def on_backtest_start(self):
         """
         Called at the start of a backtest.
         """
-        self.logger.info("Backtest starting with model-based strategy")
+        logging.info("Backtest starting with model-based strategy")
         
         # Reset prediction history
         self.predictions = {symbol: [] for symbol in self.symbols}
@@ -88,7 +84,7 @@ class ModelBasedStrategy(BaseStrategy):
             missing_features = [f for f in self.required_features if f not in data.data]
             if missing_features:
                 if not hasattr(self, 'missing_features_logged'):
-                    self.logger.warning(f"Missing required features: {missing_features}")
+                    logging.warning(f"Missing required features: {missing_features}")
                     self.missing_features_logged = True
                 continue
             
@@ -164,7 +160,7 @@ class ModelBasedStrategy(BaseStrategy):
                 # Add signal to list if generated
                 if signal:
                     signals.append(signal)
-                    self.logger.info(f"Generated signal: {signal}")
+                    logging.info(f"Generated signal: {signal}")
                     
                 # Record prediction history
                 self.prediction_history[symbol].append({
@@ -176,7 +172,7 @@ class ModelBasedStrategy(BaseStrategy):
                 })
                 
             except Exception as e:
-                self.logger.error(f"Error making prediction: {str(e)}")
+                logging.error(f"Error making prediction: {str(e)}")
         
         return signals
     
@@ -184,7 +180,7 @@ class ModelBasedStrategy(BaseStrategy):
         """
         Called at the end of a backtest.
         """
-        self.logger.info("Backtest completed with model-based strategy")
+        logging.info("Backtest completed with model-based strategy")
         
         # Calculate prediction accuracy if possible
         for symbol in self.symbols:
@@ -195,7 +191,7 @@ class ModelBasedStrategy(BaseStrategy):
                 total_predictions = len(df)
                 signals_generated = df['signal_generated'].sum()
                 
-                self.logger.info(f"Symbol: {symbol} - Total predictions: {total_predictions}, Signals generated: {signals_generated}")
+                logging.info(f"Symbol: {symbol} - Total predictions: {total_predictions}, Signals generated: {signals_generated}")
     
     def get_parameters(self):
         """
