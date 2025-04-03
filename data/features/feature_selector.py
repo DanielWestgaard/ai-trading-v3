@@ -1,3 +1,4 @@
+# data/featues/feature_selector.py
 from data.processors.base_processor import BaseProcessor
 import pandas as pd
 import numpy as np
@@ -17,10 +18,16 @@ from utils import data_utils
 class FeatureSelector(BaseProcessor):
     """
     Selects the most important features based on feature importance scores.
-    Using Random Forest feature importance with time series cross-validation.
     
-    This component fits at the end of the pipeline, after normalization,
-    to select the most relevant features for modeling.
+    Use this class DURING DATA PREPROCESSING to:
+    1. Reduce dimensionality before model training
+    2. Filter out noisy or redundant features
+    3. Create a consistent feature set across different model iterations
+    4. Perform feature selection without tying to a specific model architecture
+    
+    This is part of the data pipeline and should be used BEFORE model training.
+    For model-specific feature importance analysis AFTER training, use the 
+    get_feature_importance() methods in the model classes.
     """
     
     def __init__(self, 
@@ -36,7 +43,8 @@ class FeatureSelector(BaseProcessor):
                  n_splits=5,
                  save_visualizations=True,
                  output_dir=None,
-                 processed_file_path=None):
+                 processed_file_path=None,
+                 preserve_target=True):
         """
         Initialize the feature selector.
         
@@ -56,6 +64,7 @@ class FeatureSelector(BaseProcessor):
             processed_file_path: Path to the processed data file (for naming derived files)
         """
         self.target_col = target_col
+        self.preserve_target = preserve_target
         self.selection_method = selection_method
         self.n_features = n_features
         self.importance_threshold = importance_threshold
@@ -299,7 +308,15 @@ class FeatureSelector(BaseProcessor):
         if self.category_balance and 'category' in importance_df.columns:
             selected = self._balance_feature_categories(importance_df, selected)
         
-        return selected    
+        # Always include target column if requested
+        if self.preserve_target and self.target_col:
+            if self.target_col in importance_df['feature'].values and self.target_col not in selected:
+                selected.append(self.target_col)
+                logging.info(f"Preserving target column '{self.target_col}' for modeling")
+        
+        
+        return selected
+       
     def _balance_feature_categories(self, importance_df, initial_selection):
         """
         Balance feature selection across categories.

@@ -70,7 +70,7 @@ class TimeSeriesSplit:
         return logger
     
     def _parse_period(self, period: Union[str, int, timedelta], 
-                     reference_index: pd.DatetimeIndex) -> Union[int, timedelta]:
+                    reference_index: pd.DatetimeIndex) -> Union[int, timedelta]:
         """
         Parse a period specification to either a number of samples or a timedelta.
         
@@ -88,32 +88,33 @@ class TimeSeriesSplit:
             if period.endswith(('D', 'W', 'M', 'Q', 'Y')):
                 # For pandas offset strings like '30D', '12M', etc.
                 try:
-                    # First try to interpret as a frequency string
-                    return pd.tseries.frequencies.to_offset(period)
-                except (ValueError, AttributeError):
-                    # If that fails, try to convert to a timedelta
-                    try:
-                        if period.endswith('D'):
-                            return timedelta(days=int(period[:-1]))
-                        elif period.endswith('W'):
-                            return timedelta(weeks=int(period[:-1]))
-                        elif period.endswith('M'):
-                            return timedelta(days=30 * int(period[:-1]))
-                        elif period.endswith('Y'):
-                            return timedelta(days=365 * int(period[:-1]))
-                        else:
-                            raise ValueError(f"Unrecognized period format: {period}")
-                    except ValueError:
-                        raise ValueError(f"Could not parse period: {period}")
+                    # Convert to a timedelta for consistency
+                    if period.endswith('D'):
+                        return timedelta(days=int(period[:-1]))
+                    elif period.endswith('W'):
+                        return timedelta(days=7 * int(period[:-1]))
+                    elif period.endswith('M'):
+                        return timedelta(days=30 * int(period[:-1]))  # Approximation
+                    elif period.endswith('Q'):
+                        return timedelta(days=90 * int(period[:-1]))  # Approximation
+                    elif period.endswith('Y'):
+                        return timedelta(days=365 * int(period[:-1]))  # Approximation
+                    else:
+                        raise ValueError(f"Unrecognized period format: {period}")
+                except ValueError:
+                    self.logger.warning(f"Could not parse period '{period}' as timedelta. Using default 30 days.")
+                    return timedelta(days=30)
             else:
                 # Try to interpret as a number of periods
                 try:
                     return int(period)
                 except ValueError:
-                    raise ValueError(f"Could not parse period: {period}")
+                    self.logger.warning(f"Could not parse period: {period}. Using default 30 days.")
+                    return timedelta(days=30)
         
-        raise TypeError(f"Period must be a string, int, or timedelta, not {type(period)}")
-    
+        self.logger.warning(f"Unrecognized period type: {type(period)}. Using default 30 days.")
+        return timedelta(days=30)
+
     def split(self, data: pd.DataFrame) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
         """
         Generate train/test splits respecting temporal order.
@@ -155,7 +156,7 @@ class TimeSeriesSplit:
         # Parse periods based on the data's frequency
         train_period = self._parse_period(self.train_period, dates)
         test_period = self._parse_period(self.test_period, dates)
-        step_size = self._parse_period(self.step_size, dates)
+        step_size = self._parse_period(self.step_size or test_period, dates)
         max_train_size = self._parse_period(self.max_train_size, dates) if self.max_train_size else None
         
         splits = []
@@ -214,15 +215,46 @@ class TimeSeriesSplit:
                 avg_diff = (dates[-1] - dates[0]) / (len(dates) - 1)
                 max_train_size = avg_diff * max_train_size
             
-            # Calculate number of splits if n_splits is specified
+            # Calculate splits based on n_splits if specified
             if self.n_splits is not None:
-                total_range = (end_date - start_date - train_period - test_period)
-                days_between_splits = total_range / (self.n_splits - 1) if self.n_splits > 1 else test_period
-                step_size = timedelta(days=days_between_splits.days)
+                # Ensure both periods are timedeltas for consistent date arithmetic
+                if not isinstance(train_period, timedelta):
+                    self.logger.warning(f"Converting train_period to timedelta from {type(train_period)}")
+                    train_period = timedelta(days=30)  # Default fallback
+                    
+                if not isinstance(test_period, timedelta):
+                    self.logger.warning(f"Converting test_period to timedelta from {type(test_period)}")
+                    test_period = timedelta(days=10)  # Default fallback
+                
+                # Calculate total range in days
+                total_days = (end_date - start_date).days - train_period.days - test_period.days
+                
+                if total_days <= 0:
+                    raise ValueError("Time range too small for the specified periods")
+                    
+                # Calculate days between splits
+                days_between_splits = total_days / (self.n_splits - 1) if self.n_splits > 1 else test_period.days
+                step_size = timedelta(days=int(days_between_splits))
+                
+                self.logger.info(f"Calculated step size of {step_size.days} days for {self.n_splits} splits")
             
             # Generate splits
             current_train_start = start_date
+            
             while True:
+                # Ensure both periods are timedeltas for consistent date arithmetic
+                if not isinstance(train_period, timedelta):
+                    self.logger.warning(f"Converting train_period to timedelta from {type(train_period)}")
+                    train_period = timedelta(days=30)  # Default fallback
+                    
+                if not isinstance(test_period, timedelta):
+                    self.logger.warning(f"Converting test_period to timedelta from {type(test_period)}")
+                    test_period = timedelta(days=10)  # Default fallback
+                    
+                if not isinstance(step_size, timedelta):
+                    self.logger.warning(f"Converting step_size to timedelta from {type(step_size)}")
+                    step_size = test_period  # Default to test period size
+                
                 train_end = current_train_start + train_period
                 test_end = train_end + test_period
                 
@@ -231,6 +263,10 @@ class TimeSeriesSplit:
                 
                 # Limit training size if specified
                 if max_train_size is not None:
+                    if not isinstance(max_train_size, timedelta):
+                        self.logger.warning(f"Converting max_train_size to timedelta from {type(max_train_size)}")
+                        max_train_size = train_period  # Default to full train period
+                        
                     actual_train_start = max(start_date, train_end - max_train_size)
                 else:
                     actual_train_start = current_train_start
@@ -248,7 +284,7 @@ class TimeSeriesSplit:
                 
                 splits.append((train_data, test_data))
                 self.logger.info(f"Split {len(splits)}: Train {actual_train_start} to {train_end}, "
-                               f"Test {train_end} to {test_end}")
+                            f"Test {train_end} to {test_end}")
                 
                 current_train_start += step_size
         

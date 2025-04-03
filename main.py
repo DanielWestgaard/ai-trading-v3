@@ -14,9 +14,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
     parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
-    parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
+    parser.add_argument('--data-pipeline', action='store_true', default=True, help='Run data processing pipeline')
     parser.add_argument('--backtest', action='store_true', default=False, help='Run backtesting')
-    parser.add_argument('--walk-forward-analysis', action='store_true', default=True, 
+    parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     
     return parser.parse_args()

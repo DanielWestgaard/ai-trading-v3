@@ -8,3 +8,5 @@ scikit-learn
 tensorflow
 cryptography
 scipy
+xgboost
+graphviz
