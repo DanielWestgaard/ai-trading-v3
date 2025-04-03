@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from models.base_model import BaseModel
 from typing import Dict, List, Union, Tuple, Optional, Any
+import config.system_config as sys_congig
 
 class XGBoostModel(BaseModel):
     """XGBoost model implementation."""
@@ -15,7 +16,7 @@ class XGBoostModel(BaseModel):
                  prediction_type: str = 'classification',
                  lookback_periods: int = 10,
                  prediction_horizon: int = 1,
-                 model_dir: str = 'model_storage',
+                 model_dir: str = sys_congig.SAVED_MODELS_DIR,
                  **xgb_params):
         """
         Initialize XGBoost model.
@@ -40,7 +41,7 @@ class XGBoostModel(BaseModel):
             model_dir=model_dir
         )
         
-        # Default XGBoost parameters
+        # Default XGBoost parameters - potential for optimizing parameters?
         self.xgb_params = {
             'n_estimators': 100,
             'max_depth': 5,
@@ -152,7 +153,6 @@ class XGBoostModel(BaseModel):
         
         For feature selection BEFORE training as part of the data pipeline,
         use the FeatureSelector class from data.features.feature_selector.
-
         
         Args:
             plot: Whether to plot feature importance

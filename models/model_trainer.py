@@ -10,6 +10,7 @@ import seaborn as sns
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from models.model_factory import ModelFactory
+import config.system_config as sys_config
 
 class ModelTrainer:
     """Class for training and evaluating prediction models."""
@@ -25,8 +26,8 @@ class ModelTrainer:
                  validation_size: float = 0.1,
                  n_splits: int = 5,
                  scale_features: bool = True,
-                 model_dir: str = 'model_storage',
-                 results_dir: str = 'ml_model_results',
+                 model_dir: str = sys_config.SAVED_MODELS_DIR,
+                 results_dir: str = sys_config.ML_MODEL_RESULTS_DIR,
                  model_params: Dict[str, Any] = None):
         """
         Initialize the model trainer.

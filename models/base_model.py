@@ -7,6 +7,7 @@ import pickle
 import logging
 from datetime import datetime
 from typing import Dict, List, Union, Tuple, Optional, Any
+import config.system_config as sys_config
 
 class BaseModel(ABC):
     """Abstract base class for all prediction models."""
@@ -18,7 +19,7 @@ class BaseModel(ABC):
                  prediction_type: str = 'classification',
                  lookback_periods: int = 10,
                  prediction_horizon: int = 1,
-                 model_dir: str = 'model_storage'):
+                 model_dir: str = sys_config.SAVED_MODELS_DIR):
         """
         Initialize the base model.
         

@@ -48,8 +48,8 @@ def train_model(df, model_config):
         validation_size=model_config.get('validation_size', 0.1),
         n_splits=model_config.get('n_splits', 5),
         scale_features=model_config.get('scale_features', True),
-        model_dir=model_config.get('model_dir', 'model_storage'),
-        results_dir=model_config.get('results_dir', 'ml_model_results'),
+        #model_dir=model_config.get('model_dir', 'model_storage'),
+        #results_dir=model_config.get('results_dir', 'ml_model_results'),
         model_params=model_config.get('model_params', {})
     )
     

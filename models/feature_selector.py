@@ -1,5 +1,3 @@
-# Is this even needed??
-
 # models/feature_selector.py
 import os
 import pandas as pd
@@ -9,6 +7,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Dict, List, Union, Tuple, Optional, Any
 from datetime import datetime
+import config.system_config as sys_config
+
 
 class ModelFeatureSelector:
     """Utility for selecting optimal features for prediction models."""
@@ -22,7 +22,7 @@ class ModelFeatureSelector:
                  min_features: int = 5,
                  correlation_threshold: float = 0.7,
                  cv_folds: int = 5,
-                 output_dir: str = 'ml_model_results'):
+                 output_dir: str = sys_config.ML_MODEL_RESULTS_DIR):
         """
         Initialize the feature selector.
         

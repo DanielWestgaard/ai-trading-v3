@@ -1,0 +1,124 @@
+03-04-2025 10:22:59 - INFO - Logging system initialized. Environment: development
+03-04-2025 10:23:00 - INFO - Starting model training and backtesting workflow
+03-04-2025 10:23:00 - INFO - Loading data from data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+03-04-2025 10:23:00 - INFO - Data loaded with shape: (74693, 42)
+03-04-2025 10:23:00 - INFO - Date range: 2024-01-02 00:35:00 to 2024-12-31 21:55:00
+03-04-2025 10:23:00 - INFO - Training model with configuration:
+03-04-2025 10:23:00 - INFO - {
+  "model_type": "xgboost",
+  "prediction_type": "classification",
+  "target": "close_return",
+  "features": null,
+  "prediction_horizon": 1,
+  "test_size": 0.2,
+  "cross_validate": true,
+  "scale_features": true,
+  "model_params": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "learning_rate": 0.1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "objective": "binary:logistic",
+    "eval_metric": "auc",
+    "random_state": 42
+  }
+}
+03-04-2025 10:23:00 - INFO - Auto-selected 40 features
+03-04-2025 10:23:00 - INFO - Data prepared: 59754 training samples, 14939 test samples
+03-04-2025 10:23:00 - INFO - Training xgboost model...
+03-04-2025 10:23:01 - INFO - XGBoost model trained with 59754 samples
+03-04-2025 10:23:01 - INFO - Model evaluation metrics: {'accuracy': 0.5160988017939621, 'precision': 0.5214808043875686, 'recall': 0.7410053253669308, 'f1': 0.6121573045764258, 'roc_auc': np.float64(0.5138271168172088)}
+03-04-2025 10:23:01 - INFO - Model saved to /Users/danielwestgaard/progRel/ai-trading-v3/model_related_storage/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+03-04-2025 10:23:01 - INFO - Feature importance plot saved to /Users/danielwestgaard/progRel/ai-trading-v3/model_related_storage/model_storage/xgboost_20250403_102300_feature_importance.png
+03-04-2025 10:23:01 - INFO - Prediction plot saved to /Users/danielwestgaard/progRel/ai-trading-v3/model_related_storage/ml_model_results/xgboost_predictions_20250403_102301.png
+03-04-2025 10:23:01 - INFO - Performing cross-validation
+03-04-2025 10:23:01 - INFO - Calculated step size of 61 days for 5 splits
+03-04-2025 10:23:01 - INFO - Split 1: Train 2024-01-02 00:35:00 to 2024-04-01 00:35:00, Test 2024-04-01 00:35:00 to 2024-05-01 00:35:00
+03-04-2025 10:23:01 - INFO - Split 2: Train 2024-03-03 00:35:00 to 2024-06-01 00:35:00, Test 2024-06-01 00:35:00 to 2024-07-01 00:35:00
+03-04-2025 10:23:01 - INFO - Split 3: Train 2024-05-03 00:35:00 to 2024-08-01 00:35:00, Test 2024-08-01 00:35:00 to 2024-08-31 00:35:00
+03-04-2025 10:23:01 - INFO - Split 4: Train 2024-07-03 00:35:00 to 2024-10-01 00:35:00, Test 2024-10-01 00:35:00 to 2024-10-31 00:35:00
+03-04-2025 10:23:01 - INFO - Split 5: Train 2024-09-02 00:35:00 to 2024-12-01 00:35:00, Test 2024-12-01 00:35:00 to 2024-12-31 00:35:00
+03-04-2025 10:23:01 - INFO - Created 5 time series splits
+03-04-2025 10:23:01 - INFO - Cross-validation fold 1/5
+03-04-2025 10:23:01 - INFO - XGBoost model trained with 18410 samples
+03-04-2025 10:23:01 - INFO - Cross-validation fold 2/5
+03-04-2025 10:23:02 - INFO - XGBoost model trained with 18684 samples
+03-04-2025 10:23:02 - INFO - Cross-validation fold 3/5
+03-04-2025 10:23:02 - INFO - XGBoost model trained with 18393 samples
+03-04-2025 10:23:02 - INFO - Cross-validation fold 4/5
+03-04-2025 10:23:02 - INFO - XGBoost model trained with 18392 samples
+03-04-2025 10:23:02 - INFO - Cross-validation fold 5/5
+03-04-2025 10:23:02 - INFO - XGBoost model trained with 18642 samples
+03-04-2025 10:23:02 - INFO - Cross-validation results: {'avg_accuracy': np.float64(0.5024793708637317), 'avg_precision': np.float64(0.532131294720452), 'avg_recall': np.float64(0.6378700803015608), 'avg_f1': np.float64(0.5651474235888615), 'avg_roc_auc': np.float64(0.49565606084229)}
+03-04-2025 10:23:02 - INFO - Cross-validation results saved to /Users/danielwestgaard/progRel/ai-trading-v3/model_related_storage/ml_model_results/xgboost_cv_results_20250403_102302.csv
+03-04-2025 10:23:02 - INFO - Cross-validation results: {'accuracy': [0.47319310453898467, 0.5177892918825562, 0.4898056705957311, 0.5154965211891208, 0.5161122661122661], 'precision': [0.5329760923330585, 0.5347568208778173, 0.5480717001629549, 0.5202702702702703, 0.524581589958159], 'recall': [0.7082990961380444, 0.7306320907617504, 0.2985207100591716, 0.778969957081545, 0.6729285474672928], 'f1': [0.6082559096789368, 0.6175342465753425, 0.3865159931047692, 0.6238644733611588, 0.5895664952240999], 'roc_auc': [np.float64(0.4295695277481192), np.float64(0.5111514483353655), np.float64(0.5095218187609492), np.float64(0.508315926202844), np.float64(0.5197215831641722)], 'avg_accuracy': np.float64(0.5024793708637317), 'avg_precision': np.float64(0.532131294720452), 'avg_recall': np.float64(0.6378700803015608), 'avg_f1': np.float64(0.5651474235888615), 'avg_roc_auc': np.float64(0.49565606084229), 'std_accuracy': np.float64(0.017933230555485895), 'std_precision': np.float64(0.009585254710087265), 'std_recall': np.float64(0.17312498565346113), 'std_f1': np.float64(0.09006208052879698), 'std_roc_auc': np.float64(0.03328428364318126)}
+03-04-2025 10:23:02 - INFO - Setting up backtest with configuration:
+03-04-2025 10:23:02 - INFO - {
+  "backtest_id": "xgboost_gbpusd_20250403_102300",
+  "market_data": {
+    "symbols": [
+      "GBPUSD"
+    ],
+    "date_col": "date"
+  },
+  "initial_capital": 10000.0,
+  "prediction_threshold": 0.55,
+  "confidence_threshold": 0.6,
+  "lookback_window": 1,
+  "risk_manager": {
+    "position_sizing_method": "percent",
+    "position_sizing_params": {
+      "percent": 2.0
+    }
+  }
+}
+03-04-2025 10:23:02 - INFO - Output directory: backtest_results
+03-04-2025 10:23:02 - INFO - Loading processed data from data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+03-04-2025 10:23:03 - INFO - Loaded 74693 data points from processed data
+03-04-2025 10:23:03 - INFO - Filtered GBPUSD data to 74693 points with common dates
+03-04-2025 10:23:03 - INFO - Using 40 features for model predictions
+03-04-2025 10:23:03 - INFO - Initializing model-based strategy
+03-04-2025 10:23:03 - INFO - Created backtest: xgboost_gbpusd_20250403_102300
+03-04-2025 10:23:03 - INFO - Running backtest: xgboost_gbpusd_20250403_102300
+03-04-2025 10:23:03 - INFO - Reset market data iterator
+03-04-2025 10:23:03 - INFO - Starting backtest with ModelBasedStrategy
+03-04-2025 10:23:03 - INFO - Initial capital: 10000.0
+03-04-2025 10:23:03 - INFO - Market data: 1 symbols, 313 data points
+03-04-2025 10:23:03 - INFO - Backtest starting with model-based strategy
+03-04-2025 10:23:03 - INFO - Generated signal: SIGNAL: BUY GBPUSD (strength: 1.0) from ModelBasedStrategy
+03-04-2025 10:23:03 - INFO - Using close_raw price for GBPUSD: 1.27164
+03-04-2025 10:23:03 - INFO - Order executed: ORDER: BUY 1.0 GBPUSD (MARKET) -> FILL: BUY 1.0 GBPUSD @ 1.27164
+03-04-2025 10:23:03 - INFO - Opened new position: OPEN LONG 1.0 GBPUSD @ 1.27164
+03-04-2025 10:23:03 - INFO - Processed fill: FILL: BUY 1.0 GBPUSD @ 1.27164
+03-04-2025 10:23:06 - INFO - Backtest completed with model-based strategy
+03-04-2025 10:23:06 - INFO - Symbol: GBPUSD - Total predictions: 313, Signals generated: 1
+03-04-2025 10:23:06 - INFO - Calculating performance metrics
+03-04-2025 10:23:06 - INFO - Backtest completed for ModelBasedStrategy
+03-04-2025 10:23:06 - INFO - Final equity: 9998.71 (Return: -0.01%)
+03-04-2025 10:23:06 - INFO - Total trades: 0
+03-04-2025 10:23:06 - INFO - Backtest completed in 2.74 seconds
+03-04-2025 10:23:06 - INFO - Plotting equity curve
+03-04-2025 10:23:06 - INFO - Saved figure to backtest_results/xgboost_gbpusd_20250403_102300/reports/equity_curve.png
+03-04-2025 10:23:06 - INFO - Plotting top 5 drawdowns
+03-04-2025 10:23:06 - INFO - Saved figure to backtest_results/xgboost_gbpusd_20250403_102300/reports/drawdowns.png
+03-04-2025 10:23:06 - INFO - Plotting monthly returns heatmap
+03-04-2025 10:23:06 - INFO - Saved figure to backtest_results/xgboost_gbpusd_20250403_102300/reports/monthly_returns.png
+03-04-2025 10:23:06 - INFO - Plotting D return distribution
+03-04-2025 10:23:07 - INFO - Saved figure to backtest_results/xgboost_gbpusd_20250403_102300/reports/return_distribution.png
+03-04-2025 10:23:07 - INFO - Plotting trade analysis
+03-04-2025 10:23:07 - WARNING - No trade data for plotting
+03-04-2025 10:23:07 - INFO - Creating performance dashboard
+03-04-2025 10:23:07 - INFO - Saved figure to backtest_results/xgboost_gbpusd_20250403_102300/reports/performance_dashboard.png
+03-04-2025 10:23:07 - INFO - Generated performance reports for xgboost_gbpusd_20250403_102300
+03-04-2025 10:23:07 - INFO - Saved results for xgboost_gbpusd_20250403_102300
+03-04-2025 10:23:07 - INFO - Completed backtest: xgboost_gbpusd_20250403_102300
+03-04-2025 10:23:07 - WARNING - No results found for backtest: indicator_crossover_gbpusd
+03-04-2025 10:23:07 - INFO - Comparison with baseline:
+                      backtest_id            strategy  initial_capital  final_equity    return  total_trades  ...  max_drawdown_pct  sharpe_ratio  sortino_ratio  calmar_ratio  win_rate_pct  profit_factor
+0  xgboost_gbpusd_20250403_102300  ModelBasedStrategy          10000.0   9998.710118 -0.012899             1  ...         -0.013017     -0.907102      -0.635553        -0.802           0.0            inf
+
+[1 rows x 13 columns]
+03-04-2025 10:23:07 - WARNING - No results found for backtest: indicator_crossover_gbpusd
+03-04-2025 10:23:07 - INFO - Saved equity comparison to backtest_results/xgboost_gbpusd_20250403_102300/reports/comparison.png
+03-04-2025 10:23:07 - INFO - Workflow completed successfully
