@@ -17,6 +17,8 @@ from models.model_factory import ModelFactory
 from backtesting.backtest_runner import BacktestRunner
 from backtesting.strategies.model_based_strategy import ModelBasedStrategy
 from backtesting.data.market_data import PipelineMarketData
+from config import data_config
+
 
 def load_data(data_path):
     """Load and prepare data."""
@@ -117,15 +119,15 @@ def run_backtest(model, data_path, backtest_config):
     
     return results, runner
 
-def main():
+def main(data_path=None, model_config=None):
     """Main function to run the entire workflow."""
     logger.info("Starting model training and backtesting workflow")
     
     # Configuration
-    DATA_PATH = "data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv"
+    DATA_PATH = data_path or data_config.TESTING_PROCESSED_DATA  # "data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv"
     
     # Model configuration
-    model_config = {
+    model_config = model_config or {
         'model_type': 'xgboost',
         'prediction_type': 'classification',
         'target': 'close_return',  # Be explicit
@@ -173,27 +175,27 @@ def main():
         model, trainer = train_model(df, model_config)
         
         # Run backtest
-        results, runner = run_backtest(model, DATA_PATH, backtest_config)
+        # results, runner = run_backtest(model, DATA_PATH, backtest_config)
         
         # Final results
-        backtest_id = backtest_config['backtest_id']
-        logger.info(f"Completed backtest: {backtest_id}")
+        # backtest_id = backtest_config['backtest_id']
+        # logger.info(f"Completed backtest: {backtest_id}")
         
-        # Compare with baseline
-        baseline_id = "indicator_crossover_gbpusd"  # Replace with your baseline strategy
+        # # Compare with baseline
+        # baseline_id = "indicator_crossover_gbpusd"  # Replace with your baseline strategy
         
-        try:
-            comparison = runner.compare_backtests([backtest_id, baseline_id])
-            logger.info(f"Comparison with baseline:\n{comparison}")
+        # try:
+        #     comparison = runner.compare_backtests([backtest_id, baseline_id])
+        #     logger.info(f"Comparison with baseline:\n{comparison}")
             
-            # Plot comparison
-            runner.plot_equity_comparison(
-                [backtest_id, baseline_id],
-                title="Model vs Indicator Strategy",
-                save_path=f"backtest_results/{backtest_id}/reports/comparison.png"
-            )
-        except Exception as e:
-            logger.warning(f"Could not compare with baseline: {str(e)}")
+        #     # Plot comparison
+        #     runner.plot_equity_comparison(
+        #         [backtest_id, baseline_id],
+        #         title="Model vs Indicator Strategy",
+        #         save_path=f"backtest_results/{backtest_id}/reports/comparison.png"
+        #     )
+        # except Exception as e:
+        #     logger.warning(f"Could not compare with baseline: {str(e)}")
         
         logger.info("Workflow completed successfully")
         
