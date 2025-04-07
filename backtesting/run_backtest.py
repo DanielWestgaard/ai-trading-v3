@@ -46,7 +46,7 @@ def parse_args():
 
 
 def main(config_file:str=None):
-    """Main function."""
+    """Main function for testing basic functionality. After a while, this can be deleted."""
     args = parse_args()
     
     # Set up logging
