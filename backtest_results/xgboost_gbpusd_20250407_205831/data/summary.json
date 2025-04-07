@@ -1,0 +1,10 @@
+{
+    "backtest_id": "xgboost_gbpusd_20250407_205831",
+    "strategy": "ModelBasedStrategy",
+    "initial_capital": 10000.0,
+    "final_equity": 9983.936462532452,
+    "return": -0.1606353746754774,
+    "total_trades": 5918,
+    "execution_time": 53.522305965423584,
+    "timestamp": "2025-04-07 20:59:36"
+}
