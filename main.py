@@ -25,7 +25,7 @@ def parse_arguments():
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=True, help='Run backtesting on trained model')
-    parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
+    parser.add_argument('--test-backtest', action='store_true', default=True, help='Test backtesting (simple)')
     
     return parser.parse_args()
 

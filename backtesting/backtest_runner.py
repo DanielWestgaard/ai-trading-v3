@@ -15,6 +15,7 @@ from backtesting.portfolio import Portfolio
 from backtesting.performance import PerformanceTracker
 from backtesting.visualization import BacktestVisualizer
 from backtesting.risk_manager import RiskManager
+import config.system_config as sys_config
 
 
 class BacktestRunner:
@@ -41,7 +42,7 @@ class BacktestRunner:
         """
         
         # Setup output directory
-        self.output_dir = output_dir or os.path.join(os.getcwd(), 'backtest_results')
+        self.output_dir = output_dir or sys_config.BACKTEST_RESTULTS_DIR
         os.makedirs(self.output_dir, exist_ok=True)
         logging.info(f"Output directory: {self.output_dir}")
         

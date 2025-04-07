@@ -15,6 +15,7 @@ BASE_LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance", "backtesting"]
 BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
 BASE_CONFIG_DIR = os.path.join(BASE_DIR, 'config')
+BACKTEST_RESTULTS_DIR = os.path.join(BASE_DIR, 'backtest_results')
 
 # Capital.com related to data storage
 CAPCOM_BASE_DATA_DIR = os.path.join(BASE_DATA_DIR, 'capital_com')
