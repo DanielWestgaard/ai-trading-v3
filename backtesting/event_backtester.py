@@ -418,6 +418,30 @@ class EventDrivenBacktester(BaseBacktester):
             # Add order to queue
             self.add_event(order)
             logging.debug(f"Created order from signal: {order}")
+        
+        # Add this new code to handle exit signals
+        elif signal.signal_type.value in ["EXIT_LONG", "EXIT_SHORT"]:
+            # For EXIT signals, determine the correct side to exit
+            order_side = OrderSide.SELL if signal.signal_type.value == "EXIT_LONG" else OrderSide.BUY
+            
+            # Get current position to determine quantity
+            current_position = self.portfolio.get_position(signal.symbol)
+            quantity = current_position.quantity if current_position else 0
+            
+            if quantity > 0:
+                # Create order to close position
+                order = OrderEvent(
+                    timestamp=signal.timestamp,
+                    symbol=signal.symbol,
+                    order_type=OrderType.MARKET,
+                    order_side=order_side,
+                    quantity=quantity,
+                    signal_id=id(signal)
+                )
+                
+                # Add order to queue
+                self.add_event(order)
+                logging.debug(f"Created exit order from signal: {order}")
                 
     def process_order(self, order: OrderEvent):
         """

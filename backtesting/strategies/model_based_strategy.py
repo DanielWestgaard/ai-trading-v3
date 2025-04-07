@@ -75,6 +75,8 @@ class ModelBasedStrategy(BaseStrategy):
             List of signal events
         """
         signals = []
+        # Synchronize position tracking with actual portfolio positions
+        self.synchronize_positions(portfolio)
         
         for symbol, data in market_data.items():
             if symbol not in self.symbols:
@@ -120,6 +122,12 @@ class ModelBasedStrategy(BaseStrategy):
                 # Get current position
                 current_position = self.position_history.get(symbol, 0)
                 
+                # Get ACTUAL current position from portfolio instead of relying on self.position_history
+                current_position = 0
+                portfolio_position = portfolio.get_position(symbol)
+                if portfolio_position:
+                    current_position = 1 if portfolio_position.direction == "LONG" else -1
+                
                 # Generate signal based on prediction and confidence
                 signal = None
                 
@@ -139,7 +147,6 @@ class ModelBasedStrategy(BaseStrategy):
                                 'prediction': prediction
                             }
                         )
-                        self.position_history[symbol] = 1
                     
                     # Short signal
                     elif prediction == -1 and current_position >= 0:
@@ -155,7 +162,33 @@ class ModelBasedStrategy(BaseStrategy):
                                 'prediction': prediction
                             }
                         )
-                        self.position_history[symbol] = -1
+                
+                # Add this new code to exit positions when prediction changes
+                # Exit long position when prediction becomes negative
+                elif current_position > 0 and prediction == -1:
+                    signal = self.create_signal(
+                        symbol=symbol,
+                        signal_type=SignalType.EXIT_LONG,
+                        timestamp=data.timestamp,
+                        reason=f"Exit long: prediction changed to DOWN (confidence: {confidence:.4f})",
+                        metadata={
+                            'confidence': confidence,
+                            'prediction': prediction
+                        }
+                    )
+                
+                # Exit short position when prediction becomes positive
+                elif current_position < 0 and prediction == 1:
+                    signal = self.create_signal(
+                        symbol=symbol,
+                        signal_type=SignalType.EXIT_SHORT,
+                        timestamp=data.timestamp,
+                        reason=f"Exit short: prediction changed to UP (confidence: {confidence:.4f})",
+                        metadata={
+                            'confidence': confidence,
+                            'prediction': prediction
+                        }
+                    )
                 
                 # Add signal to list if generated
                 if signal:
@@ -240,3 +273,13 @@ class ModelBasedStrategy(BaseStrategy):
             return pd.DataFrame()
         
         return pd.concat(all_history, ignore_index=True)
+    
+    def synchronize_positions(self, portfolio):
+        """Synchronize strategy position tracking with actual portfolio positions."""
+        for symbol in self.symbols:
+            position = portfolio.get_position(symbol)
+            if position is None:
+                self.position_history[symbol] = 0
+            else:
+                # If position direction is LONG, set to 1, if SHORT, set to -1
+                self.position_history[symbol] = 1 if position.direction == "LONG" else -1
