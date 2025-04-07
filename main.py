@@ -2,14 +2,18 @@ import argparse
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
+from backtesting.strategies.model_based_strategy import ModelBasedStrategy
 from data.pipelines.data_pipeline import DataPipeline
 from data.processors.cleaner import DataCleaner
+from models.model_factory import ModelFactory
 import utils.logging_utils as log_utils
 from broker.capital_com.capitalcom import CapitalCom
 import config.data_config as data_config
 import config.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
+import models.base_model as base_model
+
 
 def parse_arguments():
     """Parse command line arguments."""
@@ -19,7 +23,7 @@ def parse_arguments():
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
-    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
+    parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=True, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     
@@ -119,10 +123,22 @@ def main():
         model, trainer = run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
 
     if args.backtest_trained_model:
-        # possibility of backtesting an "old" model
-        if model is None:
-            pass
-        run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+        if args.train_model:  # The model has just been trained
+            logger.info("Backtesting newly trained model.")
+            print(model.features)
+            run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+        else:  # Model has not newly been trained, so need to fetch a model
+            logger.info("Backtesting older model.")
+            model_type = "xgboost"  # or "random_forest" depending on is already saved
+            model = ModelFactory.create_model(model_type)
+
+            # 2. Load the saved model from disk
+            model_path = "model_related_storage/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+            success = model.load(model_path)
+            if success:
+                run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+            else:
+                logger.error("Could not find model.")
         
     if args.test_backtest:
         config_file = sys_config.CONFIG_BACKTESTING_PATH
