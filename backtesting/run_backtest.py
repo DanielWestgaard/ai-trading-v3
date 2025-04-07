@@ -11,6 +11,8 @@ import json
 from datetime import datetime
 import pandas as pd
 
+from backtesting.strategies.model_based_strategy import ModelBasedStrategy
+
 # Add parent directory to path so we can import modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -141,3 +143,100 @@ def main(config_file:str=None):
 
 if __name__ == '__main__':
     main()
+    
+    
+def run_backtest(model, data_path, backtest_config):
+    """Run a backtest using the trained model."""
+    logging.info("Setting up backtest with configuration:")
+    logging.info(json.dumps(backtest_config, indent=2))
+    
+    # Create backtest runner
+    runner = BacktestRunner(
+        output_dir=backtest_config.get('output_dir', 'backtest_results')
+    )
+    
+    # Set up market data
+    market_data_config = backtest_config.get('market_data', {})
+    market_data = PipelineMarketData(
+        processed_data_path=data_path,
+        symbols=market_data_config.get('symbols', ['GBPUSD']),
+        date_col=market_data_config.get('date_col', 'date')
+    )
+    
+    # Set up model-based strategy
+    required_features = model.features
+    logging.info(f"Using {len(required_features)} features for model predictions")
+    
+    strategy = ModelBasedStrategy(
+        symbols=market_data_config.get('symbols', ['GBPUSD']),
+        model=model,
+        prediction_threshold=backtest_config.get('prediction_threshold', 0.55),
+        confidence_threshold=backtest_config.get('confidence_threshold', 0.0),
+        lookback_window=backtest_config.get('lookback_window', 1),
+        required_features=required_features
+    )
+    
+    # Set up and run backtest
+    backtest_id = backtest_config.get('backtest_id', f'model_backtest_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+    
+    # Create backtest
+    runner.create_backtest(
+        backtest_id=backtest_id,
+        strategy=strategy,
+        market_data=market_data,
+        initial_capital=backtest_config.get('initial_capital', 10000.0),
+        risk_manager_config=backtest_config.get('risk_manager'),
+        slippage_model=backtest_config.get('slippage_model', 'fixed'),
+        slippage_params=backtest_config.get('slippage_params')
+    )
+    
+    # Run backtest
+    results = runner.run_backtest(backtest_id)
+    
+    # Display summary
+    runner.display_summary_table(backtest_id)
+    
+    return results, runner
+
+def main_backtest_trained_model(model, DATA_PATH):
+    # Backtest configuration
+    backtest_config = {
+        'backtest_id': f'xgboost_gbpusd_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+        'market_data': {
+            'symbols': ['GBPUSD'],
+            'date_col': 'date'
+        },
+        'initial_capital': 10000.0,
+        'prediction_threshold': 0.55,
+        'confidence_threshold': 0.6,
+        'lookback_window': 1,
+        'risk_manager': {
+            'position_sizing_method': 'percent',
+            'position_sizing_params': {
+                'percent': 2.0  # Use 2% of equity per trade
+            }
+        }
+    }
+    
+    # Run backtest
+    results, runner = run_backtest(model, DATA_PATH, backtest_config)
+    
+    # Final results
+    backtest_id = backtest_config['backtest_id']
+    logging.info(f"Completed backtest: {backtest_id}")
+    
+    # Compare with baseline
+    baseline_id = "indicator_crossover_gbpusd"  # Replace with your baseline strategy
+    
+    try:
+        comparison = runner.compare_backtests([backtest_id, baseline_id])
+        logging.info(f"Comparison with baseline:\n{comparison}")
+        
+        # Plot comparison
+        runner.plot_equity_comparison(
+            [backtest_id, baseline_id],
+            title="Model vs Indicator Strategy",
+            save_path=f"backtest_results/{backtest_id}/reports/comparison.png"
+        )
+    except Exception as e:
+        logging.warning(f"Could not compare with baseline: {str(e)}")

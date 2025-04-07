@@ -19,8 +19,9 @@ def parse_arguments():
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
-    parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
-    parser.add_argument('--backtest', action='store_true', default=True, help='Run backtesting')
+    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
+    parser.add_argument('--backtest-trained-model', action='store_true', default=True, help='Run backtesting on trained model')
+    parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
 
@@ -115,12 +116,17 @@ def main():
             }
         }
         
-        run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
+        model, trainer = run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
 
-    if args.backtest:
+    if args.backtest_trained_model:
+        # possibility of backtesting an "old" model
+        if model is None:
+            pass
+        run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+        
+    if args.test_backtest:
         config_file = sys_config.CONFIG_BACKTESTING_PATH
         run_backtest.main(config_file=config_file)
-        pass
 
 if __name__ == "__main__":
     exit(main())
