@@ -1,4 +1,5 @@
 # Is this file even needed?? Walk-Forward Testing and Cross-Validation Implementation example usage
+# This is more advanced than the one in main.py?? Currently not tested nor utilized.
 
 import pandas as pd
 import numpy as np
