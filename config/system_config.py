@@ -14,6 +14,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ai-tra
 BASE_LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance", "backtesting"]
 BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
+BASE_CONFIG_DIR = os.path.join(BASE_DIR, 'config')
+BACKTEST_RESTULTS_DIR = os.path.join(BASE_DIR, 'backtest_results')
 
 # Capital.com related to data storage
 CAPCOM_BASE_DATA_DIR = os.path.join(BASE_DATA_DIR, 'capital_com')
@@ -26,6 +28,9 @@ MODEL_BASE_DIR = os.path.join(BASE_DIR, 'model_related_storage')
 SAVED_MODELS_DIR = os.path.join(MODEL_BASE_DIR, 'model_storage')
 ML_MODEL_RESULTS_DIR = os.path.join(MODEL_BASE_DIR, 'ml_model_results')
 MODEL_METADATA_DIR = os.path.join(MODEL_BASE_DIR, 'metadata')
+
+# Backtesting config
+CONFIG_BACKTESTING_PATH = os.path.join(BASE_CONFIG_DIR, 'indicator_strategy_config.json')
 
 # Environments
 DEV_ENV = "development"

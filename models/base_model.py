@@ -147,8 +147,8 @@ class BaseModel(ABC):
             return None
         
         if filepath is None:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filepath = os.path.join(self.model_dir, f"{self.name}_{timestamp}.pkl")
+            #timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filepath = os.path.join(self.model_dir, f"{self.name}.pkl")
         
         # Update metadata
         self.metadata['saved_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

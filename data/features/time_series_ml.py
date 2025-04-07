@@ -52,22 +52,6 @@ class TimeSeriesSplit:
         self.end_date = end_date
         self.n_splits = n_splits
         self.date_column = date_column
-        self.logger = self._setup_logger()
-    
-    def _setup_logger(self) -> logging.Logger:
-        """Set up and configure the logger."""
-        logger = logging.getLogger(f"{__name__}.TimeSeriesSplit")
-        logger.setLevel(logging.INFO)
-        
-        # Add handlers if they don't exist
-        if not logger.handlers:
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            console_handler.setFormatter(formatter)
-            logger.addHandler(console_handler)
-            
-        return logger
     
     def _parse_period(self, period: Union[str, int, timedelta], 
                     reference_index: pd.DatetimeIndex) -> Union[int, timedelta]:
@@ -102,17 +86,17 @@ class TimeSeriesSplit:
                     else:
                         raise ValueError(f"Unrecognized period format: {period}")
                 except ValueError:
-                    self.logger.warning(f"Could not parse period '{period}' as timedelta. Using default 30 days.")
+                    logging.warning(f"Could not parse period '{period}' as timedelta. Using default 30 days.")
                     return timedelta(days=30)
             else:
                 # Try to interpret as a number of periods
                 try:
                     return int(period)
                 except ValueError:
-                    self.logger.warning(f"Could not parse period: {period}. Using default 30 days.")
+                    logging.warning(f"Could not parse period: {period}. Using default 30 days.")
                     return timedelta(days=30)
         
-        self.logger.warning(f"Unrecognized period type: {type(period)}. Using default 30 days.")
+        logging.warning(f"Unrecognized period type: {type(period)}. Using default 30 days.")
         return timedelta(days=30)
 
     def split(self, data: pd.DataFrame) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
@@ -135,7 +119,7 @@ class TimeSeriesSplit:
                                                         date_str in ['date', 'time', 'timestamp'])]
             if date_cols:
                 self.date_column = date_cols[0]
-                self.logger.info(f"Using '{self.date_column}' as date column")
+                logging.info(f"Using '{self.date_column}' as date column")
             else:
                 raise ValueError(f"Date column '{self.date_column}' not found and no alternative available")
         
@@ -187,13 +171,13 @@ class TimeSeriesSplit:
                 test_indices = indices[train_end:test_end]
                 
                 if len(train_indices) == 0 or len(test_indices) == 0:
-                    self.logger.warning(f"Skipping empty split at index {i}")
+                    logging.warning(f"Skipping empty split at index {i}")
                     continue
                 
                 train_data = df.iloc[train_indices].copy()
                 test_data = df.iloc[test_indices].copy()
                 
-                self.logger.info(f"Split {len(splits)+1}: Train {len(train_data)} samples, Test {len(test_data)} samples")
+                logging.info(f"Split {len(splits)+1}: Train {len(train_data)} samples, Test {len(test_data)} samples")
                 splits.append((train_data, test_data))
         
         else:
@@ -219,11 +203,11 @@ class TimeSeriesSplit:
             if self.n_splits is not None:
                 # Ensure both periods are timedeltas for consistent date arithmetic
                 if not isinstance(train_period, timedelta):
-                    self.logger.warning(f"Converting train_period to timedelta from {type(train_period)}")
+                    logging.warning(f"Converting train_period to timedelta from {type(train_period)}")
                     train_period = timedelta(days=30)  # Default fallback
                     
                 if not isinstance(test_period, timedelta):
-                    self.logger.warning(f"Converting test_period to timedelta from {type(test_period)}")
+                    logging.warning(f"Converting test_period to timedelta from {type(test_period)}")
                     test_period = timedelta(days=10)  # Default fallback
                 
                 # Calculate total range in days
@@ -236,7 +220,7 @@ class TimeSeriesSplit:
                 days_between_splits = total_days / (self.n_splits - 1) if self.n_splits > 1 else test_period.days
                 step_size = timedelta(days=int(days_between_splits))
                 
-                self.logger.info(f"Calculated step size of {step_size.days} days for {self.n_splits} splits")
+                logging.info(f"Calculated step size of {step_size.days} days for {self.n_splits} splits")
             
             # Generate splits
             current_train_start = start_date
@@ -244,15 +228,15 @@ class TimeSeriesSplit:
             while True:
                 # Ensure both periods are timedeltas for consistent date arithmetic
                 if not isinstance(train_period, timedelta):
-                    self.logger.warning(f"Converting train_period to timedelta from {type(train_period)}")
+                    logging.warning(f"Converting train_period to timedelta from {type(train_period)}")
                     train_period = timedelta(days=30)  # Default fallback
                     
                 if not isinstance(test_period, timedelta):
-                    self.logger.warning(f"Converting test_period to timedelta from {type(test_period)}")
+                    logging.warning(f"Converting test_period to timedelta from {type(test_period)}")
                     test_period = timedelta(days=10)  # Default fallback
                     
                 if not isinstance(step_size, timedelta):
-                    self.logger.warning(f"Converting step_size to timedelta from {type(step_size)}")
+                    logging.warning(f"Converting step_size to timedelta from {type(step_size)}")
                     step_size = test_period  # Default to test period size
                 
                 train_end = current_train_start + train_period
@@ -264,7 +248,7 @@ class TimeSeriesSplit:
                 # Limit training size if specified
                 if max_train_size is not None:
                     if not isinstance(max_train_size, timedelta):
-                        self.logger.warning(f"Converting max_train_size to timedelta from {type(max_train_size)}")
+                        logging.warning(f"Converting max_train_size to timedelta from {type(max_train_size)}")
                         max_train_size = train_period  # Default to full train period
                         
                     actual_train_start = max(start_date, train_end - max_train_size)
@@ -278,17 +262,17 @@ class TimeSeriesSplit:
                 test_data = df[test_mask].copy()
                 
                 if len(train_data) == 0 or len(test_data) == 0:
-                    self.logger.warning(f"Skipping empty split at {train_end}")
+                    logging.warning(f"Skipping empty split at {train_end}")
                     current_train_start += step_size
                     continue
                 
                 splits.append((train_data, test_data))
-                self.logger.info(f"Split {len(splits)}: Train {actual_train_start} to {train_end}, "
+                logging.info(f"Split {len(splits)}: Train {actual_train_start} to {train_end}, "
                             f"Test {train_end} to {test_end}")
                 
                 current_train_start += step_size
         
-        self.logger.info(f"Created {len(splits)} time series splits")
+        logging.info(f"Created {len(splits)} time series splits")
         
         return splits
     
@@ -318,13 +302,13 @@ class TimeSeriesSplit:
             price_cols = [col for col in df.columns if any(x in col.lower() for x in ['close', 'price', 'open'])]
             if price_cols:
                 value_column = price_cols[0]
-                self.logger.info(f"Using '{value_column}' instead of '{value_column}'")
+                logging.info(f"Using '{value_column}' instead of '{value_column}'")
             else:
                 # Use the first numeric column
                 numeric_cols = df.select_dtypes(include=['number']).columns
                 if len(numeric_cols) > 0:
                     value_column = numeric_cols[0]
-                    self.logger.info(f"Using '{value_column}' as fallback")
+                    logging.info(f"Using '{value_column}' as fallback")
                 else:
                     raise ValueError("No suitable numeric column found for visualization")
         
@@ -367,7 +351,7 @@ class ModelPerformanceTracker:
         self.metrics = {}
         self.performance_by_regime = {}
         self.output_dir = output_dir
-        self.logger = self._setup_logger()
+        logging = self._setup_logger()
         
         if output_dir and not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -423,7 +407,7 @@ class ModelPerformanceTracker:
         self.metrics[fold_id] = metrics
         
         # Log summary
-        self.logger.info(f"Fold {fold_id} metrics: {metrics}")
+        logging.info(f"Fold {fold_id} metrics: {metrics}")
         
         # Save predictions to CSV if output_dir is specified
         if self.output_dir:
@@ -441,7 +425,7 @@ class ModelPerformanceTracker:
             # Save to CSV
             fold_csv_path = os.path.join(self.output_dir, f'fold_{fold_id}_predictions.csv')
             fold_df.to_csv(fold_csv_path, index=False)
-            self.logger.info(f"Saved fold {fold_id} predictions to {fold_csv_path}")
+            logging.info(f"Saved fold {fold_id} predictions to {fold_csv_path}")
         
         return metrics
     
@@ -545,13 +529,13 @@ class ModelPerformanceTracker:
             # Save to CSV
             all_csv_path = os.path.join(self.output_dir, 'all_predictions.csv')
             all_df.to_csv(all_csv_path, index=False)
-            self.logger.info(f"Saved all predictions to {all_csv_path}")
+            logging.info(f"Saved all predictions to {all_csv_path}")
             
             # Save metrics to JSON
             metrics_path = os.path.join(self.output_dir, 'metrics.json')
             with open(metrics_path, 'w') as f:
                 json.dump(result, f, indent=4)
-            self.logger.info(f"Saved metrics to {metrics_path}")
+            logging.info(f"Saved metrics to {metrics_path}")
         
         return result
     
@@ -586,7 +570,7 @@ class ModelPerformanceTracker:
         regime_metrics = {}
         
         if not self.predictions or not regime_predictions:
-            self.logger.warning("No market regime data available for analysis")
+            logging.warning("No market regime data available for analysis")
             return {}
             
         prediction_type = self.predictions[0]['prediction_type']
@@ -598,7 +582,7 @@ class ModelPerformanceTracker:
             metrics = self._calculate_metrics(preds, acts, prediction_type)
             regime_metrics[regime] = metrics
             
-            self.logger.info(f"Regime '{regime}' metrics: {metrics}")
+            logging.info(f"Regime '{regime}' metrics: {metrics}")
         
         self.performance_by_regime = regime_metrics
         
@@ -611,7 +595,7 @@ class ModelPerformanceTracker:
             # Save to CSV
             regime_csv_path = os.path.join(self.output_dir, 'regime_metrics.csv')
             regime_df.to_csv(regime_csv_path)
-            self.logger.info(f"Saved regime metrics to {regime_csv_path}")
+            logging.info(f"Saved regime metrics to {regime_csv_path}")
         
         return regime_metrics
     
@@ -673,11 +657,11 @@ class ModelPerformanceTracker:
         # Save if path provided or output_dir is set
         if output_path:
             fig.savefig(output_path, dpi=300, bbox_inches='tight')
-            self.logger.info(f"Saved predictions plot to {output_path}")
+            logging.info(f"Saved predictions plot to {output_path}")
         elif self.output_dir:
             plot_path = os.path.join(self.output_dir, 'predictions_plot.png')
             fig.savefig(plot_path, dpi=300, bbox_inches='tight')
-            self.logger.info(f"Saved predictions plot to {plot_path}")
+            logging.info(f"Saved predictions plot to {plot_path}")
         
         return fig
     
@@ -701,7 +685,7 @@ class ModelPerformanceTracker:
         
         if not metric_name or metric_name not in available_metrics:
             metric_name = available_metrics[0]
-            self.logger.info(f"Using metric: {metric_name}")
+            logging.info(f"Using metric: {metric_name}")
         
         # Extract fold dates (using first date in each fold)
         fold_dates = []
@@ -730,11 +714,11 @@ class ModelPerformanceTracker:
         # Save if path provided or output_dir is set
         if output_path:
             fig.savefig(output_path, dpi=300, bbox_inches='tight')
-            self.logger.info(f"Saved metrics plot to {output_path}")
+            logging.info(f"Saved metrics plot to {output_path}")
         elif self.output_dir:
             plot_path = os.path.join(self.output_dir, f'{metric_name}_over_time.png')
             fig.savefig(plot_path, dpi=300, bbox_inches='tight')
-            self.logger.info(f"Saved metrics plot to {plot_path}")
+            logging.info(f"Saved metrics plot to {plot_path}")
         
         return fig
 
@@ -786,7 +770,7 @@ class WalkForwardAnalysis:
             os.makedirs(model_store_path)
         
         self.performance_tracker = ModelPerformanceTracker(output_dir=output_dir)
-        self.logger = self._setup_logger()
+        logging = self._setup_logger()
         
         # Store analysis results
         self.results = {
@@ -838,7 +822,7 @@ class WalkForwardAnalysis:
             price_cols = [col for col in result.columns if 'close' in col.lower()]
             if price_cols:
                 source_column = price_cols[0]
-                self.logger.info(f"Using '{source_column}' as source column for target creation")
+                logging.info(f"Using '{source_column}' as source column for target creation")
             else:
                 raise ValueError(f"Source column '{source_column}' not found")
         
@@ -847,18 +831,18 @@ class WalkForwardAnalysis:
         if target_type == 'return':
             # Future return
             result[target_column] = result[source_column].shift(-horizon).pct_change(-horizon)
-            self.logger.info(f"Created future return target '{target_column}'")
+            logging.info(f"Created future return target '{target_column}'")
             
         elif target_type == 'direction':
             # Future direction (1 for up, -1 for down, 0 for no change)
             future_price = result[source_column].shift(-horizon)
             result[target_column] = np.sign(future_price - result[source_column])
-            self.logger.info(f"Created future direction target '{target_column}'")
+            logging.info(f"Created future direction target '{target_column}'")
             
         elif target_type == 'price':
             # Future price
             result[target_column] = result[source_column].shift(-horizon)
-            self.logger.info(f"Created future price target '{target_column}'")
+            logging.info(f"Created future price target '{target_column}'")
             
         elif target_type == 'normalized_return':
             # Z-score normalized return
@@ -866,12 +850,12 @@ class WalkForwardAnalysis:
             mean = future_return.mean()
             std = future_return.std()
             result[target_column] = (future_return - mean) / std
-            self.logger.info(f"Created normalized future return target '{target_column}'")
+            logging.info(f"Created normalized future return target '{target_column}'")
         
         # Drop rows with NaN targets
         na_count = result[target_column].isna().sum()
         if na_count > 0:
-            self.logger.info(f"Dropping {na_count} rows with NaN target values")
+            logging.info(f"Dropping {na_count} rows with NaN target values")
             result = result.dropna(subset=[target_column])
         
         return result, target_column
@@ -922,7 +906,7 @@ class WalkForwardAnalysis:
             possible_targets = [col for col in df.columns if 'target' in col.lower() or 'return' in col.lower()]
             if possible_targets:
                 target_column = possible_targets[0]
-                self.logger.info(f"Using '{target_column}' as target column")
+                logging.info(f"Using '{target_column}' as target column")
             else:
                 # Create a target as a fallback
                 df, target_column = self.create_target_column(
@@ -934,12 +918,12 @@ class WalkForwardAnalysis:
             # Exclude target and date columns
             exclude_cols = [self.date_column, target_column]
             features = [col for col in df.columns if col not in exclude_cols]
-            self.logger.info(f"Using all {len(features)} columns as features")
+            logging.info(f"Using all {len(features)} columns as features")
         
         # Log key information
-        self.logger.info(f"Running walk-forward analysis with {len(features)} features")
-        self.logger.info(f"Target column: {target_column} (type: {prediction_type})")
-        self.logger.info(f"Data shape: {df.shape} rows, {df.shape[1]} columns")
+        logging.info(f"Running walk-forward analysis with {len(features)} features")
+        logging.info(f"Target column: {target_column} (type: {prediction_type})")
+        logging.info(f"Data shape: {df.shape} rows, {df.shape[1]} columns")
         
         # Visualize the splits
         if self.output_dir:
@@ -948,9 +932,9 @@ class WalkForwardAnalysis:
                 splits_viz_path = os.path.join(self.output_dir, 'splits_visualization.png')
                 fig.savefig(splits_viz_path, dpi=300, bbox_inches='tight')
                 plt.close(fig)
-                self.logger.info(f"Saved splits visualization to {splits_viz_path}")
+                logging.info(f"Saved splits visualization to {splits_viz_path}")
             except Exception as e:
-                self.logger.warning(f"Could not create splits visualization: {str(e)}")
+                logging.warning(f"Could not create splits visualization: {str(e)}")
         
         # Store configuration
         self.results['features'] = features
@@ -959,30 +943,30 @@ class WalkForwardAnalysis:
         
         # Generate train/test splits
         splits = self.splitter.split(df)
-        self.logger.info(f"Created {len(splits)} train/test splits")
+        logging.info(f"Created {len(splits)} train/test splits")
         
         # Run analysis for each split
         for fold_id, (train_data, test_data) in enumerate(splits):
-            self.logger.info(f"Processing fold {fold_id+1}/{len(splits)}")
+            logging.info(f"Processing fold {fold_id+1}/{len(splits)}")
             
             # Safety check: make sure all features are in the data
             missing_features = [f for f in features if f not in train_data.columns]
             if missing_features:
-                self.logger.warning(f"Missing features in training data: {missing_features}")
+                logging.warning(f"Missing features in training data: {missing_features}")
                 features = [f for f in features if f not in missing_features]
                 if len(features) == 0:
-                    self.logger.error("No valid features left after filtering")
+                    logging.error("No valid features left after filtering")
                     continue
             
             # Create model
             model = model_factory()
             
             # Train model
-            self.logger.info(f"Training model on {len(train_data)} samples")
+            logging.info(f"Training model on {len(train_data)} samples")
             try:
                 model = train_func(model, train_data, features, target_column)
             except Exception as e:
-                self.logger.error(f"Error training model: {str(e)}")
+                logging.error(f"Error training model: {str(e)}")
                 continue
             
             # Save trained model if requested
@@ -990,7 +974,7 @@ class WalkForwardAnalysis:
                 model_filename = f"model_fold_{fold_id}.joblib"
                 model_path = os.path.join(self.model_store_path, model_filename)
                 joblib.dump(model, model_path)
-                self.logger.info(f"Saved model to {model_path}")
+                logging.info(f"Saved model to {model_path}")
                 
                 self.results['models'][fold_id] = {
                     'path': model_path,
@@ -1001,11 +985,11 @@ class WalkForwardAnalysis:
                 }
             
             # Make predictions
-            self.logger.info(f"Making predictions on {len(test_data)} samples")
+            logging.info(f"Making predictions on {len(test_data)} samples")
             try:
                 predictions = predict_func(model, test_data, features)
             except Exception as e:
-                self.logger.error(f"Error making predictions: {str(e)}")
+                logging.error(f"Error making predictions: {str(e)}")
                 continue
             
             # Extract test dates and actuals
@@ -1049,7 +1033,7 @@ class WalkForwardAnalysis:
             results_path = os.path.join(self.output_dir, 'model_analysis_results.json')
             with open(results_path, 'w') as f:
                 json.dump(self.results, f, indent=4, default=str)
-            self.logger.info(f"Saved analysis results to {results_path}")
+            logging.info(f"Saved analysis results to {results_path}")
         
         return self.results
     
@@ -1074,7 +1058,7 @@ class WalkForwardAnalysis:
         Returns:
             Dictionary of analysis results
         """
-        self.logger.info(f"Running walk-forward strategy analysis")
+        logging.info(f"Running walk-forward strategy analysis")
         
         # Create a working copy of the data
         df = data.copy()
@@ -1085,23 +1069,23 @@ class WalkForwardAnalysis:
             raw_price_cols = [col for col in df.columns if col.endswith('_raw')]
             exclude_cols = [self.date_column] + raw_price_cols
             features = [col for col in df.columns if col not in exclude_cols]
-            self.logger.info(f"Using {len(features)} columns as features")
+            logging.info(f"Using {len(features)} columns as features")
         
         # Generate train/test splits
         splits = self.splitter.split(df)
-        self.logger.info(f"Created {len(splits)} train/test splits")
+        logging.info(f"Created {len(splits)} train/test splits")
         
         # Run analysis for each split
         for fold_id, (train_data, test_data) in enumerate(splits):
-            self.logger.info(f"Processing fold {fold_id+1}/{len(splits)}")
+            logging.info(f"Processing fold {fold_id+1}/{len(splits)}")
             
             # Create and train model
             model = model_factory()
             try:
                 model = train_func(model, train_data, features)
-                self.logger.info(f"Trained model for fold {fold_id}")
+                logging.info(f"Trained model for fold {fold_id}")
             except Exception as e:
-                self.logger.error(f"Error training model for fold {fold_id}: {str(e)}")
+                logging.error(f"Error training model for fold {fold_id}: {str(e)}")
                 continue
             
             # Save trained model if requested
@@ -1109,7 +1093,7 @@ class WalkForwardAnalysis:
                 model_filename = f"model_fold_{fold_id}.joblib"
                 model_path = os.path.join(self.model_store_path, model_filename)
                 joblib.dump(model, model_path)
-                self.logger.info(f"Saved model to {model_path}")
+                logging.info(f"Saved model to {model_path}")
                 
                 self.results['models'][fold_id] = {
                     'path': model_path,
@@ -1132,14 +1116,14 @@ class WalkForwardAnalysis:
         if self.results['backtest_results']:
             self._analyze_backtest_performance()
         else:
-            self.logger.warning("No successful backtests to analyze")
+            logging.warning("No successful backtests to analyze")
         
         # Save results
         if self.output_dir:
             results_path = os.path.join(self.output_dir, 'strategy_analysis_results.json')
             with open(results_path, 'w') as f:
                 json.dump(self.results, f, indent=4, default=str)
-            self.logger.info(f"Saved analysis results to {results_path}")
+            logging.info(f"Saved analysis results to {results_path}")
             
             # Generate and save visualizations
             self._save_strategy_plots()
@@ -1163,7 +1147,7 @@ class WalkForwardAnalysis:
         Returns:
             Backtest results
         """
-        self.logger.info(f"Running backtest for fold {fold_id}")
+        logging.info(f"Running backtest for fold {fold_id}")
         
         # Set up market data
         from backtesting.data.market_data import DataFrameMarketData
@@ -1193,7 +1177,7 @@ class WalkForwardAnalysis:
         # Check if we have all required columns
         missing_cols = [col for col in required_columns if col not in column_mapping]
         if missing_cols:
-            self.logger.error(f"Missing required price columns for backtesting: {missing_cols}")
+            logging.error(f"Missing required price columns for backtesting: {missing_cols}")
             return None
         
         # Create a copy of the data with required columns
@@ -1239,11 +1223,11 @@ class WalkForwardAnalysis:
                 'performance_metrics': performance_metrics
             }
             
-            self.logger.info(f"Backtest for fold {fold_id} completed successfully")
+            logging.info(f"Backtest for fold {fold_id} completed successfully")
             return result_data
             
         except Exception as e:
-            self.logger.error(f"Error running backtest for fold {fold_id}: {str(e)}")
+            logging.error(f"Error running backtest for fold {fold_id}: {str(e)}")
             return None
     
     def _analyze_backtest_performance(self) -> Dict[str, Any]:
@@ -1285,19 +1269,19 @@ class WalkForwardAnalysis:
             self.results['aggregate_performance'] = aggregate_metrics
             
             # Log key metrics
-            self.logger.info(f"Aggregate performance metrics:")
+            logging.info(f"Aggregate performance metrics:")
             
             # Use try/except since column names might vary
             try:
-                self.logger.info(f"  Average annualized return: {avg_metrics.get('annualized_return_pct', 'N/A')}%")
-                self.logger.info(f"  Average Sharpe ratio: {avg_metrics.get('sharpe_ratio', 'N/A')}")
-                self.logger.info(f"  Average max drawdown: {avg_metrics.get('max_drawdown_pct', 'N/A')}%")
+                logging.info(f"  Average annualized return: {avg_metrics.get('annualized_return_pct', 'N/A')}%")
+                logging.info(f"  Average Sharpe ratio: {avg_metrics.get('sharpe_ratio', 'N/A')}")
+                logging.info(f"  Average max drawdown: {avg_metrics.get('max_drawdown_pct', 'N/A')}%")
             except Exception as e:
-                self.logger.warning(f"Error logging metrics: {str(e)}")
+                logging.warning(f"Error logging metrics: {str(e)}")
             
             return aggregate_metrics
         else:
-            self.logger.warning("No performance metrics available for aggregation")
+            logging.warning("No performance metrics available for aggregation")
             return {}
     
     def _save_strategy_plots(self):
@@ -1340,10 +1324,10 @@ class WalkForwardAnalysis:
                 equity_path = os.path.join(self.output_dir, 'equity_curves_comparison.png')
                 fig.savefig(equity_path, dpi=300, bbox_inches='tight')
                 plt.close(fig)
-                self.logger.info(f"Saved equity curves comparison to {equity_path}")
+                logging.info(f"Saved equity curves comparison to {equity_path}")
         
         except Exception as e:
-            self.logger.error(f"Error creating equity curves plot: {str(e)}")
+            logging.error(f"Error creating equity curves plot: {str(e)}")
         
         # Create performance metrics comparison if available
         try:
@@ -1392,10 +1376,10 @@ class WalkForwardAnalysis:
                     metrics_path = os.path.join(self.output_dir, 'performance_by_fold.png')
                     fig.savefig(metrics_path, dpi=300, bbox_inches='tight')
                     plt.close(fig)
-                    self.logger.info(f"Saved performance metrics plot to {metrics_path}")
+                    logging.info(f"Saved performance metrics plot to {metrics_path}")
         
         except Exception as e:
-            self.logger.error(f"Error creating performance metrics plot: {str(e)}")
+            logging.error(f"Error creating performance metrics plot: {str(e)}")
 
 
 class MLModelStrategy:

@@ -25,12 +25,6 @@ backtesting/
     └── portfolio_backtest.py
 ```
 
-# Understanding Backtesting: A Complete Guide
-
-## What is Backtesting?
-
-Backtesting is the process of testing a trading strategy using historical data to see how it would have performed in the past. It's a critical step before deploying any trading strategy with real money.
-
 ## Why Backtest?
 
 - **Validate Strategy Performance**: Determine if a strategy actually works before risking real capital
@@ -48,7 +42,7 @@ Our framework follows an event-driven architecture, which is industry standard f
 │ Market Data  │ ──> │   Strategy   │ ──> │ Risk Manager │ ──> │   Portfolio  │
 └──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
        │                    │                    │                    │
-       └────────────────────┴────────────────────┴──────────────────>│
+       └────────────────────┴────────────────────┴───────────────────>│
                                                                       │
                                                                       ▼
                                                             ┌──────────────────┐

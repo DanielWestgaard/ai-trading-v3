@@ -2,22 +2,30 @@ import argparse
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
+from backtesting.strategies.model_based_strategy import ModelBasedStrategy
 from data.pipelines.data_pipeline import DataPipeline
 from data.processors.cleaner import DataCleaner
+from models.model_factory import ModelFactory
 import utils.logging_utils as log_utils
 from broker.capital_com.capitalcom import CapitalCom
 import config.data_config as data_config
 import config.system_config as sys_config
+import models.run_model_training as run_model
+import backtesting.run_backtest as run_backtest
+import models.base_model as base_model
+
 
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
     parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
-    parser.add_argument('--data-pipeline', action='store_true', default=True, help='Run data processing pipeline')
-    parser.add_argument('--backtest', action='store_true', default=False, help='Run backtesting')
+    parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
+    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
+    parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
+    parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
 
@@ -44,11 +52,7 @@ def main():
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
-    
-    if args.backtest:
-        # Call run_backtest.py or integrate it into here
-        pass
-    
+      
     if args.walk_forward_analysis:
         from data.features.time_series_ml import WalkForwardAnalysis
 
@@ -94,6 +98,51 @@ def main():
             predict_func=predict
         )
         
+    if args.train_model:
+        model_config = {
+            'model_type': 'xgboost',
+            'prediction_type': 'classification',
+            'target': 'close_return',  # Be explicit
+            'features': None,
+            'prediction_horizon': 1,
+            'test_size': 0.2,
+            'cross_validate': True,
+            'scale_features': True,
+            'model_params': {
+                'n_estimators': 100,
+                'max_depth': 5,
+                'learning_rate': 0.1,
+                'subsample': 0.8,
+                'colsample_bytree': 0.8,
+                'objective': 'binary:logistic',
+                'eval_metric': 'auc',
+                'random_state': 42
+            }
+        }
+        
+        model, trainer = run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
+
+    if args.backtest_trained_model:
+        if args.train_model:  # The model has just been trained
+            logger.info("Backtesting newly trained model.")
+            print(model.features)
+            run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+        else:  # Model has not newly been trained, so need to fetch a model
+            logger.info("Backtesting older model.")
+            model_type = "xgboost"  # or "random_forest" depending on is already saved
+            model = ModelFactory.create_model(model_type)
+
+            # 2. Load the saved model from disk
+            model_path = "model_related_storage/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+            success = model.load(model_path)
+            if success:
+                run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
+            else:
+                logger.error("Could not find model.")
+        
+    if args.test_backtest:
+        config_file = sys_config.CONFIG_BACKTESTING_PATH
+        run_backtest.main(config_file=config_file)
 
 if __name__ == "__main__":
     exit(main())
