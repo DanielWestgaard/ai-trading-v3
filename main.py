@@ -9,6 +9,7 @@ from broker.capital_com.capitalcom import CapitalCom
 import config.data_config as data_config
 import config.system_config as sys_config
 import models.run_model_training as run_model
+import backtesting.run_backtest as run_backtest
 
 def parse_arguments():
     """Parse command line arguments."""
@@ -16,10 +17,10 @@ def parse_arguments():
     
     parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
-    parser.add_argument('--backtest', action='store_true', default=False, help='Run backtesting')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
-    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
+    parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
+    parser.add_argument('--backtest', action='store_true', default=True, help='Run backtesting')
     
     return parser.parse_args()
 
@@ -117,7 +118,8 @@ def main():
         run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
 
     if args.backtest:
-        # Call run_backtest.py or integrate it into here
+        config_file = sys_config.CONFIG_BACKTESTING_PATH
+        run_backtest.main(config_file=config_file)
         pass
 
 if __name__ == "__main__":

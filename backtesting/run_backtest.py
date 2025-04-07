@@ -43,7 +43,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
+def main(config_file:str=None):
     """Main function."""
     args = parse_args()
     
@@ -56,12 +56,12 @@ def main():
     
     # Create backtest runner
     runner = BacktestRunner(
-        config_path=args.config,
+        config_path=args.config or config_file,
         output_dir=output_dir
     )
     
     # If config file was provided, run backtest from config
-    if args.config:
+    if args.config or config_file:
         logging.info(f"Running backtest from configuration: {args.config}")
         
         # Get backtest ID from config or command line
