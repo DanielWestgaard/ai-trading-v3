@@ -151,3 +151,17 @@ class BaseBroker(ABC):
             True if successful, False otherwise
         """
         pass
+    
+    @abstractmethod
+    def sub_live_market_data(self,
+                             symbol: str,
+                             timeframe: str) -> bool:
+        """Subscribe to live market data.
+        
+        Args:
+            symbol: The symbol, or epic, you want to recieve data about. Eg. GOLD, GBPUSD, US100, etc.
+            timeframe: The timeframe (/candles) of the symbol. Eg. 1M, 5M, 1H, 4H, etc.
+        Returns:
+            ...
+        """
+        pass

@@ -12,6 +12,7 @@ import broker.capital_com.rest_api.account as account
 import broker.capital_com.rest_api.session as session
 import broker.capital_com.rest_api.trading as trading
 import broker.capital_com.rest_api.markets_info as markets_info
+import broker.capital_com.web_socket as web_socket
 
 
 class CapitalCom(BaseBroker):
@@ -186,4 +187,16 @@ class CapitalCom(BaseBroker):
             return True
         except Exception as e:
             logging.error(f"Unable to modify position: {e}")
+            return False
+        
+    # ==================== LIVE DATA ====================
+    
+    def sub_live_market_data(self, symbol, timeframe, X_SECURITY_TOKEN=None, CST=None):
+        try:
+            logging.info("About to initiate subscribtion to live market data...")
+            
+            return True
+        except Exception as e:
+            logging.error(f"Error occured: {e}")
+            
             return False
