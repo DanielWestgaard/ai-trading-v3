@@ -24,7 +24,7 @@ CAPCOM_PROCESSED_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'processed')
 CAPCOM_VIS_DATA_DIR = os.path.join(CAPCOM_BASE_DATA_DIR, 'visualizations')
 
 # Model storage
-MODEL_BASE_DIR = os.path.join(BASE_DIR, 'model_related_storage')
+MODEL_BASE_DIR = os.path.join(BASE_DIR, 'model_registry')
 SAVED_MODELS_DIR = os.path.join(MODEL_BASE_DIR, 'model_storage')
 ML_MODEL_RESULTS_DIR = os.path.join(MODEL_BASE_DIR, 'ml_model_results')
 MODEL_METADATA_DIR = os.path.join(MODEL_BASE_DIR, 'metadata')

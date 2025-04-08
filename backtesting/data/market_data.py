@@ -353,21 +353,12 @@ class DataFrameMarketData(MarketData):
 
 # Integration with the data pipeline
 class PipelineMarketData(DataFrameMarketData):
-    """Market data handler that integrates with the existing data pipeline."""
+    """Market data handler that preserves intraday data points."""
     
     def __init__(self, 
                 processed_data_path: str,
                 symbols: List[str] = None,
-                date_col: str = 'Date'):
-        """
-        Initialize pipeline market data handler.
-        
-        Args:
-            processed_data_path: Path to processed data file
-            symbols: List of symbols (can be None if single symbol data)
-            date_col: Name of date column
-            logger: Custom logger
-        """
+                date_col: str = 'date'):  # Note: Changed to lowercase 'date' based on your sample
         self.processed_data_path = processed_data_path
         self.date_col = date_col
         
@@ -380,25 +371,27 @@ class PipelineMarketData(DataFrameMarketData):
             filename = os.path.basename(processed_data_path)
             parts = filename.split('_')
             if len(parts) > 1:
-                # Try to extract symbol from filename
                 symbol = parts[1]
                 symbols = [symbol]
             else:
-                # Use a default symbol
                 symbol = "UNKNOWN"
                 symbols = [symbol]
             
             logging.info(f"No symbols provided, using {symbol}")
-            
-            # Create data dictionary with the single symbol
             data = {symbol: df}
         else:
-            # Create a copy of the same data for each symbol
-            # This is a simplification - in a real system, you'd have different data for each symbol
             data = {symbol: df.copy() for symbol in symbols}
         
-        # Initialize parent class
-        super().__init__(data, date_col)
+        # Initialize with data
+        self.symbols = symbols
+        self.data = data
+        self.current_idx = 0
+        
+        # Validate data
+        self.load_data()
+        
+        # Create a unified timeline of all timestamps across all symbols
+        self._create_timeline()
     
     def _load_processed_data(self) -> pd.DataFrame:
         """Load processed data from file."""
@@ -417,5 +410,61 @@ class PipelineMarketData(DataFrameMarketData):
             return df
         except Exception as e:
             logging.error(f"Error loading processed data: {str(e)}")
-            # Return empty DataFrame as fallback
             return pd.DataFrame()
+    
+    def _create_timeline(self):
+        """Create a unified timeline of all timestamps across all symbols."""
+        # Collect all timestamps from all symbols
+        all_timestamps = []
+        for symbol, df in self.data.items():
+            if self.date_col in df.columns:
+                all_timestamps.extend(df[self.date_col].tolist())
+        
+        # Sort and deduplicate timestamps
+        self.timeline = sorted(list(set(all_timestamps)))
+        logging.info(f"Created timeline with {len(self.timeline)} timestamps")
+    
+    def get_next(self) -> Optional[Dict[str, MarketEvent]]:
+        """Get the next market data points."""
+        if not self.has_more_data() or not self.timeline:
+            return None
+        
+        # Get the timestamp for the current index
+        if self.current_idx < len(self.timeline):
+            current_timestamp = self.timeline[self.current_idx]
+        else:
+            return None
+        
+        # Prepare market events for all symbols
+        events = {}
+        for symbol, df in self.data.items():
+            # Find data for the current timestamp
+            timestamp_data = df[df[self.date_col] == current_timestamp]
+            
+            if len(timestamp_data) > 0:
+                # Create a market event with the data
+                row_dict = timestamp_data.iloc[0].to_dict()
+                
+                # Create MarketEvent
+                events[symbol] = MarketEvent(
+                    timestamp=current_timestamp,
+                    symbol=symbol,
+                    data=row_dict
+                )
+        
+        # Increment the index for next time
+        self.current_idx += 1
+        
+        return events
+    
+    def get_length(self) -> int:
+        """Get the length of the timeline."""
+        return len(self.timeline)
+    
+    def get_dates(self) -> List[datetime]:
+        """Get list of all timestamps in the timeline."""
+        return self.timeline
+    
+    def has_more_data(self) -> bool:
+        """Check if there is more data available."""
+        return self.current_idx < len(self.timeline)

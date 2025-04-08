@@ -4,8 +4,11 @@ import numpy as np
 import logging
 from typing import Dict, List, Union, Tuple, Optional, Any
 
+from backtesting.position_management import PositionManager
+from backtesting.signal_filter import SignalFilter
 from backtesting.strategies.base_strategy import BaseStrategy
 from backtesting.events import SignalEvent, SignalType
+from backtesting.timeframe_resampler import TimeframeResampler
 
 class ModelBasedStrategy(BaseStrategy):
     """Trading strategy based on ML model predictions."""
@@ -17,7 +20,8 @@ class ModelBasedStrategy(BaseStrategy):
                  confidence_threshold: float = 0.0,
                  lookback_window: int = 1,
                  required_features: List[str] = None,
-                 params: Dict[str, Any] = None):
+                 params: Dict[str, Any] = None,
+                 **kwargs):
         """
         Initialize the model-based strategy.
         
@@ -35,6 +39,22 @@ class ModelBasedStrategy(BaseStrategy):
         self.confidence_threshold = confidence_threshold
         self.lookback_window = lookback_window
         self.required_features = required_features or []
+        
+        # Initialize our new modules
+        self.signal_filter = SignalFilter(
+            lookback_window=kwargs.get('lookback_window', 10),
+            consensus_threshold=kwargs.get('consensus_threshold', 0.7)
+        )
+        
+        self.position_manager = PositionManager(
+            min_hold_bars=kwargs.get('min_hold_bars', 12),  # 1 hour minimum
+            max_hold_bars=kwargs.get('max_hold_bars', 288)  # 1 day maximum
+        )
+        
+        self.resampler = TimeframeResampler(
+            base_timeframe=5,  # 5-minute data
+            target_timeframe=kwargs.get('decision_timeframe', 60)  # 1-hour decisions
+        )
         
         # Initialize with base strategy
         super().__init__(symbols, params)
@@ -75,9 +95,26 @@ class ModelBasedStrategy(BaseStrategy):
             List of signal events
         """
         signals = []
+        # Synchronize position tracking with actual portfolio positions
+        self.synchronize_positions(portfolio)
         
         for symbol, data in market_data.items():
             if symbol not in self.symbols:
+                continue
+            
+            # Update position tracking
+            self.position_manager.on_bar(symbol, data.timestamp)
+            
+            # Add data to resampler
+            self.resampler.add_bar(symbol, data.timestamp, data.data)
+            
+            # Only make decisions at the higher timeframe boundaries
+            if not self.resampler.should_make_decision(data.timestamp):
+                continue
+            
+            # Get resampled data
+            resampled_data = self.resampler.get_resampled_data(symbol)
+            if not resampled_data:
                 continue
             
             # Check if we have the required features
@@ -116,46 +153,47 @@ class ModelBasedStrategy(BaseStrategy):
                 # Keep only the last N predictions
                 if len(self.predictions[symbol]) > self.lookback_window:
                     self.predictions[symbol] = self.predictions[symbol][-self.lookback_window:]
+                    
+                # Add prediction to filter
+                self.signal_filter.add_prediction(symbol, data.timestamp, prediction, confidence)
                 
-                # Get current position
-                current_position = self.position_history.get(symbol, 0)
+                # Get ACTUAL current position from portfolio instead of relying on self.position_history
+                current_position = 0
+                portfolio_position = portfolio.get_position(symbol)
+                if portfolio_position:
+                    current_position = 1 if portfolio_position.direction == "LONG" else -1
                 
                 # Generate signal based on prediction and confidence
                 signal = None
                 
-                # Check if confidence exceeds threshold
-                if confidence >= self.confidence_threshold:
-                    # Long signal
-                    if prediction == 1 and current_position <= 0:
-                        signal_type = SignalType.BUY if current_position == 0 else SignalType.REVERSE
-                        reason = f"Model prediction: UP (confidence: {confidence:.4f})"
-                        signal = self.create_signal(
-                            symbol=symbol,
-                            signal_type=signal_type,
-                            timestamp=data.timestamp,
-                            reason=reason,
-                            metadata={
-                                'confidence': confidence,
-                                'prediction': prediction
-                            }
-                        )
-                        self.position_history[symbol] = 1
-                    
-                    # Short signal
-                    elif prediction == -1 and current_position >= 0:
-                        signal_type = SignalType.SELL if current_position == 0 else SignalType.REVERSE
-                        reason = f"Model prediction: DOWN (confidence: {confidence:.4f})"
-                        signal = self.create_signal(
-                            symbol=symbol,
-                            signal_type=signal_type,
-                            timestamp=data.timestamp,
-                            reason=reason,
-                            metadata={
-                                'confidence': confidence,
-                                'prediction': prediction
-                            }
-                        )
-                        self.position_history[symbol] = -1
+                # No position - check for entry
+                if current_position == 0:
+                    if self.signal_filter.should_generate_signal(symbol, 1):  # Bullish consensus
+                        signal = self.create_signal(symbol, SignalType.BUY, data.timestamp)
+                        self.position_manager.open_position(symbol, data.timestamp, 1)
+                    elif self.signal_filter.should_generate_signal(symbol, -1):  # Bearish consensus
+                        signal = self.create_signal(symbol, SignalType.SELL, data.timestamp)
+                        self.position_manager.open_position(symbol, data.timestamp, -1)
+                
+                # Long position - check for exit
+                elif current_position > 0:
+                    if (self.position_manager.can_exit(symbol) and 
+                        self.signal_filter.should_generate_signal(symbol, -1)):
+                        signal = self.create_signal(symbol, SignalType.EXIT_LONG, data.timestamp)
+                        self.position_manager.close_position(symbol, data.timestamp)
+                    elif self.position_manager.should_exit(symbol):  # Force exit after max hold time
+                        signal = self.create_signal(symbol, SignalType.EXIT_LONG, data.timestamp)
+                        self.position_manager.close_position(symbol, data.timestamp)
+                
+                # Short position - check for exit
+                elif current_position < 0:
+                    if (self.position_manager.can_exit(symbol) and 
+                        self.signal_filter.should_generate_signal(symbol, 1)):
+                        signal = self.create_signal(symbol, SignalType.EXIT_SHORT, data.timestamp)
+                        self.position_manager.close_position(symbol, data.timestamp)
+                    elif self.position_manager.should_exit(symbol):  # Force exit after max hold time
+                        signal = self.create_signal(symbol, SignalType.EXIT_SHORT, data.timestamp)
+                        self.position_manager.close_position(symbol, data.timestamp)
                 
                 # Add signal to list if generated
                 if signal:
@@ -240,3 +278,13 @@ class ModelBasedStrategy(BaseStrategy):
             return pd.DataFrame()
         
         return pd.concat(all_history, ignore_index=True)
+    
+    def synchronize_positions(self, portfolio):
+        """Synchronize strategy position tracking with actual portfolio positions."""
+        for symbol in self.symbols:
+            position = portfolio.get_position(symbol)
+            if position is None:
+                self.position_history[symbol] = 0
+            else:
+                # If position direction is LONG, set to 1, if SHORT, set to -1
+                self.position_history[symbol] = 1 if position.direction == "LONG" else -1
