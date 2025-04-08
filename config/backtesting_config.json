@@ -1,7 +1,7 @@
 {
     "backtest_id": "ma_crossover_gbpusd",
     "strategy": {
-        "class_path": "backtesting.strategies.simple_ma_crossover.SimpleMovingAverageCrossover",
+        "class_path": "core.strategies.simple_ma_crossover.SimpleMovingAverageCrossover",
         "parameters": {
             "symbols": ["GBPUSD"],
             "short_window": 20,

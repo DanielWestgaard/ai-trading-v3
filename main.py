@@ -24,7 +24,7 @@ def parse_arguments():
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
-    parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
+    parser.add_argument('--backtest-trained-model', action='store_true', default=True, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
@@ -134,7 +134,7 @@ def main():
             model = ModelFactory.create_model(model_type)
 
             # 2. Load the saved model from disk
-            model_path = "model_related_storage/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+            model_path = "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
             success = model.load(model_path)
             if success:
                 run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
