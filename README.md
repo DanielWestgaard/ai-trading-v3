@@ -68,14 +68,17 @@ algotrading/
 │   ├── portfolio_risk.py    # Portfolio-level risk management
 │   └── limits.py            # Trading limits and circuit breakers
 │
-├── backtesting/             # Backtesting framework
-│   ├── engine.py            # Backtesting engine
-│   ├── metrics.py           # Performance metrics
-│   └── visualizations.py    # Performance visualizations
+├── backtesting/            # Backtesting-specific components
+│   ├── engine/             # Backtesting engines
+│   ├── simulator/          # Market simulator for backtesting
+│   ├── visualization/      # Backtest reporting and visualization
+│   └── runners/            # Backtest runner scripts
 │
 ├── live/                    # Live trading infrastructure
+│   ├── broker_adapters/     # Connections to real brokers
 │   ├── runners/             # Trading session managers
 │   ├── monitoring/          # System monitoring
+│   ├── execution_service/   # Real-time execution services
 │   └── alerts/              # Alert system
 │
 ├── utils/                   # Utility functions
