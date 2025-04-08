@@ -124,7 +124,7 @@ class BaseBroker(ABC):
         pass
     
     @abstractmethod
-    def cancel_order(self, order_id: str) -> bool:
+    def close_order(self, order_id: str) -> bool:
         """Cancel an existing order.
         
         Args:

@@ -98,7 +98,7 @@ def create_new_position(X_SECURITY_TOKEN, CST,
     
     return deal_ref
     
-def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer=True):
+def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer):
     """
     Close the position of trade related with dealId for a confirmed trade.
     Note: The deal reference you get as "confirmation" from successfully creating a new position

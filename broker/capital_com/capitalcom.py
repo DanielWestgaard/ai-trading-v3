@@ -127,7 +127,7 @@ class CapitalCom(BaseBroker):
         Return:
             Deal Reference / deal ID
         """
-        return trading.create_new_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer,
+        return trading.create_new_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
                                         symbol=symbol, direction=direction, size=size, stop_amount=stop_amount, profit_amount=profit_amount, stop_level=stop_level, profit_level=profit_level)
     
     def place_limit_order(self,
@@ -141,10 +141,29 @@ class CapitalCom(BaseBroker):
         logging.info(f"Placing limit order for {symbol}")
         return {}  # Return empty dict
     
-    def cancel_order(self, order_id: str) -> bool:
-        """Cancel an existing order."""
-        logging.info(f"Canceling order {order_id}")
-        return True
+    def close_order(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True) -> bool:
+        """Close an existing order. This går ut ifra that the model/we only have one active trade open at a time."""
+        logging.error("Not made yet")
+        return False
+    
+    def close_all_orders(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True) -> bool:
+        """Close an existing order. This is based on the principle that the model/we only have one active trade open at a time."""
+        try:
+            all_positions_after_new = trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+            
+            dealIds = br_util.process_positions(all_positions_after_new)
+            
+            logging.info(f"Sleeping for 5 seconds before closing ALL active positions..")
+            time.sleep(5)
+            
+            for dealId in dealIds:
+                logging.info(f"Closing trade/position with dealId: {dealId}")
+                trading.close_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
+                                       dealID=dealId)
+            return True
+        except Exception as e:
+            logging.error(f"Unable to close all positions. Error: {e}")
+            return False
     
     def modify_position(self,
                        position_id: str,

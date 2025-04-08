@@ -50,6 +50,8 @@ def main():
         broker.all_positions()
         broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_level="1.27342", profit_level="1.27724")
         broker.all_positions()
+        broker.close_all_orders()
+        broker.all_positions()
         
         broker.end_session()
 
