@@ -12,7 +12,7 @@ import broker.capital_com.rest_api.account as account
 import broker.capital_com.rest_api.session as session
 import broker.capital_com.rest_api.trading as trading
 import broker.capital_com.rest_api.markets_info as markets_info
-import broker.capital_com.web_socket as web_socket
+import broker.capital_com.web_socket.web_socket as web_socket
 
 
 class CapitalCom(BaseBroker):
@@ -194,6 +194,18 @@ class CapitalCom(BaseBroker):
     def sub_live_market_data(self, symbol, timeframe, X_SECURITY_TOKEN=None, CST=None):
         try:
             logging.info("About to initiate subscribtion to live market data...")
+            
+            # Initiating the subscription
+            ws = web_socket.sub_live_market_data(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
+                                                 epic=symbol, resolution=timeframe)
+            # Set up automatic pinging every 1 minutes (60 seconds) to make sure we don't time out
+            web_socket.setup_ping_timer(ws=ws, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, interval_seconds=60)
+            # Simple "hack" so that the program isn't terminated
+            try:
+                while True:
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                print("Program terminated by user")
             
             return True
         except Exception as e:
