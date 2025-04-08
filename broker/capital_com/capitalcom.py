@@ -108,15 +108,27 @@ class CapitalCom(BaseBroker):
         """Returns all open positions for the active account."""
         return trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer)
     
-    def place_market_order(self, 
-                          symbol: str, 
-                          side: str, 
-                          quantity: float,
-                          take_profit: Optional[float] = None,
-                          stop_loss: Optional[float] = None) -> Dict:
-        """Place a market order."""
-        logging.info(f"Placing market order for {symbol}")
-        return {}  # Return empty dict
+    def place_market_order(self, symbol, direction, size, stop_amount, profit_amount,
+                            X_SECURITY_TOKEN=None, CST=None,
+                            print_answer=True):
+        """
+        Create orders and positions.
+        Note: The deal reference you get as "confirmation" from successfully creating a new position
+        is not the same dealReference the order has (when active) and not the same as dealId.
+        
+        Args:
+            symbol: Instrument epic identifier. Ex. SILVER
+            direction: Deal direction. Must be BUY or SELL
+            size: Deal size. Ex. 1
+            stop_amount: Loss amount when a stop loss will be triggered. Ex. 4
+            profit_amount: Profit amount when a take profit will be triggered. Ex. 20
+            print_answer: If true, prints response body and headers. Default is False
+        
+        Return:
+            Deal Reference / deal ID
+        """
+        return trading.create_new_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer,
+                                        symbol=symbol, direction=direction, size=size, stop_amount=stop_amount, profit_amount=profit_amount)
     
     def place_limit_order(self,
                          symbol: str,

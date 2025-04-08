@@ -31,7 +31,7 @@ def all_positions(X_SECURITY_TOKEN, CST, print_answer):
     return data.decode("utf-8")
 
 def create_new_position(X_SECURITY_TOKEN, CST, 
-                     symbol, direction, size, stop_amount, profit_amount,
+                     symbol, direction, size, stop_amount, profit_amount, #stop_level, profit_level,
                      print_answer=True):
     """
     Create orders and positions.
@@ -44,8 +44,8 @@ def create_new_position(X_SECURITY_TOKEN, CST,
         symbol: Instrument epic identifier. Ex. SILVER
         direction: Deal direction. Must be BUY or SELL
         size: Deal size. Ex. 1
-        stop_amount: Loss amount when a stop loss will be triggered. Ex. 4
-        profit_amount: Profit amount when a take profit will be triggered. Ex. 20
+        stop_amount: Loss amount when a stop loss will be triggered (dollars). Ex. 4
+        profit_amount: Profit amount when a take profit will be triggered (dollars). Ex. 20
         print_answer: If true, prints response body and headers. Default is False
     
     Return:
