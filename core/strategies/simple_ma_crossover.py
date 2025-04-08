@@ -4,7 +4,7 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 
 from core.strategies.base_strategy import BaseStrategy
-from backtesting.events import SignalEvent, SignalType
+from core.events import SignalEvent, SignalType
 
 
 class SimpleMovingAverageCrossover(BaseStrategy):

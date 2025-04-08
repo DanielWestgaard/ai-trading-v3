@@ -7,7 +7,7 @@ import logging
 import os
 import glob
 
-from backtesting.events import MarketEvent
+from core.events import MarketEvent
 
 
 class MarketData(ABC):

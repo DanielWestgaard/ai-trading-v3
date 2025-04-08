@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 import logging
 
-from backtesting.events import OrderEvent, FillEvent, OrderSide, OrderType
+from core.events import OrderEvent, FillEvent, OrderSide, OrderType
 
 
 class Position:

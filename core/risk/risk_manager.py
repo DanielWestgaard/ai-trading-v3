@@ -3,7 +3,7 @@ import numpy as np
 import logging
 from datetime import datetime
 
-from backtesting.events import OrderEvent, OrderType, OrderSide
+from core.events import OrderEvent, OrderType, OrderSide
 
 
 class PositionSizer:

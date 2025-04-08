@@ -5,7 +5,7 @@ import numpy as np
 import logging
 from datetime import datetime
 
-from backtesting.events import SignalEvent, SignalType
+from core.events import SignalEvent, SignalType
 
 
 class BaseStrategy(ABC):

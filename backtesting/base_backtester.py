@@ -5,7 +5,7 @@ import numpy as np
 import logging
 from datetime import datetime
 
-from backtesting.events import Event, SignalEvent, OrderEvent, FillEvent
+from core.events import Event, SignalEvent, OrderEvent, FillEvent
 from core.portfolio.portfolio import Portfolio
 from core.performance.performance import PerformanceTracker
 

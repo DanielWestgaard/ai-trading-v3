@@ -3,7 +3,7 @@ import pandas as pd
 from typing import List, Optional
 
 from core.strategies.base_strategy import BaseStrategy
-from backtesting.events import SignalEvent, SignalType
+from core.events import SignalEvent, SignalType
 import logging
 
 class IndicatorCrossoverStrategy(BaseStrategy):
