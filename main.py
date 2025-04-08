@@ -1,4 +1,5 @@
 import argparse
+import time
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
@@ -47,10 +48,10 @@ def main():
         #                                         from_date="2024-01-01T00:00:00", to_date="2025-01-01T01:00:00",
         #                                         print_answer=False)
         
+        broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_level="1.27642", profit_level="1.28024")
         broker.all_positions()
-        broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_level="1.27342", profit_level="1.27724")
-        broker.all_positions()
-        broker.close_all_orders()
+        broker.modify_position(stop_level="1.25", profit_level="1.29")
+        broker.close_all_orders(print_answer=False)
         broker.all_positions()
         
         broker.end_session()

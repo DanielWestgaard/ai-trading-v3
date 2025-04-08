@@ -165,10 +165,25 @@ class CapitalCom(BaseBroker):
             logging.error(f"Unable to close all positions. Error: {e}")
             return False
     
-    def modify_position(self,
-                       position_id: str,
-                       take_profit: Optional[float] = None,
-                       stop_loss: Optional[float] = None) -> bool:
-        """Modify an existing position."""
-        logging.info(f"Modifying position {position_id}")
-        return True
+    def modify_position(self, dealId=None, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
+                        X_SECURITY_TOKEN=None, CST=None,
+                        print_answer=True) -> bool:
+        """Modify an existing position. Note!! As with the close all order method, this wil modify the 'last' dealID, so really it is only meant for one active position. Must find a better solution later.
+        The issue is that creating and placing an order, doesn't give you the right dealreference - it is only temporary. So to close a position, we need to get all active positions from active positions, and
+        extract all dealIds there. So i have no way of filtering based on a position. I think this will work for now, but should be solved later. Perhaps based on the time it was placed, amount or symbol?"""
+        try:
+            if dealId is None:
+                all_positions_after_new = trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+                
+                dealIds = br_util.process_positions(all_positions_after_new)  # Getting all dealIDs
+                if len(dealIds) >= 2:
+                    logging.error(f"There are {len(dealIds)} active positions, which is more than 1! Will not confinue to modify! Either specify the dealId, or close not-relevant positions.")
+                    return False
+                for deal_ID in dealIds:
+                    dealId = deal_ID
+            trading.update_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
+                                    stop_amount=stop_amount, profit_amount=profit_amount, stop_level=stop_level, profit_level=profit_level, dealID=dealId)
+            return True
+        except Exception as e:
+            logging.error(f"Unable to modify position: {e}")
+            return False

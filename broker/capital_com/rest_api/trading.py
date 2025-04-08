@@ -127,6 +127,38 @@ def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer):
         print(json.dumps(parsed_data, indent=4))
     return data.decode("utf-8")
 
+def update_position(X_SECURITY_TOKEN, CST, dealID, print_answer,
+                    stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,):
+    if stop_amount is not None and profit_amount is not None:  # have added dollar amount of SL/TP
+        logging.info("Recieved request of using dollar amout as SL/TP.")
+        payload = json.dumps({
+            "guaranteedStop": False,
+            "stopAmount": stop_amount,
+            "profitAmount": profit_amount
+        })
+    elif stop_level is not None and profit_level is not None:  # have added price level/value as SL/TP
+        logging.info("Recieved request of using price level as SL/TP.")
+        payload = json.dumps({
+            "guaranteedStop": False,
+            "stopLevel": stop_level,
+            "profitLevel": profit_level
+        })
+    else:  # Not having any stop loss or take profit
+        logging.error("Did not recieve SL/TP values! What is there to change then?")
+        return None
+    
+    headers = {
+        'X-SECURITY-TOKEN': X_SECURITY_TOKEN,
+        'CST': CST,
+        'Content-Type': 'application/json'
+    }
+    conn.request("PUT", f"/api/v1/positions/{dealID}", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    if print_answer:
+        parsed_data = json.loads(data.decode("utf-8"))
+        print(json.dumps(parsed_data, indent=4))
+    return data.decode("utf-8")
 
 # ORDERS - not really needed for current scope?
 def all_orders(X_SECURITY_TOKEN, CST, print_answer=True):
