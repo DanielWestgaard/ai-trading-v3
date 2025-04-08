@@ -48,7 +48,7 @@ def main():
         #                                         print_answer=False)
         
         broker.all_positions()
-        broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_amount="2", profit_amount="4")
+        broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_level="1.27342", profit_level="1.27724")
         broker.all_positions()
         
         broker.end_session()

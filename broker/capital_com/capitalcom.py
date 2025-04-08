@@ -108,7 +108,7 @@ class CapitalCom(BaseBroker):
         """Returns all open positions for the active account."""
         return trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer)
     
-    def place_market_order(self, symbol, direction, size, stop_amount, profit_amount,
+    def place_market_order(self, symbol, direction, size, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
                             X_SECURITY_TOKEN=None, CST=None,
                             print_answer=True):
         """
@@ -128,7 +128,7 @@ class CapitalCom(BaseBroker):
             Deal Reference / deal ID
         """
         return trading.create_new_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer,
-                                        symbol=symbol, direction=direction, size=size, stop_amount=stop_amount, profit_amount=profit_amount)
+                                        symbol=symbol, direction=direction, size=size, stop_amount=stop_amount, profit_amount=profit_amount, stop_level=stop_level, profit_level=profit_level)
     
     def place_limit_order(self,
                          symbol: str,

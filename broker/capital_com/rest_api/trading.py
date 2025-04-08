@@ -31,7 +31,7 @@ def all_positions(X_SECURITY_TOKEN, CST, print_answer):
     return data.decode("utf-8")
 
 def create_new_position(X_SECURITY_TOKEN, CST, 
-                     symbol, direction, size, stop_amount, profit_amount, #stop_level, profit_level,
+                     symbol, direction, size, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
                      print_answer=True):
     """
     Create orders and positions.
@@ -51,14 +51,35 @@ def create_new_position(X_SECURITY_TOKEN, CST,
     Return:
         Deal Reference / deal ID
     """
-    payload = json.dumps({
-        "epic": symbol,
-        "direction": direction,
-        "size": size,
-        "guaranteedStop": False,
-        "stopAmount": stop_amount, 
-        "profitAmount": profit_amount
-    })
+    if stop_amount is not None and profit_amount is not None:  # have added dollar amount of SL/TP
+        logging.info("Recieved request of using dollar amout as SL/TP.")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+            "stopAmount": stop_amount, 
+            "profitAmount": profit_amount
+        })
+    elif stop_level is not None and profit_level is not None:  # have added price level/value as SL/TP
+        logging.info("Recieved request of using price level as SL/TP.")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+            "stopLevel": stop_level,
+            "profitLevel": profit_level
+        })
+    else:  # Not having any stop loss or take profit
+        logging.warning("Did not recieve SL/TP values!")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+        })
+        
     headers = {
         'X-SECURITY-TOKEN': X_SECURITY_TOKEN,
         'CST': CST,
