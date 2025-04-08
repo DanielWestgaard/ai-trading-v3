@@ -25,12 +25,24 @@ backtesting/
     └── portfolio_backtest.py
 ```
 
-## Why Backtest?
+## Important note about current status over backtesting system
+These are some important key concepts the system is using that's important to keep in mind. They are put in place only as a temporary solution, but is probably restricting performace by a lot! This current iteration has focus on making everything work, but after the first deployment, this should be very high on the list to fix a better solution.
+1. **Decision Timeframe**: *Only* make trading *decisions* at *higher timeframe* boundaries (e.g., hourly)
+2. **Consensus Mechanism**: Require multiple consecutive signals to agree before trading
+3. **Minimum Holding Period**: *Force positions to be held* for a minimum period (e.g., 1 hour)
+4. **Maximum Holding Period**: *Force exit of positions held too long*
 
-- **Validate Strategy Performance**: Determine if a strategy actually works before risking real capital
-- **Optimize Parameters**: Find the best parameters for your strategy (like moving average periods)
-- **Understand Risk**: Measure metrics like maximum drawdown and volatility
-- **Identify Weaknesses**: Discover market conditions where your strategy struggles
+### Future dynamic improvements
+1. **Adaptive Timeframes**: Instead of fixed timeframe boundaries, your model could detect market regime changes and adjust its decision frequency accordingly (more frequent in volatile markets, less frequent in ranging markets).
+2. **Confidence-Based Position Sizing**: Instead of binary yes/no trade decisions, position size could scale with model confidence.
+3. **Dynamic Holding Periods**: Rather than fixed min/max holding periods, you could:
+   - Exit faster when the model confidence strongly reverses
+   - Hold longer when the trend is strengthening
+   - Adjust holding periods based on market volatility
+4. **Smart Exit Strategies**: Implement trailing stops that adjust based on realized volatility or model confidence.
+5. **Multi-timeframe Analysis**: Use predictions from different timeframes simultaneously to generate stronger signals (e.g., align 1-hour and 4-hour predictions).
+6. **Ensemble Consensus**: When you move to ensemble models, require consensus not just across time but across different model types.
+
 
 ## Our Backtesting Framework Architecture
 
