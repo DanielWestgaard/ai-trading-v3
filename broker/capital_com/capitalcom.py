@@ -50,12 +50,15 @@ class CapitalCom(BaseBroker):
     def session_details(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
         return session.session_details(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
     
-    def switch_active_account(self, account_id=None, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+    def switch_active_account(self, account_id=None, account_name=None, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
         if account_id is None or self.all_accounts is None:
             logging.info("AccountID and/or all_accounts is None. Initializing them now.")
             self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
-            self.account_id = br_util.get_account_id_by_name(self.all_accounts, mark_config.ACCOUNT_TEST)
-        return session.switch_active_account(self.account_id, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+            self.account_id, self.account_name = br_util.get_account_id_by_name(self.all_accounts, account_name=account_name or mark_config.ACCOUNT_TEST)
+        if self.account_id is None and self.account_name is None:
+            logging.error("Error switching active account! Unable to switch!")
+            return None
+        return session.switch_active_account(self.account_id, self.account_name, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
     
     # ==================== DATA METHODS ====================
     
@@ -100,6 +103,10 @@ class CapitalCom(BaseBroker):
         return []  # Return empty list
     
     # ==================== TRADING METHODS ====================
+    
+    def all_positions(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True):
+        """Returns all open positions for the active account."""
+        return trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer)
     
     def place_market_order(self, 
                           symbol: str, 

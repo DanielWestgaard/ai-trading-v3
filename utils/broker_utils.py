@@ -138,11 +138,11 @@ def get_account_id_by_name(json_data : json, account_name):
     for account in parsed_data["accounts"]:
         if account["accountName"] == account_name:
             logging.info(f"Found accountId matching account {account_name}!")
-            return account["accountId"]
+            return account["accountId"], account_name
     
-    logging.info(f"Did not find accountId that matched account {account_name}.")
+    logging.warning(f"Did not find accountId that matched account name {account_name}")
     # Return None if no match is found
-    return None
+    return None, None
 
 def extract_deal_reference(json_data, key_string_to_extract):
     """ Extracting and returning the deal reference / dealID from confirmed positions. """

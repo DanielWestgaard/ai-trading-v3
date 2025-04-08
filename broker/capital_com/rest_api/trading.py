@@ -15,7 +15,7 @@ import config.market_config as config
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 
 # POSITIONS
-def all_positions(X_SECURITY_TOKEN, CST, print_answer=True):
+def all_positions(X_SECURITY_TOKEN, CST, print_answer):
     """Returns all open positions for the active account"""
     payload = ''
     headers = {
