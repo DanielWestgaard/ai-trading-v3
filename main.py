@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
-from backtesting.strategies.model_based_strategy import ModelBasedStrategy
+from core.strategies.model_based_strategy import ModelBasedStrategy
 from data.pipelines.data_pipeline import DataPipeline
 from data.processors.cleaner import DataCleaner
 from models.model_factory import ModelFactory

@@ -6,8 +6,8 @@ import logging
 from datetime import datetime
 
 from backtesting.events import Event, SignalEvent, OrderEvent, FillEvent
-from backtesting.portfolio import Portfolio
-from backtesting.performance import PerformanceTracker
+from core.portfolio.portfolio import Portfolio
+from core.performance.performance import PerformanceTracker
 
 
 class BaseBacktester(ABC):

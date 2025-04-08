@@ -11,14 +11,14 @@ import json
 from datetime import datetime
 import pandas as pd
 
-from backtesting.strategies.model_based_strategy import ModelBasedStrategy
+from core.strategies.model_based_strategy import ModelBasedStrategy
 
 # Add parent directory to path so we can import modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Use absolute imports instead of relative
 from backtesting.backtest_runner import BacktestRunner
-from backtesting.strategies.simple_ma_crossover import SimpleMovingAverageCrossover, MACDStrategy
+from core.strategies.simple_ma_crossover import SimpleMovingAverageCrossover, MACDStrategy
 from backtesting.data.market_data import CSVMarketData, PipelineMarketData
 import utils.logging_utils as log_utils
 import config.system_config as sys_config

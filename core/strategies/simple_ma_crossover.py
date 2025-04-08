@@ -3,7 +3,7 @@ import numpy as np
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
-from backtesting.strategies.base_strategy import BaseStrategy
+from core.strategies.base_strategy import BaseStrategy
 from backtesting.events import SignalEvent, SignalType
 
 

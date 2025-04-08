@@ -15,7 +15,7 @@ logger = setup_logging(name="model_backtest", type="model_backtest", log_to_file
 from models.model_trainer import ModelTrainer
 from models.model_factory import ModelFactory
 from backtesting.backtest_runner import BacktestRunner
-from backtesting.strategies.model_based_strategy import ModelBasedStrategy
+from core.strategies.model_based_strategy import ModelBasedStrategy
 from backtesting.data.market_data import PipelineMarketData
 from config import data_config
 

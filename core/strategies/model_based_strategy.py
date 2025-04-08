@@ -4,9 +4,9 @@ import numpy as np
 import logging
 from typing import Dict, List, Union, Tuple, Optional, Any
 
-from backtesting.position_management import PositionManager
+from core.risk.position_management import PositionManager
 from backtesting.signal_filter import SignalFilter
-from backtesting.strategies.base_strategy import BaseStrategy
+from core.strategies.base_strategy import BaseStrategy
 from backtesting.events import SignalEvent, SignalType
 from backtesting.timeframe_resampler import TimeframeResampler
 

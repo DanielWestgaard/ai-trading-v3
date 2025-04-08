@@ -2,7 +2,7 @@
 import pandas as pd
 from typing import List, Optional
 
-from backtesting.strategies.base_strategy import BaseStrategy
+from core.strategies.base_strategy import BaseStrategy
 from backtesting.events import SignalEvent, SignalType
 import logging
 
