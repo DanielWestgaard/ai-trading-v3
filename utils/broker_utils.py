@@ -5,9 +5,6 @@ from datetime import datetime
 import sys
 import json
 
-# Add the parent directory to the path for imports
-#sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import config.system_config as sys_config
 import config.market_config as mark_config
 
