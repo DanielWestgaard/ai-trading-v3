@@ -17,9 +17,19 @@ from utils.broker_utils import on_close, on_error, on_message, on_open, on_messa
 # Global variables
 ws_url = "wss://api-streaming-capital.backend-capital.com/connect"
 
-def sub_live_market_data(X_SECURITY_TOKEN, CST, epic, resolution):
+def sub_live_market_data(X_SECURITY_TOKEN, CST, epic, resolution, custom_message_handler=None):
     """
-    Subscribe to the candlestick bars updates by mentioning the epics, resolutions and bar type.
+    Subscribe to the candlestick bars updates by mentioning the epics, resolutions, bar type, and a custom message handler.
+    
+    Args:
+        X_SECURITY_TOKEN: Security token
+        CST: CST value
+        epic: Trading instrument/epic
+        resolution: Data resolution
+        custom_message_handler: Custom function to handle incoming messages
+        
+    Returns:
+        WebSocket connection object
     """
     # Subscription payload
     subscription_message = {
@@ -37,9 +47,11 @@ def sub_live_market_data(X_SECURITY_TOKEN, CST, epic, resolution):
             "type": "classic"
         }
     }
-        # Create a modified on_open function with subscription_message included
+    
     # This uses functools.partial to create a new function with the parameter pre-filled
     custom_on_open = partial(on_open, subscription_message=subscription_message)
+    # Determine which message handler to use
+    message_handler = custom_message_handler if custom_message_handler else on_message_improved
     
     # Create a WebSocket connection
     ws = websocket.WebSocketApp(
@@ -49,7 +61,7 @@ def sub_live_market_data(X_SECURITY_TOKEN, CST, epic, resolution):
             "X-SECURITY-TOKEN": X_SECURITY_TOKEN
         },
         on_open=custom_on_open,
-        on_message=on_message_improved,
+        on_message=message_handler,
         on_error=on_error,
         on_close=on_close
     )
@@ -119,63 +131,3 @@ def setup_ping_timer(ws, X_SECURITY_TOKEN, CST, interval_seconds=120):
     # Start the first ping task
     threading.Timer(interval_seconds, ping_task).start()
     print(f"Automatic ping scheduled every {interval_seconds} seconds")
-
-def sub_live_market_data_with_handler(X_SECURITY_TOKEN, CST, epic, resolution, custom_message_handler=None):
-    """
-    Subscribe to candlestick bars updates with a custom message handler.
-    
-    Args:
-        X_SECURITY_TOKEN: Security token
-        CST: CST value
-        epic: Trading instrument/epic
-        resolution: Data resolution
-        custom_message_handler: Custom function to handle incoming messages
-        
-    Returns:
-        WebSocket connection object
-    """
-    # Subscription payload
-    subscription_message = {
-        "destination": "OHLCMarketData.subscribe",
-        "correlationId": "3",
-        "cst": CST,
-        "securityToken": X_SECURITY_TOKEN,
-        "payload": {
-            "epics": [
-                epic
-            ],
-            "resolutions": [
-                resolution
-            ],
-            "type": "classic"
-        }
-    }
-    
-    # Create a modified on_open function with subscription_message included
-    custom_on_open = partial(on_open, subscription_message=subscription_message)
-    
-    # Determine which message handler to use
-    message_handler = custom_message_handler if custom_message_handler else on_message_improved
-    
-    # Create a WebSocket connection
-    ws = websocket.WebSocketApp(
-        ws_url,
-        header={
-            "CST": CST,
-            "X-SECURITY-TOKEN": X_SECURITY_TOKEN
-        },
-        on_open=custom_on_open,
-        on_message=message_handler,
-        on_error=on_error,
-        on_close=on_close
-    )
-
-    # Start the WebSocket connection in a separate thread
-    ws_thread = threading.Thread(target=ws.run_forever)
-    ws_thread.daemon = True  # Allow the thread to exit when the main program exits
-    ws_thread.start()
-    
-    # Give the WebSocket time to connect
-    time.sleep(1)
-    
-    return ws

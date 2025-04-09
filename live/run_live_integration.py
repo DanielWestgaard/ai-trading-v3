@@ -69,10 +69,10 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         logging.info(f"Subscribing to {symbol} {timeframe} data...")
         
         # Subscribe with custom message handler
-        ws = broker.sub_live_market_data_with_handler(
+        ws = broker.sub_live_market_data(
             symbol=symbol, 
-            timeframe=timeframe,
-            message_handler=custom_message_handler
+            timeframe=timeframe
+            #message_handler=custom_message_handler
         )
         
         # Set timeout if specified

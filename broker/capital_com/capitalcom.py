@@ -190,15 +190,21 @@ class CapitalCom(BaseBroker):
         
     # ==================== LIVE DATA ====================
     
-    def sub_live_market_data(self, symbol, timeframe, X_SECURITY_TOKEN=None, CST=None):
+    def sub_live_market_data(self, symbol, timeframe, message_handler=None, X_SECURITY_TOKEN=None, CST=None):
         try:
             logging.info("About to initiate subscribtion to live market data...")
             
             # Initiating the subscription
-            ws = web_socket.sub_live_market_data(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,
-                                                 epic=symbol, resolution=timeframe)
+            ws = web_socket.sub_live_market_data(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token,
+                                                 CST=CST or self.cst,
+                                                 epic=symbol,
+                                                 resolution=timeframe,
+                                                 custom_message_handler=message_handler)
             # Set up automatic pinging every 1 minutes (60 seconds) to make sure we don't time out
-            web_socket.setup_ping_timer(ws=ws, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, interval_seconds=60)
+            web_socket.setup_ping_timer(ws=ws,
+                                        X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token,
+                                        CST=CST or self.cst,
+                                        interval_seconds=60)
             # Simple "hack" so that the program isn't terminated
             try:
                 while True:
@@ -211,44 +217,3 @@ class CapitalCom(BaseBroker):
             logging.error(f"Error occured: {e}")
             
             return False
-
-    # Related to live data
-    def sub_live_market_data_with_handler(self, symbol, timeframe, message_handler=None, X_SECURITY_TOKEN=None, CST=None):
-        """
-        Subscribe to live market data with custom message handler.
-        
-        Args:
-            symbol: Trading instrument/epic
-            timeframe: Data resolution (e.g., "MINUTE")
-            message_handler: Custom function to handle incoming WebSocket messages
-            X_SECURITY_TOKEN: Security token (optional)
-            CST: CST value (optional)
-            
-        Returns:
-            WebSocket connection object
-        """
-        try:
-            logging.info(f"Subscribing to live market data for {symbol} at {timeframe} resolution...")
-            
-            # Use the custom message handler if provided
-            ws = web_socket.sub_live_market_data_with_handler(
-                X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, 
-                CST=CST or self.cst,
-                epic=symbol, 
-                resolution=timeframe,
-                custom_message_handler=message_handler
-            )
-            
-            # Set up automatic pinging to keep connection alive
-            web_socket.setup_ping_timer(
-                ws=ws, 
-                X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, 
-                CST=CST or self.cst, 
-                interval_seconds=60
-            )
-            
-            return ws
-            
-        except Exception as e:
-            logging.error(f"Error in live market data subscription: {e}")
-            return None
