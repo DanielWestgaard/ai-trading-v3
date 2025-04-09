@@ -1,0 +1,257 @@
+09-04-2025 19:34:14 - INFO - Logging system initialized. Environment: development
+09-04-2025 19:34:14 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+09-04-2025 19:34:14 - INFO - Successfully loaded model from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+09-04-2025 19:34:14 - INFO - Found 40 features embedded in the model
+09-04-2025 19:34:14 - INFO - Loaded credentials. Length: 3
+09-04-2025 19:34:14 - INFO - Starting session with Capital.com...
+09-04-2025 19:34:14 - INFO - About to start a new session.
+09-04-2025 19:34:14 - INFO - Using encrypted password to start session.
+09-04-2025 19:34:14 - INFO - AccountID and/or all_accounts is None. Initializing them now.
+09-04-2025 19:34:15 - INFO - Will not print out response of all accounts.
+09-04-2025 19:34:15 - INFO - Found accountId matching account USD_testing!
+09-04-2025 19:34:15 - INFO - Successfully switched to account USD_testing!
+09-04-2025 19:34:15 - INFO - Switched to demo account
+09-04-2025 19:34:15 - INFO - Data processor thread started
+09-04-2025 19:34:15 - INFO - LiveDataHandler processor thread started
+09-04-2025 19:34:15 - INFO - Subscribing to GBPUSD MINUTE data with integrated data pipeline...
+09-04-2025 19:34:15 - INFO - Data will be saved to: /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_MINUTE_20250409_193415.csv
+09-04-2025 19:34:15 - INFO - About to initiate subscribtion to live market data...
+09-04-2025 19:34:15 - INFO - Websocket connected
+09-04-2025 19:35:00 - DEBUG - Processing bid message with timestamp 1744220040000
+09-04-2025 19:35:00 - DEBUG - Stored bid data for timestamp 1744220040000
+09-04-2025 19:35:00 - DEBUG - Processing ask message with timestamp 1744220040000
+09-04-2025 19:35:00 - DEBUG - Stored ask data for timestamp 1744220040000
+09-04-2025 19:35:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:34:00
+09-04-2025 19:35:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:35:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:34:00
+09-04-2025 19:35:00 - DEBUG - Matched ask with existing bid for timestamp 1744220040000
+09-04-2025 19:35:00 - DEBUG - Added midpoint to recent_data. Size: 1
+09-04-2025 19:35:16 - DEBUG - Ping sent at 19:35:16
+09-04-2025 19:36:00 - DEBUG - Processing bid message with timestamp 1744220100000
+09-04-2025 19:36:00 - DEBUG - Stored bid data for timestamp 1744220100000
+09-04-2025 19:36:00 - DEBUG - Processing ask message with timestamp 1744220100000
+09-04-2025 19:36:00 - DEBUG - Stored ask data for timestamp 1744220100000
+09-04-2025 19:36:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:35:00
+09-04-2025 19:36:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:36:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:35:00
+09-04-2025 19:36:00 - DEBUG - Matched ask with existing bid for timestamp 1744220100000
+09-04-2025 19:36:00 - DEBUG - Added midpoint to recent_data. Size: 2
+09-04-2025 19:36:16 - DEBUG - Ping sent at 19:36:16
+09-04-2025 19:37:00 - DEBUG - Processing bid message with timestamp 1744220160000
+09-04-2025 19:37:00 - DEBUG - Stored bid data for timestamp 1744220160000
+09-04-2025 19:37:00 - DEBUG - Processing ask message with timestamp 1744220160000
+09-04-2025 19:37:00 - DEBUG - Stored ask data for timestamp 1744220160000
+09-04-2025 19:37:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:36:00
+09-04-2025 19:37:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:37:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:36:00
+09-04-2025 19:37:00 - DEBUG - Matched ask with existing bid for timestamp 1744220160000
+09-04-2025 19:37:00 - DEBUG - Added midpoint to recent_data. Size: 3
+09-04-2025 19:37:16 - DEBUG - Ping sent at 19:37:16
+09-04-2025 19:38:00 - DEBUG - Processing bid message with timestamp 1744220220000
+09-04-2025 19:38:00 - DEBUG - Stored bid data for timestamp 1744220220000
+09-04-2025 19:38:00 - DEBUG - Processing ask message with timestamp 1744220220000
+09-04-2025 19:38:00 - DEBUG - Stored ask data for timestamp 1744220220000
+09-04-2025 19:38:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:37:00
+09-04-2025 19:38:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:38:00 - DEBUG - Matched ask with existing bid for timestamp 1744220220000
+09-04-2025 19:38:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:37:00
+09-04-2025 19:38:00 - DEBUG - Added midpoint to recent_data. Size: 4
+09-04-2025 19:38:16 - DEBUG - Ping sent at 19:38:16
+09-04-2025 19:39:00 - DEBUG - Processing bid message with timestamp 1744220280000
+09-04-2025 19:39:00 - DEBUG - Stored bid data for timestamp 1744220280000
+09-04-2025 19:39:00 - DEBUG - Processing ask message with timestamp 1744220280000
+09-04-2025 19:39:00 - DEBUG - Stored ask data for timestamp 1744220280000
+09-04-2025 19:39:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:38:00
+09-04-2025 19:39:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:39:00 - DEBUG - Matched ask with existing bid for timestamp 1744220280000
+09-04-2025 19:39:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:38:00
+09-04-2025 19:39:00 - DEBUG - Added midpoint to recent_data. Size: 5
+09-04-2025 19:39:16 - DEBUG - Ping sent at 19:39:16
+09-04-2025 19:40:00 - DEBUG - Processing bid message with timestamp 1744220340000
+09-04-2025 19:40:00 - DEBUG - Stored bid data for timestamp 1744220340000
+09-04-2025 19:40:00 - DEBUG - Processing ask message with timestamp 1744220340000
+09-04-2025 19:40:00 - DEBUG - Stored ask data for timestamp 1744220340000
+09-04-2025 19:40:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:39:00
+09-04-2025 19:40:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:40:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:39:00
+09-04-2025 19:40:00 - DEBUG - Matched ask with existing bid for timestamp 1744220340000
+09-04-2025 19:40:00 - DEBUG - Added midpoint to recent_data. Size: 6
+09-04-2025 19:40:16 - DEBUG - Ping sent at 19:40:16
+09-04-2025 19:41:00 - DEBUG - Processing bid message with timestamp 1744220400000
+09-04-2025 19:41:00 - DEBUG - Stored bid data for timestamp 1744220400000
+09-04-2025 19:41:00 - DEBUG - Processing ask message with timestamp 1744220400000
+09-04-2025 19:41:00 - DEBUG - Stored ask data for timestamp 1744220400000
+09-04-2025 19:41:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:40:00
+09-04-2025 19:41:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:41:00 - DEBUG - Matched ask with existing bid for timestamp 1744220400000
+09-04-2025 19:41:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:40:00
+09-04-2025 19:41:00 - DEBUG - Added midpoint to recent_data. Size: 7
+09-04-2025 19:41:16 - DEBUG - Ping sent at 19:41:16
+09-04-2025 19:42:00 - DEBUG - Processing bid message with timestamp 1744220460000
+09-04-2025 19:42:00 - DEBUG - Stored bid data for timestamp 1744220460000
+09-04-2025 19:42:00 - DEBUG - Processing ask message with timestamp 1744220460000
+09-04-2025 19:42:00 - DEBUG - Stored ask data for timestamp 1744220460000
+09-04-2025 19:42:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:41:00
+09-04-2025 19:42:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:42:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:41:00
+09-04-2025 19:42:00 - DEBUG - Matched ask with existing bid for timestamp 1744220460000
+09-04-2025 19:42:00 - DEBUG - Added midpoint to recent_data. Size: 8
+09-04-2025 19:42:16 - DEBUG - Ping sent at 19:42:16
+09-04-2025 19:43:01 - DEBUG - Processing bid message with timestamp 1744220520000
+09-04-2025 19:43:01 - DEBUG - Stored bid data for timestamp 1744220520000
+09-04-2025 19:43:01 - DEBUG - Processing ask message with timestamp 1744220520000
+09-04-2025 19:43:01 - DEBUG - Stored ask data for timestamp 1744220520000
+09-04-2025 19:43:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:42:00
+09-04-2025 19:43:01 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:43:01 - DEBUG - Got midpoint from queue: 2025-04-09 19:42:00
+09-04-2025 19:43:01 - DEBUG - Matched ask with existing bid for timestamp 1744220520000
+09-04-2025 19:43:01 - DEBUG - Added midpoint to recent_data. Size: 9
+09-04-2025 19:43:16 - DEBUG - Ping sent at 19:43:16
+09-04-2025 19:44:00 - DEBUG - Processing bid message with timestamp 1744220580000
+09-04-2025 19:44:00 - DEBUG - Stored bid data for timestamp 1744220580000
+09-04-2025 19:44:00 - DEBUG - Processing ask message with timestamp 1744220580000
+09-04-2025 19:44:00 - DEBUG - Stored ask data for timestamp 1744220580000
+09-04-2025 19:44:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:43:00
+09-04-2025 19:44:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:44:00 - DEBUG - Matched ask with existing bid for timestamp 1744220580000
+09-04-2025 19:44:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:43:00
+09-04-2025 19:44:00 - INFO - Processed 20 market data messages
+09-04-2025 19:44:00 - DEBUG - Added midpoint to recent_data. Size: 10
+09-04-2025 19:44:00 - INFO - Buffer status: 10 processed points, 0 pending bids, 0 pending asks
+09-04-2025 19:44:00 - DEBUG - Getting latest data. recent_data size: 10
+09-04-2025 19:44:00 - INFO - Latest data: 2025-04-09 19:43:00 | OHLC: 1.27825/1.27869/1.27801/1.27809
+09-04-2025 19:44:00 - INFO - Saved 10 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_MINUTE_20250409_193415.csv
+09-04-2025 19:44:16 - DEBUG - Ping sent at 19:44:16
+09-04-2025 19:44:16 - INFO - Processed 20 market data messages
+09-04-2025 19:44:16 - INFO - Buffer status: 10 processed points, 0 pending bids, 0 pending asks
+09-04-2025 19:44:16 - DEBUG - Getting latest data. recent_data size: 10
+09-04-2025 19:44:16 - INFO - Latest data: 2025-04-09 19:43:00 | OHLC: 1.27825/1.27869/1.27801/1.27809
+09-04-2025 19:45:00 - DEBUG - Processing bid message with timestamp 1744220640000
+09-04-2025 19:45:00 - DEBUG - Stored bid data for timestamp 1744220640000
+09-04-2025 19:45:00 - DEBUG - Processing ask message with timestamp 1744220640000
+09-04-2025 19:45:00 - DEBUG - Stored ask data for timestamp 1744220640000
+09-04-2025 19:45:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:44:00
+09-04-2025 19:45:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:45:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:44:00
+09-04-2025 19:45:00 - DEBUG - Matched ask with existing bid for timestamp 1744220640000
+09-04-2025 19:45:00 - DEBUG - Added midpoint to recent_data. Size: 11
+09-04-2025 19:45:16 - DEBUG - Ping sent at 19:45:16
+09-04-2025 19:46:00 - DEBUG - Processing bid message with timestamp 1744220700000
+09-04-2025 19:46:00 - DEBUG - Stored bid data for timestamp 1744220700000
+09-04-2025 19:46:00 - DEBUG - Processing ask message with timestamp 1744220700000
+09-04-2025 19:46:00 - DEBUG - Stored ask data for timestamp 1744220700000
+09-04-2025 19:46:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:45:00
+09-04-2025 19:46:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:46:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:45:00
+09-04-2025 19:46:00 - DEBUG - Matched ask with existing bid for timestamp 1744220700000
+09-04-2025 19:46:00 - DEBUG - Added midpoint to recent_data. Size: 12
+09-04-2025 19:46:16 - DEBUG - Ping sent at 19:46:16
+09-04-2025 19:47:00 - DEBUG - Processing bid message with timestamp 1744220760000
+09-04-2025 19:47:00 - DEBUG - Stored bid data for timestamp 1744220760000
+09-04-2025 19:47:00 - DEBUG - Processing ask message with timestamp 1744220760000
+09-04-2025 19:47:00 - DEBUG - Stored ask data for timestamp 1744220760000
+09-04-2025 19:47:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:46:00
+09-04-2025 19:47:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:47:00 - DEBUG - Matched ask with existing bid for timestamp 1744220760000
+09-04-2025 19:47:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:46:00
+09-04-2025 19:47:00 - DEBUG - Added midpoint to recent_data. Size: 13
+09-04-2025 19:47:16 - DEBUG - Ping sent at 19:47:16
+09-04-2025 19:48:00 - DEBUG - Processing bid message with timestamp 1744220820000
+09-04-2025 19:48:00 - DEBUG - Stored bid data for timestamp 1744220820000
+09-04-2025 19:48:00 - DEBUG - Processing ask message with timestamp 1744220820000
+09-04-2025 19:48:00 - DEBUG - Stored ask data for timestamp 1744220820000
+09-04-2025 19:48:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:47:00
+09-04-2025 19:48:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:48:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:47:00
+09-04-2025 19:48:00 - DEBUG - Matched ask with existing bid for timestamp 1744220820000
+09-04-2025 19:48:00 - DEBUG - Added midpoint to recent_data. Size: 14
+09-04-2025 19:48:16 - DEBUG - Ping sent at 19:48:16
+09-04-2025 19:49:00 - DEBUG - Processing bid message with timestamp 1744220880000
+09-04-2025 19:49:00 - DEBUG - Stored bid data for timestamp 1744220880000
+09-04-2025 19:49:00 - DEBUG - Processing ask message with timestamp 1744220880000
+09-04-2025 19:49:00 - DEBUG - Stored ask data for timestamp 1744220880000
+09-04-2025 19:49:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:48:00
+09-04-2025 19:49:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:49:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:48:00
+09-04-2025 19:49:00 - DEBUG - Matched ask with existing bid for timestamp 1744220880000
+09-04-2025 19:49:00 - DEBUG - Added midpoint to recent_data. Size: 15
+09-04-2025 19:49:16 - DEBUG - Ping sent at 19:49:16
+09-04-2025 19:50:00 - DEBUG - Processing bid message with timestamp 1744220940000
+09-04-2025 19:50:00 - DEBUG - Stored bid data for timestamp 1744220940000
+09-04-2025 19:50:00 - DEBUG - Processing ask message with timestamp 1744220940000
+09-04-2025 19:50:00 - DEBUG - Stored ask data for timestamp 1744220940000
+09-04-2025 19:50:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:49:00
+09-04-2025 19:50:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:50:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:49:00
+09-04-2025 19:50:00 - DEBUG - Matched ask with existing bid for timestamp 1744220940000
+09-04-2025 19:50:00 - DEBUG - Added midpoint to recent_data. Size: 16
+09-04-2025 19:50:16 - DEBUG - Ping sent at 19:50:16
+09-04-2025 19:51:00 - DEBUG - Processing bid message with timestamp 1744221000000
+09-04-2025 19:51:00 - DEBUG - Stored bid data for timestamp 1744221000000
+09-04-2025 19:51:00 - DEBUG - Processing ask message with timestamp 1744221000000
+09-04-2025 19:51:00 - DEBUG - Stored ask data for timestamp 1744221000000
+09-04-2025 19:51:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:50:00
+09-04-2025 19:51:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:51:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:50:00
+09-04-2025 19:51:00 - DEBUG - Matched ask with existing bid for timestamp 1744221000000
+09-04-2025 19:51:00 - DEBUG - Added midpoint to recent_data. Size: 17
+09-04-2025 19:51:16 - DEBUG - Ping sent at 19:51:16
+09-04-2025 19:52:00 - DEBUG - Processing bid message with timestamp 1744221060000
+09-04-2025 19:52:00 - DEBUG - Stored bid data for timestamp 1744221060000
+09-04-2025 19:52:00 - DEBUG - Processing ask message with timestamp 1744221060000
+09-04-2025 19:52:00 - DEBUG - Stored ask data for timestamp 1744221060000
+09-04-2025 19:52:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:51:00
+09-04-2025 19:52:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:52:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:51:00
+09-04-2025 19:52:00 - DEBUG - Matched ask with existing bid for timestamp 1744221060000
+09-04-2025 19:52:00 - DEBUG - Added midpoint to recent_data. Size: 18
+09-04-2025 19:52:16 - DEBUG - Ping sent at 19:52:16
+09-04-2025 19:53:00 - DEBUG - Processing bid message with timestamp 1744221120000
+09-04-2025 19:53:00 - DEBUG - Stored bid data for timestamp 1744221120000
+09-04-2025 19:53:00 - DEBUG - Processing ask message with timestamp 1744221120000
+09-04-2025 19:53:00 - DEBUG - Stored ask data for timestamp 1744221120000
+09-04-2025 19:53:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:52:00
+09-04-2025 19:53:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:53:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:52:00
+09-04-2025 19:53:00 - DEBUG - Matched ask with existing bid for timestamp 1744221120000
+09-04-2025 19:53:00 - DEBUG - Added midpoint to recent_data. Size: 19
+09-04-2025 19:53:16 - DEBUG - Ping sent at 19:53:16
+09-04-2025 19:54:00 - DEBUG - Processing bid message with timestamp 1744221180000
+09-04-2025 19:54:00 - DEBUG - Stored bid data for timestamp 1744221180000
+09-04-2025 19:54:00 - DEBUG - Processing ask message with timestamp 1744221180000
+09-04-2025 19:54:00 - DEBUG - Stored ask data for timestamp 1744221180000
+09-04-2025 19:54:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:53:00
+09-04-2025 19:54:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:54:00 - DEBUG - Matched ask with existing bid for timestamp 1744221180000
+09-04-2025 19:54:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:53:00
+09-04-2025 19:54:00 - INFO - Processed 40 market data messages
+09-04-2025 19:54:00 - DEBUG - Added midpoint to recent_data. Size: 20
+09-04-2025 19:54:00 - INFO - Buffer status: 20 processed points, 0 pending bids, 0 pending asks
+09-04-2025 19:54:00 - DEBUG - Getting latest data. recent_data size: 20
+09-04-2025 19:54:00 - INFO - Latest data: 2025-04-09 19:53:00 | OHLC: 1.28062/1.28113/1.28022/1.28035
+09-04-2025 19:54:00 - INFO - Saved 20 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_MINUTE_20250409_193415.csv
+09-04-2025 19:54:16 - DEBUG - Ping sent at 19:54:16
+09-04-2025 19:54:16 - INFO - Processed 40 market data messages
+09-04-2025 19:54:16 - INFO - Buffer status: 20 processed points, 0 pending bids, 0 pending asks
+09-04-2025 19:54:16 - DEBUG - Getting latest data. recent_data size: 20
+09-04-2025 19:54:16 - INFO - Latest data: 2025-04-09 19:53:00 | OHLC: 1.28062/1.28113/1.28022/1.28035
+09-04-2025 19:55:00 - DEBUG - Processing bid message with timestamp 1744221240000
+09-04-2025 19:55:00 - DEBUG - Stored bid data for timestamp 1744221240000
+09-04-2025 19:55:00 - DEBUG - Processing ask message with timestamp 1744221240000
+09-04-2025 19:55:00 - DEBUG - Stored ask data for timestamp 1744221240000
+09-04-2025 19:55:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:54:00
+09-04-2025 19:55:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:55:00 - DEBUG - Matched ask with existing bid for timestamp 1744221240000
+09-04-2025 19:55:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:54:00
+09-04-2025 19:55:00 - DEBUG - Added midpoint to recent_data. Size: 21
+09-04-2025 19:55:16 - DEBUG - Ping sent at 19:55:16
+09-04-2025 19:56:00 - DEBUG - Processing bid message with timestamp 1744221300000
+09-04-2025 19:56:00 - DEBUG - Stored bid data for timestamp 1744221300000
+09-04-2025 19:56:00 - DEBUG - Processing ask message with timestamp 1744221300000
+09-04-2025 19:56:00 - DEBUG - Stored ask data for timestamp 1744221300000
+09-04-2025 19:56:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-09 19:55:00
+09-04-2025 19:56:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+09-04-2025 19:56:00 - DEBUG - Matched ask with existing bid for timestamp 1744221300000
+09-04-2025 19:56:00 - DEBUG - Got midpoint from queue: 2025-04-09 19:55:00
+09-04-2025 19:56:00 - DEBUG - Added midpoint to recent_data. Size: 22
+09-04-2025 19:56:16 - DEBUG - Ping sent at 19:56:16
