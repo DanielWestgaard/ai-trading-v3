@@ -37,10 +37,19 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         timeframe: Resolution for the data
         duration_minutes: How long to run (None for indefinite)
     """
+    # Create data handler with custom output file name that includes timestamp
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    output_file = f'live_data_{symbol}_{timeframe}_{timestamp}.csv'
+    
+    # Create full path for output file
+    output_dir = sys_config.LIVE_DATA_DIR
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, output_file)
+    
     # Create data handler
     data_handler = LiveDataHandler(
         model=model,
-        output_file=f'live_data_{symbol}_{timeframe}_{time.strftime("%Y%m%d_%H%M%S")}.csv'
+        output_file=output_path
     )
     
     # Start the data handler
@@ -49,25 +58,42 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
     # Create a stop event for controlled termination
     stop_event = Event()
     
+    # Set up message count tracking
+    message_count = 0
+    last_message_time = time.time()
+    
     # Define custom message handler that forwards to our data handler
     def custom_message_handler(ws, message):
         """Called when a message is received from the WebSocket."""
-        data_handler.process_message(message)
-        logging.debug(f"Inside custom_message_handler() - Got: {message}")
+        nonlocal message_count, last_message_time
         
-        # Print a sample of the processed data periodically
-        if hasattr(custom_message_handler, 'counter'):
-            custom_message_handler.counter += 1
-        else:
-            custom_message_handler.counter = 1
-            
-        if custom_message_handler.counter % 10 == 0:
+        # Forward message to data handler
+        data_handler.process_message(message)
+        
+        # Debug logging
+        if "ohlc.event" in message:
+            message_count += 1
+            last_message_time = time.time()
+        
+        # Print status every 10 OHLC messages (5 minutes)
+        if message_count > 0 and message_count % 10 == 0:
             latest = data_handler.get_latest_data()
             if latest:
-                logging.info(f"Latest midpoint data: {latest['datetime']} | Open: {latest['o']:.5f} | Close: {latest['c']:.5f} | Spread: {latest['spread']:.6f}")
+                logging.info(f"Latest midpoint data: {latest['datetime']} | " +
+                           f"O: {latest['o']:.5f} | H: {latest['h']:.5f} | " +
+                           f"L: {latest['l']:.5f} | C: {latest['c']:.5f} | " +
+                           f"Spread: {latest['spread']:.6f}")
+                           
+                # Also log cached data sizes
+                logging.debug(f"Cached data: {len(data_handler.bid_cache)} bids, " +
+                             f"{len(data_handler.ask_cache)} asks, " +
+                             f"{len(data_handler.recent_data)} processed points")
+            else:
+                logging.warning("No processed data available yet")
     
     try:
         logging.info(f"Subscribing to {symbol} {timeframe} data...")
+        logging.info(f"Data will be saved to: {output_path}")
         
         # Subscribe with custom message handler
         ws = broker.sub_live_market_data(
@@ -88,9 +114,17 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
             timer.daemon = True
             timer.start()
         
-        # Wait for termination signal
+        # Wait for termination signal with watchdog
         try:
             while not stop_event.is_set():
+                # Check if we're still receiving data (watchdog)
+                if message_count > 0 and time.time() - last_message_time > 120:
+                    logging.warning("No messages received for 2 minutes, possible connection issue")
+                
+                # Force a file save every 60 seconds
+                if message_count > 0 and message_count % 30 == 0:
+                    data_handler._save_to_file()
+                
                 time.sleep(1)
         except KeyboardInterrupt:
             logging.info("Received keyboard interrupt, shutting down...")
@@ -100,6 +134,10 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         logging.error(f"Error in data subscription: {e}")
         
     finally:
+        # Final save before stopping
+        if data_handler.recent_data:
+            data_handler._save_to_file()
+            
         # Clean up
         data_handler.stop()
         logging.info("Data handler stopped")

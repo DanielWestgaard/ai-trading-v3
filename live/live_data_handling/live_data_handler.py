@@ -5,6 +5,7 @@ import pandas as pd
 from threading import Thread, Lock
 from queue import Queue, Empty
 from typing import Dict, List, Optional, Callable
+from datetime import datetime
 
 
 class LiveDataHandler:
@@ -13,7 +14,7 @@ class LiveDataHandler:
     Calculates midpoint prices from bid/ask pairs and prepares data for model consumption.
     """
     
-    def __init__(self, model=None, strategy=None, output_file='live_market_data.csv'):
+    def __init__(self, model=None, strategy=None, output_file='live/temp_live/live_market_data.csv'):
         """
         Initialize the LiveDataHandler.
         
@@ -24,8 +25,8 @@ class LiveDataHandler:
         """
         self.data_queue = Queue(maxsize=1000)
         self.recent_data = []  # In-memory buffer for recent data
-        self.unpaired_bids = {}  # Store bids waiting for matching asks
-        self.unpaired_asks = {}  # Store asks waiting for matching bids
+        self.bid_cache = {}  # Store bids by timestamp
+        self.ask_cache = {}  # Store asks by timestamp
         self.output_file = output_file
         self.model = model
         self.strategy = strategy
@@ -33,6 +34,9 @@ class LiveDataHandler:
         self.is_running = False
         self.processor_thread = None
         self.logger = logging.getLogger(__name__)
+        
+        # Configure the logger
+        self.logger.setLevel(logging.DEBUG)
     
     def start(self):
         """Start the data processor thread."""
@@ -59,6 +63,10 @@ class LiveDataHandler:
         try:
             data = json.loads(message)
             
+            # Skip ping responses and subscription confirmations
+            if data.get("destination") == "ping" or data.get("destination") == "OHLCMarketData.subscribe":
+                return
+                
             # Only process OHLC events
             if data.get("destination") != "ohlc.event":
                 return
@@ -69,47 +77,56 @@ class LiveDataHandler:
             
             if not (price_type and timestamp):
                 return
+            
+            self.logger.debug(f"Processing {price_type} message with timestamp {timestamp}")
                 
-            # Store message based on type
+            # Process based on message type
             if price_type == "bid":
-                self._handle_price_message(payload, "bid")
+                self._store_price_data(payload, "bid")
             elif price_type == "ask":
-                self._handle_price_message(payload, "ask")
+                self._store_price_data(payload, "ask")
                 
         except Exception as e:
             self.logger.error(f"Error processing message: {e}")
     
-    def _handle_price_message(self, data: Dict, price_type: str):
+    def _store_price_data(self, data: Dict, price_type: str):
         """
-        Handle a single price message (bid or ask) and try to match it.
+        Store price data and attempt to match with opposite type.
         
         Args:
-            data: The payload data from the message
+            data: The payload data
             price_type: Either "bid" or "ask"
         """
         timestamp = data.get("t")
-        epic = data.get("epic")
         
-        # Store this message
+        # Store this price data
         if price_type == "bid":
-            self.unpaired_bids[timestamp] = data
-            # Check if we have a matching ask
-            if timestamp in self.unpaired_asks:
-                self._create_midpoint(self.unpaired_bids[timestamp], self.unpaired_asks[timestamp])
-                # Clean up after matching
-                del self.unpaired_bids[timestamp]
-                del self.unpaired_asks[timestamp]
-        else:  # ask
-            self.unpaired_asks[timestamp] = data
-            # Check if we have a matching bid
-            if timestamp in self.unpaired_bids:
-                self._create_midpoint(self.unpaired_bids[timestamp], self.unpaired_asks[timestamp])
-                # Clean up after matching
-                del self.unpaired_bids[timestamp]
-                del self.unpaired_asks[timestamp]
+            self.bid_cache[timestamp] = data
+            self.logger.debug(f"Stored bid data for timestamp {timestamp}")
+        else:
+            self.ask_cache[timestamp] = data
+            self.logger.debug(f"Stored ask data for timestamp {timestamp}")
         
-        # Clean up old unmatched messages (older than 30 seconds)
-        self._cleanup_old_messages()
+        # Try to match and create midpoint
+        if price_type == "bid" and timestamp in self.ask_cache:
+            self._create_midpoint(self.bid_cache[timestamp], self.ask_cache[timestamp])
+            self.logger.debug(f"Matched bid with existing ask for timestamp {timestamp}")
+            
+            # Clean up after matching
+            del self.bid_cache[timestamp]
+            del self.ask_cache[timestamp]
+            
+        elif price_type == "ask" and timestamp in self.bid_cache:
+            self._create_midpoint(self.bid_cache[timestamp], self.ask_cache[timestamp])
+            self.logger.debug(f"Matched ask with existing bid for timestamp {timestamp}")
+            
+            # Clean up after matching
+            del self.bid_cache[timestamp]
+            del self.ask_cache[timestamp]
+        
+        # Clean up old unmatched data periodically
+        if len(self.bid_cache) > 100 or len(self.ask_cache) > 100:
+            self._cleanup_old_data()
     
     def _create_midpoint(self, bid_data: Dict, ask_data: Dict):
         """
@@ -119,67 +136,79 @@ class LiveDataHandler:
             bid_data: The bid price data
             ask_data: The ask price data
         """
-        # Ensure bid and ask are for the same instrument and timeframe
-        if bid_data["epic"] != ask_data["epic"] or bid_data["resolution"] != ask_data["resolution"]:
-            return
+        try:
+            # Ensure bid and ask are for the same instrument and timeframe
+            if bid_data["epic"] != ask_data["epic"] or bid_data["resolution"] != ask_data["resolution"]:
+                self.logger.warning(f"Mismatched epic or resolution: {bid_data['epic']} vs {ask_data['epic']}")
+                return
+                
+            # Calculate midpoint values
+            midpoint = {
+                "epic": bid_data["epic"],
+                "resolution": bid_data["resolution"],
+                "t": bid_data["t"],
+                "datetime": datetime.fromtimestamp(bid_data["t"] / 1000).strftime('%Y-%m-%d %H:%M:%S'),
+                "o": (bid_data["o"] + ask_data["o"]) / 2,
+                "h": (bid_data["h"] + ask_data["h"]) / 2,
+                "l": (bid_data["l"] + ask_data["l"]) / 2,
+                "c": (bid_data["c"] + ask_data["c"]) / 2,
+                "spread": ask_data["c"] - bid_data["c"]  # Capture spread information
+            }
             
-        # Calculate midpoint values
-        midpoint = {
-            "epic": bid_data["epic"],
-            "resolution": bid_data["resolution"],
-            "t": bid_data["t"],
-            "datetime": pd.to_datetime(bid_data["t"], unit='ms'),
-            "o": (bid_data["o"] + ask_data["o"]) / 2,
-            "h": (bid_data["h"] + ask_data["h"]) / 2,
-            "l": (bid_data["l"] + ask_data["l"]) / 2,
-            "c": (bid_data["c"] + ask_data["c"]) / 2,
-            "spread": ask_data["c"] - bid_data["c"]  # Capture spread information
-        }
-        
-        # Add to queue for processing
-        self.data_queue.put(midpoint)
+            self.logger.debug(f"Created midpoint for {midpoint['epic']} at {midpoint['datetime']}")
+            
+            # Add to queue for processing
+            self.data_queue.put(midpoint)
+            self.logger.debug(f"Added midpoint to queue. Queue size: ~{self.data_queue.qsize()}")
+            
+        except Exception as e:
+            self.logger.error(f"Error creating midpoint: {e}")
     
-    def _cleanup_old_messages(self, max_age_seconds: int = 30):
+    def _cleanup_old_data(self, max_age_seconds: int = 300):
         """
-        Remove old unmatched messages to prevent memory leaks.
+        Clean up old data from bid and ask caches.
         
         Args:
-            max_age_seconds: Maximum age in seconds to keep unmatched messages
+            max_age_seconds: Maximum age in seconds to keep unmatched data
         """
-        current_time = int(time.time() * 1000)  # Convert to milliseconds
+        current_time = int(time.time() * 1000)
         
-        # Remove old bids
-        bid_timestamps = list(self.unpaired_bids.keys())
-        for ts in bid_timestamps:
-            if current_time - ts > max_age_seconds * 1000:
-                del self.unpaired_bids[ts]
-        
-        # Remove old asks
-        ask_timestamps = list(self.unpaired_asks.keys())
-        for ts in ask_timestamps:
-            if current_time - ts > max_age_seconds * 1000:
-                del self.unpaired_asks[ts]
+        # Clean old bids
+        old_bids = [ts for ts in self.bid_cache.keys() if current_time - ts > max_age_seconds * 1000]
+        for ts in old_bids:
+            del self.bid_cache[ts]
+            
+        # Clean old asks
+        old_asks = [ts for ts in self.ask_cache.keys() if current_time - ts > max_age_seconds * 1000]
+        for ts in old_asks:
+            del self.ask_cache[ts]
+            
+        self.logger.debug(f"Cleaned up {len(old_bids)} old bids and {len(old_asks)} old asks")
     
     def _data_processor(self):
         """Consumer thread that processes the midpoint data and feeds to model."""
+        self.logger.info("Data processor thread started")
+        
         while self.is_running:
             try:
                 # Get data from queue (with timeout to check is_running periodically)
                 try:
                     midpoint_data = self.data_queue.get(timeout=1.0)
+                    self.logger.debug(f"Got midpoint from queue: {midpoint_data['datetime']}")
                 except Empty:
                     continue
                 
                 with self.lock:
                     # Add to in-memory buffer
                     self.recent_data.append(midpoint_data)
+                    self.logger.debug(f"Added midpoint to recent_data. Size: {len(self.recent_data)}")
                     
                     # If buffer grows too large, trim it
-                    if len(self.recent_data) > 1000:  # Keep last 1000 points
+                    if len(self.recent_data) > 1000:
                         self.recent_data = self.recent_data[-1000:]
                 
-                # Periodically save to disk
-                if len(self.recent_data) % 100 == 0:
+                # Save to file every 10 data points (instead of 100)
+                if len(self.recent_data) % 10 == 0:
                     self._save_to_file()
                 
                 # Feed to model for prediction if model exists
@@ -221,6 +250,10 @@ class LiveDataHandler:
         """Save recent data to disk."""
         try:
             with self.lock:
+                if not self.recent_data:
+                    self.logger.warning("No data to save")
+                    return
+                    
                 df = pd.DataFrame(self.recent_data)
             
             # Save with header only if file doesn't exist
@@ -239,12 +272,16 @@ class LiveDataHandler:
             n: Number of latest data points to retrieve
             
         Returns:
-            List of the latest n data points or DataFrame if n > 1
+            Latest data point or DataFrame of latest points
         """
         with self.lock:
-            if n == 1 and self.recent_data:
+            self.logger.debug(f"Getting latest data. recent_data size: {len(self.recent_data)}")
+            if not self.recent_data:
+                self.logger.warning("No data in recent_data buffer")
+                return None
+                
+            if n == 1:
                 return self.recent_data[-1]
-            elif n > 1:
+            else:
                 latest = self.recent_data[-n:] if len(self.recent_data) >= n else self.recent_data
                 return pd.DataFrame(latest)
-            return None
