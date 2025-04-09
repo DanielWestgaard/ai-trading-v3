@@ -53,6 +53,7 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
     def custom_message_handler(ws, message):
         """Called when a message is received from the WebSocket."""
         data_handler.process_message(message)
+        logging.debug(f"Inside custom_message_handler() - Got: {message}")
         
         # Print a sample of the processed data periodically
         if hasattr(custom_message_handler, 'counter'):
@@ -71,8 +72,8 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         # Subscribe with custom message handler
         ws = broker.sub_live_market_data(
             symbol=symbol, 
-            timeframe=timeframe
-            #message_handler=custom_message_handler
+            timeframe=timeframe,
+            message_handler=custom_message_handler
         )
         
         # Set timeout if specified
