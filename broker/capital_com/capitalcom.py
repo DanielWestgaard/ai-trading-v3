@@ -20,7 +20,6 @@ class CapitalCom(BaseBroker):
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the broker with configuration."""
-        logging.info("Inside broker")
         
         try: 
             # Getting secrets

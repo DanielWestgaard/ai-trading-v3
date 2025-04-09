@@ -3,7 +3,7 @@ import logging
 import time
 import pandas as pd
 from threading import Thread, Lock
-from queue import Queue
+from queue import Queue, Empty
 from typing import Dict, List, Optional, Callable
 
 
@@ -13,7 +13,7 @@ class LiveDataHandler:
     Calculates midpoint prices from bid/ask pairs and prepares data for model consumption.
     """
     
-    def __init__(self, model=None, strategy=None, output_file='live/temp_live/live_market_data.csv'):
+    def __init__(self, model=None, strategy=None, output_file='live_market_data.csv'):
         """
         Initialize the LiveDataHandler.
         
@@ -167,7 +167,7 @@ class LiveDataHandler:
                 # Get data from queue (with timeout to check is_running periodically)
                 try:
                     midpoint_data = self.data_queue.get(timeout=1.0)
-                except Queue.Empty:
+                except Empty:
                     continue
                 
                 with self.lock:
