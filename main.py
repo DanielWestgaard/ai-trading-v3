@@ -14,19 +14,21 @@ import config.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model
+import live.run_live_integration as run_live_integration
 
 
 def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description='Train hybrid trading strategy models with uncertainty quantification')
     
-    parser.add_argument('--broker-func', action='store_true', default=True, help='Test all broker functionality')
+    parser.add_argument('--broker-func', action='store_true', default=False, help='Test all broker functionality')
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
+    parser.add_argument('--live-integration', action='store_true', default=True, help='Test backtesting (simple)')
     
     return parser.parse_args()
 
@@ -153,6 +155,9 @@ def main():
     if args.test_backtest:
         config_file = sys_config.CONFIG_BACKTESTING_PATH
         run_backtest.main(config_file=config_file)
+
+    if args.live_integration:
+        run_live_integration.main(duration_minutes=60)
 
 if __name__ == "__main__":
     exit(main())
