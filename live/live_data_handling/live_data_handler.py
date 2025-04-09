@@ -1,21 +1,27 @@
 import json
 import logging
 import time
-import numpy as np
 import pandas as pd
+import numpy as np
 from threading import Thread, Lock
 from queue import Queue, Empty
 from typing import Dict, List, Optional, Callable
 from datetime import datetime
 
+from data.features.feature_generator import FeatureGenerator
+from data.features.feature_preparator import FeaturePreparator
+from data.processors.normalizer import DataNormalizer
+
 
 class LiveDataHandler:
     """
     Handles processing of live market data from WebSocket connections.
-    Calculates midpoint prices from bid/ask pairs and prepares data for model consumption.
+    Processes bid/ask pairs into midpoint prices and prepares data for model prediction.
     """
     
-    def __init__(self, model=None, strategy=None, output_file='live/temp_live/live_market_data.csv'):
+    def __init__(self, model=None, strategy=None, output_file='live/temp_live/live_market_data.csv',
+                 feature_generator=None, feature_preparator=None, data_normalizer=None,
+                 model_features=None):
         """
         Initialize the LiveDataHandler.
         
@@ -23,6 +29,10 @@ class LiveDataHandler:
             model: The prediction model (optional)
             strategy: Trading strategy to execute trades (optional)
             output_file: CSV file to periodically save data to
+            feature_generator: FeatureGenerator for technical indicators
+            feature_preparator: FeaturePreparator for feature handling
+            data_normalizer: DataNormalizer for normalizing features
+            model_features: List of features expected by the model
         """
         self.data_queue = Queue(maxsize=1000)
         self.recent_data = []  # In-memory buffer for recent data
@@ -36,8 +46,21 @@ class LiveDataHandler:
         self.processor_thread = None
         self.logger = logging.getLogger(__name__)
         
+        # Data processing components
+        self.feature_generator = feature_generator or FeatureGenerator()
+        self.feature_preparator = feature_preparator or FeaturePreparator(
+            price_transform_method='returns', treatment_mode='basic')
+        self.data_normalizer = data_normalizer or DataNormalizer(other_method='zscore')
+        
+        # Expected features for the model
+        self.model_features = model_features
+        
+        # Data processing state
+        self.min_data_points = 25  # Minimum data points needed before generating features
+        self.initialized_processing = False
+        
         # Configure the logger
-        self.logger.setLevel(logging.DEBUG)
+        # self.logger.setLevel(logging.INFO)
     
     def start(self):
         """Start the data processor thread."""
@@ -149,10 +172,10 @@ class LiveDataHandler:
                 "resolution": bid_data["resolution"],
                 "t": bid_data["t"],
                 "datetime": datetime.fromtimestamp(bid_data["t"] / 1000).strftime('%Y-%m-%d %H:%M:%S'),
-                "o": (bid_data["o"] + ask_data["o"]) / 2,
-                "h": (bid_data["h"] + ask_data["h"]) / 2,
-                "l": (bid_data["l"] + ask_data["l"]) / 2,
-                "c": (bid_data["c"] + ask_data["c"]) / 2,
+                "open": (bid_data["o"] + ask_data["o"]) / 2,
+                "high": (bid_data["h"] + ask_data["h"]) / 2,
+                "low": (bid_data["l"] + ask_data["l"]) / 2,
+                "close": (bid_data["c"] + ask_data["c"]) / 2,
                 "spread": ask_data["c"] - bid_data["c"]  # Capture spread information
             }
             
@@ -213,26 +236,13 @@ class LiveDataHandler:
                     self._save_to_file()
                 
                 # Feed to model for prediction if model exists and we have enough data
-                if self.model and len(self.recent_data) >= 10:  # Need sufficient history
+                if self.model and len(self.recent_data) >= self.min_data_points:
                     try:
                         # Convert the recent data to the format expected by your model
                         model_input = self._prepare_model_input()
                         
                         if model_input is not None and not model_input.empty:
                             self.logger.debug(f"Running prediction on data with shape {model_input.shape}")
-                            
-                            # Log column types to help debug type issues
-                            self.logger.debug(f"Column dtypes: {model_input.dtypes}")
-                            
-                            # Ensure we have purely numeric data for XGBoost
-                            for col in model_input.columns:
-                                if not pd.api.types.is_numeric_dtype(model_input[col]):
-                                    self.logger.warning(f"Column {col} is not numeric: {model_input[col].dtype}")
-                                    model_input[col] = pd.to_numeric(model_input[col], errors='coerce')
-                            
-                            # Replace any NaN or infinite values
-                            model_input.replace([np.inf, -np.inf], np.nan, inplace=True)
-                            model_input.fillna(0, inplace=True)
                             
                             # Run prediction
                             prediction = self.model.predict(model_input)
@@ -242,7 +252,7 @@ class LiveDataHandler:
                             if self.strategy and prediction is not None:
                                 self.strategy.evaluate_signal(prediction)
                         else:
-                            self.logger.warning("Prepared model input is None or empty")
+                            self.logger.debug("Prepared model input is None or empty")
                     except Exception as e:
                         self.logger.error(f"Error in model prediction or strategy execution: {e}")
                         import traceback
@@ -255,67 +265,114 @@ class LiveDataHandler:
     
     def _prepare_model_input(self):
         """
-        Prepare recent data for model consumption.
-        Formats data to match XGBoost's expected input format.
+        Prepare recent data for model consumption using the data pipeline.
+        
+        Returns:
+            DataFrame with properly formatted features for model prediction
         """
         with self.lock:
-            if not self.recent_data or len(self.recent_data) < 5:  # Need enough data points
-                self.logger.warning("Not enough data points for model input")
+            # Ensure we have enough data
+            if len(self.recent_data) < self.min_data_points:
+                self.logger.warning(f"Not enough data points for feature generation. Need at least {self.min_data_points}")
                 return None
                 
             # Convert list of dictionaries to pandas DataFrame
             df = pd.DataFrame(self.recent_data)
             
-            # Keep only numeric columns needed for prediction
-            numeric_cols = ['o', 'h', 'l', 'c', 'spread']
+            # Rename columns to match expected data pipeline format
+            column_mapping = {
+                'datetime': 'Date',
+                'open': 'Open',
+                'high': 'High',
+                'low': 'Low',
+                'close': 'Close',
+                't': 'timestamp'
+            }
             
-            # Ensure all required columns exist
-            if not all(col in df.columns for col in numeric_cols):
-                self.logger.warning(f"Missing required columns. Available: {df.columns.tolist()}")
-                return None
+            df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
+            
+            # Make sure Date is datetime type
+            if 'Date' in df.columns:
+                df['Date'] = pd.to_datetime(df['Date'])
+            elif 'datetime' in df.columns:
+                df['Date'] = pd.to_datetime(df['datetime'])
                 
-            # Filter to only numeric columns
-            df_features = df[numeric_cols].copy()
+            # Initialize data processing components if needed
+            if not self.initialized_processing:
+                self.logger.info("Initializing data processing components")
+                # Fit the feature generator and preparator on initial data
+                self.feature_generator.fit(df)
+                
+                # Don't fit the preparator and normalizer yet since we need feature generation first
+                self.initialized_processing = True
+        
+        # Apply feature generation
+        try:
+            # Generate technical features
+            df_with_features = self.feature_generator.transform(df)
+            self.logger.debug(f"Generated features. New shape: {df_with_features.shape}")
             
-            # Convert timestamp to datetime for time-based features
-            if 't' in df.columns:
-                df_features['hour'] = pd.to_datetime(df['t'], unit='ms').dt.hour
-                df_features['minute'] = pd.to_datetime(df['t'], unit='ms').dt.minute
-                df_features['day_of_week'] = pd.to_datetime(df['t'], unit='ms').dt.dayofweek
+            # Prepare features (transform prices, handle NaNs, etc.)
+            if not hasattr(self.feature_preparator, '_stats') or not self.feature_preparator._stats:
+                # First time, need to fit
+                self.feature_preparator.fit(df_with_features)
+                
+            df_prepared = self.feature_preparator.transform(df_with_features)
+            self.logger.debug(f"Prepared features. New shape: {df_prepared.shape}")
             
-            # Add derived features if needed
-            df_features['hl_diff'] = df_features['h'] - df_features['l']
-            df_features['oc_diff'] = df_features['c'] - df_features['o']
+            # Normalize the data
+            if not hasattr(self.data_normalizer, '_params') or not self.data_normalizer._params:
+                # First time, need to fit
+                self.data_normalizer.fit(df_prepared)
+                
+            df_normalized = self.data_normalizer.transform(df_prepared)
+            self.logger.debug(f"Normalized features. Final shape: {df_normalized.shape}")
             
-            # Calculate percentage changes (returns) for relevant columns
-            for col in ['o', 'h', 'l', 'c']:
-                df_features[f'{col}_pct_change'] = df_features[col].pct_change()
+            # Select only the features expected by the model (if specified)
+            if self.model_features is not None:
+                # Find which expected features are actually in our data
+                available_features = [f for f in self.model_features if f in df_normalized.columns]
+                
+                if not available_features:
+                    self.logger.error(f"None of the expected model features are available in processed data")
+                    self.logger.debug(f"Available columns: {df_normalized.columns.tolist()}")
+                    self.logger.debug(f"Expected features: {self.model_features}")
+                    return None
+                    
+                if len(available_features) < len(self.model_features):
+                    missing = set(self.model_features) - set(available_features)
+                    self.logger.warning(f"Missing {len(missing)} expected features: {missing}")
+                
+                df_features = df_normalized[available_features].copy()
+            else:
+                # No specific features provided, use all numeric columns
+                df_features = df_normalized.select_dtypes(include=['number'])
             
-            # Drop the first row which will have NaN from pct_change
-            df_features = df_features.iloc[1:].copy()
-            
-            # Fill any remaining NaN values
-            df_features.fillna(0, inplace=True)
-            
-            # Ensure all columns are numeric
+            # Safety check - ensure all columns are numeric
             for col in df_features.columns:
                 if df_features[col].dtype == 'object':
-                    self.logger.warning(f"Converting column {col} from {df_features[col].dtype} to numeric")
                     df_features[col] = pd.to_numeric(df_features[col], errors='coerce')
                     
-            # Fill any NaN values created by the conversion
-            df_features.fillna(0, inplace=True)
+            # Replace NaN values with 0
+            df_features = df_features.fillna(0)
             
-            self.logger.debug(f"Prepared model input with shape {df_features.shape} and columns {df_features.columns.tolist()}")
+            # Remove infinity values
+            df_features = df_features.replace([np.inf, -np.inf], 0)
             
+            self.logger.debug(f"Final feature set for model: {df_features.shape[1]} features")
             return df_features
+            
+        except Exception as e:
+            self.logger.error(f"Error preparing model input: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
+            return None
     
     def _save_to_file(self):
         """Save recent data to disk."""
         try:
             with self.lock:
                 if not self.recent_data:
-                    self.logger.warning("No data to save")
                     return
                     
                 df = pd.DataFrame(self.recent_data)

@@ -3,53 +3,151 @@ import time
 import json
 import os
 from threading import Event
+import pandas as pd
 
 from broker.capital_com.capitalcom import CapitalCom
 from live.live_data_handling.live_data_handler import LiveDataHandler
 from models.model_factory import ModelFactory
+from data.features.feature_generator import FeatureGenerator
+from data.features.feature_preparator import FeaturePreparator
+from data.processors.normalizer import DataNormalizer
 import config.system_config as sys_config
 
 
-def load_model(model_path: str = None):
-    """Load a trained model from disk."""
+def load_model_and_features(model_path: str = None):
+    """
+    Load a trained model and extract its expected features.
+    
+    Args:
+        model_path: Path to the trained model
+        
+    Returns:
+        Tuple of (model, feature_list)
+    """
+    # Default model path if none provided
+    model_path = model_path or "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+    
+    # Load the model
     model_type = "xgboost"  # or "random_forest" depending on what's already saved
     model = ModelFactory.create_model(model_type)
-    model_path = model_path or "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
     
     # Load the saved model from disk
     success = model.load(model_path)
-    if success:
-        logging.info(f"Successfully loaded model from {model_path}")
-        return model
-    else:
+    if not success:
         logging.error(f"Could not find model at {model_path}")
-        return None
+        return None, None
+    
+    logging.info(f"Successfully loaded model from {model_path}")
+    
+    # Try to extract feature list
+    feature_list = None
+    try:
+        # Check if features are stored in the model
+        if hasattr(model, 'features') and model.features:
+            feature_list = model.features
+            logging.info(f"Found {len(feature_list)} features embedded in the model")
+        else:
+            # Try to find feature importance
+            feature_importance = model.get_feature_importance(plot=False)
+            if isinstance(feature_importance, dict) and len(feature_importance) > 0:
+                feature_list = list(feature_importance.keys())
+                logging.info(f"Extracted {len(feature_list)} features from feature importance")
+    except Exception as e:
+        logging.warning(f"Could not extract features from model: {e}")
+    
+    # If we couldn't find features in the model, look for a feature file
+    if not feature_list:
+        try:
+            # Try to find a features file based on model path
+            base_dir = os.path.dirname(model_path)
+            model_name = os.path.basename(model_path).split('.')[0]
+            features_file = os.path.join(base_dir, f"{model_name}_features.txt")
+            
+            if os.path.exists(features_file):
+                with open(features_file, 'r') as f:
+                    feature_list = [line.strip() for line in f.readlines() if line.strip()]
+                logging.info(f"Loaded {len(feature_list)} features from {features_file}")
+            else:
+                # Look for any features file in the directory
+                features_files = [f for f in os.listdir(base_dir) if f.endswith('_features.txt')]
+                if features_files:
+                    features_file = os.path.join(base_dir, features_files[0])
+                    with open(features_file, 'r') as f:
+                        feature_list = [line.strip() for line in f.readlines() if line.strip()]
+                    logging.info(f"Found and loaded {len(feature_list)} features from {features_file}")
+        except Exception as e:
+            logging.warning(f"Could not load features from file: {e}")
+    
+    if not feature_list:
+        logging.warning("No feature list found. The model will attempt to use all available features.")
+    
+    return model, feature_list
 
 
-def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE", duration_minutes=None):
+def setup_data_pipeline():
+    """Set up data pipeline components for live data processing."""
+    
+    # Create the feature generator
+    feature_generator = FeatureGenerator(
+        price_cols=['Open', 'High', 'Low', 'Close'],
+        volume_col='Volume',
+        timestamp_col='Date',
+        preserve_original_case=True
+    )
+    
+    # Create the feature preparator
+    feature_preparator = FeaturePreparator(
+        price_cols=['Open', 'High', 'Low', 'Close'],
+        volume_col='Volume',
+        timestamp_col='Date',
+        preserve_original_prices=True,
+        price_transform_method='returns',
+        treatment_mode='basic'  # Basic mode for live data is usually better
+    )
+    
+    # Create the normalizer
+    data_normalizer = DataNormalizer(
+        price_cols=['open', 'high', 'low', 'close'],
+        volume_col='volume',
+        price_method='returns',
+        volume_method='log',
+        other_method='zscore'
+    )
+    
+    return feature_generator, feature_preparator, data_normalizer
+
+
+def subscribe_and_process_data(broker, model, feature_list=None, symbol="GBPUSD", timeframe="MINUTE", duration_minutes=None):
     """
-    Subscribe to live market data and process it in real-time.
+    Subscribe to live market data and process it in real-time with the data pipeline.
     
     Args:
         broker: Initialized broker instance
         model: Trained model for predictions
+        feature_list: List of features expected by the model
         symbol: Trading symbol/epic to subscribe to
         timeframe: Resolution for the data
         duration_minutes: How long to run (None for indefinite)
     """
-    # Create data handler with custom output file name that includes timestamp
-    timestamp = time.strftime("%Y%m%d_%H%M%S")
-    output_file = f'live_data_{symbol}_{timeframe}_{timestamp}.csv'
-    
-    # Create full path for output file
-    output_dir = sys_config.LIVE_DATA_DIR
+    # Create output directories
+    output_dir = os.path.join(sys_config.LIVE_DATA_DIR)
     os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, output_file)
     
-    # Create data handler
+    # Generate output filename with timestamp
+    timestamp = time.strftime("%Y%m%d_%H%M%S")
+    output_file = os.path.join(output_dir, f'live_data_{symbol}_{timeframe}_{timestamp}.csv')
+    
+    # Set up data pipeline components
+    feature_generator, feature_preparator, data_normalizer = setup_data_pipeline()
+    
+    # Create data handler with pipeline components
     data_handler = LiveDataHandler(
         model=model,
-        output_file=output_path
+        output_file=output_file,
+        feature_generator=feature_generator,
+        feature_preparator=feature_preparator,
+        data_normalizer=data_normalizer,
+        model_features=feature_list
     )
     
     # Start the data handler
@@ -58,7 +156,7 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
     # Create a stop event for controlled termination
     stop_event = Event()
     
-    # Set up message count tracking
+    # Set up message tracking
     message_count = 0
     last_message_time = time.time()
     
@@ -70,30 +168,34 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         # Forward message to data handler
         data_handler.process_message(message)
         
-        # Debug logging
+        # Count OHLC messages
         if "ohlc.event" in message:
             message_count += 1
             last_message_time = time.time()
         
-        # Print status every 10 OHLC messages (5 minutes)
-        if message_count > 0 and message_count % 10 == 0:
+        # Print status every 20 OHLC messages
+        if message_count > 0 and message_count % 20 == 0:  # Perhaps change to every 5 message so it's easier to follow the status?
+            logging.info(f"Processed {message_count} market data messages")
+            
+            # Also check data buffer status
+            with data_handler.lock:
+                buffer_size = len(data_handler.recent_data)
+                bid_cache_size = len(data_handler.bid_cache)
+                ask_cache_size = len(data_handler.ask_cache)
+            
+            logging.info(f"Buffer status: {buffer_size} processed points, "
+                       f"{bid_cache_size} pending bids, {ask_cache_size} pending asks")
+            
+            # Log latest data point if available
             latest = data_handler.get_latest_data()
             if latest:
-                logging.info(f"Latest midpoint data: {latest['datetime']} | " +
-                           f"O: {latest['o']:.5f} | H: {latest['h']:.5f} | " +
-                           f"L: {latest['l']:.5f} | C: {latest['c']:.5f} | " +
-                           f"Spread: {latest['spread']:.6f}")
-                           
-                # Also log cached data sizes
-                logging.debug(f"Cached data: {len(data_handler.bid_cache)} bids, " +
-                             f"{len(data_handler.ask_cache)} asks, " +
-                             f"{len(data_handler.recent_data)} processed points")
-            else:
-                logging.warning("No processed data available yet")
+                logging.info(f"Latest data: {latest.get('datetime')} | "
+                          f"OHLC: {latest.get('open'):.5f}/{latest.get('high'):.5f}/"
+                          f"{latest.get('low'):.5f}/{latest.get('close'):.5f}")
     
     try:
-        logging.info(f"Subscribing to {symbol} {timeframe} data...")
-        logging.info(f"Data will be saved to: {output_path}")
+        logging.info(f"Subscribing to {symbol} {timeframe} data with integrated data pipeline...")
+        logging.info(f"Data will be saved to: {output_file}")
         
         # Subscribe with custom message handler
         ws = broker.sub_live_market_data(
@@ -117,12 +219,12 @@ def subscribe_and_process_data(broker, model, symbol="GBPUSD", timeframe="MINUTE
         # Wait for termination signal with watchdog
         try:
             while not stop_event.is_set():
-                # Check if we're still receiving data (watchdog)
+                # Check if we're still receiving data
                 if message_count > 0 and time.time() - last_message_time > 120:
                     logging.warning("No messages received for 2 minutes, possible connection issue")
                 
                 # Force a file save every 60 seconds
-                if message_count > 0 and message_count % 30 == 0:
+                if message_count > 0 and time.time() % 60 < 1:
                     data_handler._save_to_file()
                 
                 time.sleep(1)
@@ -150,10 +252,13 @@ def main(model_path: str = None, duration_minutes: int = None):
     Args:
         model_path: Path to the trained model
         duration_minutes: How long to run in minutes (None for indefinite)
-    """
+    """    
+    # Load the model and extract features
+    model, feature_list = load_model_and_features(model_path)
     
-    # Load the model
-    model = load_model(model_path)
+    if not model:
+        logging.error("Failed to load model. Exiting.")
+        return
     
     # Initialize broker
     broker = CapitalCom()
@@ -167,10 +272,11 @@ def main(model_path: str = None, duration_minutes: int = None):
         broker.switch_active_account(print_answer=False)
         logging.info("Switched to demo account")
         
-        # Subscribe to live market data and process
+        # Subscribe to live market data and process with data pipeline
         subscribe_and_process_data(
             broker=broker,
             model=model,
+            feature_list=feature_list,
             symbol="GBPUSD",
             timeframe="MINUTE",
             duration_minutes=duration_minutes
