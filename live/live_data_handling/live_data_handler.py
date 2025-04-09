@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+import numpy as np
 import pandas as pd
 from threading import Thread, Lock
 from queue import Queue, Empty
@@ -211,18 +212,41 @@ class LiveDataHandler:
                 if len(self.recent_data) % 10 == 0:
                     self._save_to_file()
                 
-                # Feed to model for prediction if model exists
-                if self.model:
+                # Feed to model for prediction if model exists and we have enough data
+                if self.model and len(self.recent_data) >= 10:  # Need sufficient history
                     try:
                         # Convert the recent data to the format expected by your model
                         model_input = self._prepare_model_input()
-                        prediction = self.model.predict(model_input)
                         
-                        # Execute trade if strategy exists and prediction meets criteria
-                        if self.strategy and prediction:
-                            self.strategy.evaluate_signal(prediction)
+                        if model_input is not None and not model_input.empty:
+                            self.logger.debug(f"Running prediction on data with shape {model_input.shape}")
+                            
+                            # Log column types to help debug type issues
+                            self.logger.debug(f"Column dtypes: {model_input.dtypes}")
+                            
+                            # Ensure we have purely numeric data for XGBoost
+                            for col in model_input.columns:
+                                if not pd.api.types.is_numeric_dtype(model_input[col]):
+                                    self.logger.warning(f"Column {col} is not numeric: {model_input[col].dtype}")
+                                    model_input[col] = pd.to_numeric(model_input[col], errors='coerce')
+                            
+                            # Replace any NaN or infinite values
+                            model_input.replace([np.inf, -np.inf], np.nan, inplace=True)
+                            model_input.fillna(0, inplace=True)
+                            
+                            # Run prediction
+                            prediction = self.model.predict(model_input)
+                            self.logger.info(f"Model prediction: {prediction}")
+                            
+                            # Execute trade if strategy exists and prediction meets criteria
+                            if self.strategy and prediction is not None:
+                                self.strategy.evaluate_signal(prediction)
+                        else:
+                            self.logger.warning("Prepared model input is None or empty")
                     except Exception as e:
                         self.logger.error(f"Error in model prediction or strategy execution: {e}")
+                        import traceback
+                        self.logger.error(traceback.format_exc())
                 
                 self.data_queue.task_done()
                 
@@ -232,19 +256,59 @@ class LiveDataHandler:
     def _prepare_model_input(self):
         """
         Prepare recent data for model consumption.
-        This method should be customized based on your model's input requirements.
+        Formats data to match XGBoost's expected input format.
         """
         with self.lock:
+            if not self.recent_data or len(self.recent_data) < 5:  # Need enough data points
+                self.logger.warning("Not enough data points for model input")
+                return None
+                
             # Convert list of dictionaries to pandas DataFrame
             df = pd.DataFrame(self.recent_data)
             
-            # Ensure datetime is the index
-            if 'datetime' in df.columns:
-                df.set_index('datetime', inplace=True)
+            # Keep only numeric columns needed for prediction
+            numeric_cols = ['o', 'h', 'l', 'c', 'spread']
             
-            # Add any necessary technical indicators or features here
+            # Ensure all required columns exist
+            if not all(col in df.columns for col in numeric_cols):
+                self.logger.warning(f"Missing required columns. Available: {df.columns.tolist()}")
+                return None
+                
+            # Filter to only numeric columns
+            df_features = df[numeric_cols].copy()
             
-            return df
+            # Convert timestamp to datetime for time-based features
+            if 't' in df.columns:
+                df_features['hour'] = pd.to_datetime(df['t'], unit='ms').dt.hour
+                df_features['minute'] = pd.to_datetime(df['t'], unit='ms').dt.minute
+                df_features['day_of_week'] = pd.to_datetime(df['t'], unit='ms').dt.dayofweek
+            
+            # Add derived features if needed
+            df_features['hl_diff'] = df_features['h'] - df_features['l']
+            df_features['oc_diff'] = df_features['c'] - df_features['o']
+            
+            # Calculate percentage changes (returns) for relevant columns
+            for col in ['o', 'h', 'l', 'c']:
+                df_features[f'{col}_pct_change'] = df_features[col].pct_change()
+            
+            # Drop the first row which will have NaN from pct_change
+            df_features = df_features.iloc[1:].copy()
+            
+            # Fill any remaining NaN values
+            df_features.fillna(0, inplace=True)
+            
+            # Ensure all columns are numeric
+            for col in df_features.columns:
+                if df_features[col].dtype == 'object':
+                    self.logger.warning(f"Converting column {col} from {df_features[col].dtype} to numeric")
+                    df_features[col] = pd.to_numeric(df_features[col], errors='coerce')
+                    
+            # Fill any NaN values created by the conversion
+            df_features.fillna(0, inplace=True)
+            
+            self.logger.debug(f"Prepared model input with shape {df_features.shape} and columns {df_features.columns.tolist()}")
+            
+            return df_features
     
     def _save_to_file(self):
         """Save recent data to disk."""
