@@ -36,7 +36,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="live", log_to_file=True, log_level=sys_config.DEBUG_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
@@ -44,10 +44,10 @@ def main():
         # broker.session_details(print_answer=True)
         #broker.switch_active_account(print_answer=False)
         # broker.list_all_accounts(print_answer=True)
-        broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
-                                   max=250,
-                                   from_date="2025-04-10T08:03", to_date="2025-04-10T10:23",
-                                   print_answer=True)
+        # broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
+        #                            max=1000,
+        #                            from_date="2025-04-10T12:00:00", to_date="2025-04-10T13:10:00",
+        #                            print_answer=True)
         # broker.fetch_and_save_historical_prices(epic="GBPUSD", resolution="MINUTE_5",
         #                                         from_date="2024-01-01T00:00:00", to_date="2025-01-01T01:00:00",
         #                                         print_answer=False)

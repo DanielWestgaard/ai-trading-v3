@@ -1,0 +1,68 @@
+10-04-2025 15:22:00 - INFO - Logging system initialized. Environment: development
+10-04-2025 15:22:00 - INFO - Loading model from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 15:22:00 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 15:22:00 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 15:22:00 - INFO - Loaded credentials. Length: 3
+10-04-2025 15:22:00 - INFO - Starting session with Capital.com...
+10-04-2025 15:22:00 - INFO - About to start a new session.
+10-04-2025 15:22:00 - INFO - Using encrypted password to start session.
+10-04-2025 15:22:00 - INFO - AccountID and/or all_accounts is None. Initializing them now.
+10-04-2025 15:22:01 - INFO - Will not print out response of all accounts.
+10-04-2025 15:22:01 - INFO - Found accountId matching account USD_testing!
+10-04-2025 15:22:01 - INFO - Successfully switched to account USD_testing!
+10-04-2025 15:22:01 - INFO - Switched to account: USD_testing
+10-04-2025 15:22:01 - INFO - Initializing model-based strategy
+10-04-2025 15:22:01 - INFO - Subscribing to market data for GBPUSD
+10-04-2025 15:22:01 - INFO - Fetching historical data for warm-up period
+10-04-2025 15:22:01 - INFO - Fetching historical data for GBPUSD from 2025-04-10T09:12:01 to 2025-04-10T13:22:01
+10-04-2025 15:22:01 - INFO - Inside historical_prices() markets_info.py
+10-04-2025 15:22:01 - INFO - Warming up data handler with 249 historical data points
+10-04-2025 15:22:01 - INFO - Saved 249 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250410_152201.csv
+10-04-2025 15:22:01 - INFO - Data handler warmed up with 249 data points
+10-04-2025 15:22:01 - INFO - Successfully retrieved 250 previous bars.
+10-04-2025 15:22:01 - INFO - About to initiate subscribtion to live market data...
+10-04-2025 15:22:01 - INFO - Websocket connected
+10-04-2025 15:23:01 - ERROR - Connection to remote host was lost. - goodbye
+10-04-2025 15:23:02 - ERROR - WebSocket is not connected. Cannot send ping.
+10-04-2025 15:25:09 - INFO - Data processor thread started
+10-04-2025 15:25:09 - INFO - LiveDataHandler processor thread started
+10-04-2025 15:25:09 - INFO - Starting live trading service
+10-04-2025 15:25:09 - INFO - Initializing model-based strategy
+10-04-2025 15:25:09 - INFO - Backtest starting with model-based strategy
+10-04-2025 15:25:09 - INFO - Trading loop started
+10-04-2025 15:25:09 - DEBUG - Getting latest data. recent_data size: 249
+10-04-2025 15:25:09 - INFO - Live trading service started
+10-04-2025 15:25:09 - INFO - Running indefinitely (Ctrl+C to stop)
+10-04-2025 15:25:10 - DEBUG - Getting latest data. recent_data size: 249
+10-04-2025 15:25:11 - DEBUG - Getting latest data. recent_data size: 249
+10-04-2025 15:25:12 - DEBUG - Getting latest data. recent_data size: 249
+10-04-2025 15:25:13 - DEBUG - Getting latest data. recent_data size: 249
+10-04-2025 15:25:13 - INFO - Received shutdown signal, stopping trading...
+10-04-2025 15:25:13 - INFO - Stopping live trading service
+10-04-2025 15:25:14 - INFO - Trading loop exited
+10-04-2025 15:25:14 - INFO - Closing all positions: 0 positions
+10-04-2025 15:25:14 - INFO - Sleeping for 5 seconds before closing ALL active positions..
+10-04-2025 15:25:19 - INFO - All positions closed successfully
+10-04-2025 15:25:19 - INFO - Backtest completed with model-based strategy
+10-04-2025 15:25:19 - INFO - Live trading service stopped
+10-04-2025 15:25:19 - ERROR - Error in live trading: Remote end closed connection without response
+10-04-2025 15:25:19 - ERROR - Traceback (most recent call last):
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 260, in run_live_trading
+    time.sleep(60)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 252, in signal_handler
+    broker.end_session()
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/capitalcom.py", line 48, in end_session
+    return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/rest_api/session.py", line 85, in end_session
+    res = conn.getresponse()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+10-04-2025 15:25:19 - WARNING - Trading service is not running
+10-04-2025 15:25:19 - INFO - Ended session: {"status":"SUCCESS"}
+10-04-2025 15:25:19 - INFO - Live trading session ended

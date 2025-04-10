@@ -97,7 +97,7 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
     for symbol in symbols:
         # Calculate date range for historical data
         lookback_bars = 250  # More than needed to ensure enough after processing
-        to_date = (datetime.now() - timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M")  #datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        to_date = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S")  #datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         
         # Calculate from_date based on the timeframe
         timeframe_minutes = {"MINUTE": 1, "MINUTE_5": 5, "MINUTE_15": 15, 
@@ -105,7 +105,7 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
                             "DAY": 1440}.get(timeframe, 60)
         
         minutes_to_subtract = timeframe_minutes * lookback_bars
-        from_date = (datetime.now() - timedelta(minutes=minutes_to_subtract)).strftime("%Y-%m-%dT%H:%M:%S")
+        from_date = (datetime.now() - timedelta(minutes=minutes_to_subtract, hours=2)).strftime("%Y-%m-%dT%H:%M:%S")
         
         logging.info(f"Fetching historical data for {symbol} from {from_date} to {to_date}")
         
@@ -114,8 +114,7 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
             resolution=timeframe,
             from_date=from_date,
             to_date=to_date,
-            max=lookback_bars,
-            print_answer=True
+            max=lookback_bars
         )
         
         # Format and warm up the data handler
@@ -141,6 +140,7 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
             
             # Warm up the data handler with historical data
             data_handler.warm_up_with_historical_data(formatted_history)
+            logging.info(f"Successfully retrieved {lookback_bars} previous bars.")
         else:
             logging.warning(f"No historical data received for {symbol}")
 
