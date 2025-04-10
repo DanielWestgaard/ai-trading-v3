@@ -206,11 +206,11 @@ class CapitalCom(BaseBroker):
                                         CST=CST or self.cst,
                                         interval_seconds=60)
             # Simple "hack" so that the program isn't terminated
-            try:
-                while True:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                print("Program terminated by user")
+            # try:
+            #     while True:
+            #         time.sleep(1)
+            # except KeyboardInterrupt:
+            #     print("Program terminated by user")
             
             return True
         except Exception as e:
