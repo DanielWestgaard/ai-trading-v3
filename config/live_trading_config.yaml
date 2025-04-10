@@ -1,0 +1,60 @@
+# Live Trading Configuration
+# This file contains settings for the live trading system
+
+# General trading settings
+symbols: ['GBPUSD']  # List of symbols to trade
+timeframe: 'MINUTE'  # Timeframe for market data (MINUTE, MINUTE_5, HOUR, etc.)
+account_name: 'USD_testing'  # CapitalCom account name (from your configuration)
+initial_capital: 10000.0  # Initial capital for portfolio tracking
+max_active_positions: 3  # Maximum number of concurrent positions
+log_dir: 'logs/live_trading'  # Directory for log files
+
+# Model configuration
+model_type: 'xgboost'  # Model type (xgboost, random_forest, etc.)
+
+# Strategy settings
+strategy:
+  prediction_threshold: 0.55  # Threshold for prediction to generate signal
+  confidence_threshold: 0.0  # Minimum confidence needed for signal
+  lookback_window: 5  # Number of past predictions to consider
+  consensus_threshold: 0.7  # Minimum consensus needed for signal
+  min_hold_bars: 12  # Minimum holding time (in bars)
+  max_hold_bars: 288  # Maximum holding time (in bars)
+  decision_timeframe: 60  # Timeframe for trading decisions (in minutes)
+
+# Risk management settings
+risk:
+  # Position sizing
+  position_sizing_method: 'percent'  # Method for position sizing
+  position_sizing_params:
+    percent: 5.0  # Percentage of portfolio to risk (5%)
+  
+  # Risk constraints
+  max_position_size: 5.0  # Maximum position size (in units)
+  max_correlated_positions: 2  # Maximum correlated positions
+  max_portfolio_risk: 15.0  # Maximum portfolio risk (15%)
+  
+  # Stop loss settings
+  auto_stop_loss: true  # Enable automatic stop loss
+  stop_loss_method: 'percent'  # Method for setting stop loss
+  stop_loss_params:
+    percent: 1.5  # Stop loss percentage (1.5%)
+  
+  # Take profit settings
+  auto_take_profit: true  # Enable automatic take profit
+  take_profit_method: 'risk_reward'  # Method for setting take profit
+  take_profit_params:
+    risk_reward_ratio: 2.0  # Risk-reward ratio (2:1)
+
+# Data handling settings
+data:
+  save_raw_data: true  # Save raw market data
+  save_processed_data: true  # Save processed data
+  min_data_points: 25  # Minimum data points before generating features
+
+# Monitoring settings  
+monitoring:
+  performance_report_interval: 60  # Generate performance report every X minutes
+  log_trades: true  # Log all trades
+  notify_on_trade: true  # Send notification on trade
+  notify_on_error: true  # Send notification on error

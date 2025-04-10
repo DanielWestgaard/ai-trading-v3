@@ -1,3 +1,4 @@
+# Could be moved to deprecated, as the live_trading_runner.py is utilizing the newly added live execution logic with actual trades?
 import logging
 import time
 import json

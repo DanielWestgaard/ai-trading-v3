@@ -14,7 +14,8 @@ import config.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model
-import live.run_live_integration as run_live_integration
+import live.run_live_integration as run_live_integration  # Old
+import live.live_trading_runner as live_trading_runner
 
 
 def parse_arguments():
@@ -157,7 +158,7 @@ def main():
         run_backtest.main(config_file=config_file)
 
     if args.live_integration:
-        run_live_integration.main(duration_minutes=60)
+        live_trading_runner.run_live_trading("config/live_trading_config.yaml", "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl")
 
 if __name__ == "__main__":
     exit(main())

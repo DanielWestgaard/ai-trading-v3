@@ -1,0 +1,2375 @@
+10-04-2025 10:10:39 - INFO - Logging system initialized. Environment: development
+10-04-2025 10:10:39 - INFO - Loading model from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 10:10:39 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 10:10:39 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+10-04-2025 10:10:39 - INFO - Loaded credentials. Length: 3
+10-04-2025 10:10:39 - INFO - Starting session with Capital.com...
+10-04-2025 10:10:39 - INFO - About to start a new session.
+10-04-2025 10:10:39 - INFO - Using encrypted password to start session.
+10-04-2025 10:10:39 - INFO - AccountID and/or all_accounts is None. Initializing them now.
+10-04-2025 10:10:40 - INFO - Will not print out response of all accounts.
+10-04-2025 10:10:40 - INFO - Found accountId matching account USD_testing!
+10-04-2025 10:10:40 - INFO - Successfully switched to account USD_testing!
+10-04-2025 10:10:40 - INFO - Switched to account: USD_testing
+10-04-2025 10:10:40 - INFO - Initializing model-based strategy
+10-04-2025 10:10:40 - INFO - Subscribing to market data for GBPUSD
+10-04-2025 10:10:40 - INFO - About to initiate subscribtion to live market data...
+10-04-2025 10:10:40 - INFO - Websocket connected
+10-04-2025 10:11:00 - DEBUG - Processing bid message with timestamp 1744272600000
+10-04-2025 10:11:00 - DEBUG - Stored bid data for timestamp 1744272600000
+10-04-2025 10:11:00 - DEBUG - Processing ask message with timestamp 1744272600000
+10-04-2025 10:11:00 - DEBUG - Stored ask data for timestamp 1744272600000
+10-04-2025 10:11:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:10:00
+10-04-2025 10:11:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+10-04-2025 10:11:00 - DEBUG - Matched ask with existing bid for timestamp 1744272600000
+10-04-2025 10:11:41 - DEBUG - Ping sent at 10:11:41
+10-04-2025 10:12:00 - DEBUG - Processing bid message with timestamp 1744272660000
+10-04-2025 10:12:00 - DEBUG - Stored bid data for timestamp 1744272660000
+10-04-2025 10:12:00 - DEBUG - Processing ask message with timestamp 1744272660000
+10-04-2025 10:12:00 - DEBUG - Stored ask data for timestamp 1744272660000
+10-04-2025 10:12:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:11:00
+10-04-2025 10:12:00 - DEBUG - Added midpoint to queue. Queue size: ~2
+10-04-2025 10:12:00 - DEBUG - Matched ask with existing bid for timestamp 1744272660000
+10-04-2025 10:12:41 - DEBUG - Ping sent at 10:12:41
+10-04-2025 10:13:00 - DEBUG - Processing bid message with timestamp 1744272720000
+10-04-2025 10:13:00 - DEBUG - Stored bid data for timestamp 1744272720000
+10-04-2025 10:13:00 - DEBUG - Processing ask message with timestamp 1744272720000
+10-04-2025 10:13:00 - DEBUG - Stored ask data for timestamp 1744272720000
+10-04-2025 10:13:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:12:00
+10-04-2025 10:13:00 - DEBUG - Added midpoint to queue. Queue size: ~3
+10-04-2025 10:13:00 - DEBUG - Matched ask with existing bid for timestamp 1744272720000
+10-04-2025 10:13:41 - DEBUG - Ping sent at 10:13:41
+10-04-2025 10:14:00 - DEBUG - Processing bid message with timestamp 1744272780000
+10-04-2025 10:14:00 - DEBUG - Stored bid data for timestamp 1744272780000
+10-04-2025 10:14:00 - DEBUG - Processing ask message with timestamp 1744272780000
+10-04-2025 10:14:00 - DEBUG - Stored ask data for timestamp 1744272780000
+10-04-2025 10:14:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:13:00
+10-04-2025 10:14:00 - DEBUG - Added midpoint to queue. Queue size: ~4
+10-04-2025 10:14:00 - DEBUG - Matched ask with existing bid for timestamp 1744272780000
+10-04-2025 10:14:41 - DEBUG - Ping sent at 10:14:41
+10-04-2025 10:15:00 - DEBUG - Processing bid message with timestamp 1744272840000
+10-04-2025 10:15:00 - DEBUG - Stored bid data for timestamp 1744272840000
+10-04-2025 10:15:00 - DEBUG - Processing ask message with timestamp 1744272840000
+10-04-2025 10:15:00 - DEBUG - Stored ask data for timestamp 1744272840000
+10-04-2025 10:15:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:14:00
+10-04-2025 10:15:00 - DEBUG - Added midpoint to queue. Queue size: ~5
+10-04-2025 10:15:00 - DEBUG - Matched ask with existing bid for timestamp 1744272840000
+10-04-2025 10:15:41 - DEBUG - Ping sent at 10:15:41
+10-04-2025 10:16:00 - DEBUG - Processing bid message with timestamp 1744272900000
+10-04-2025 10:16:00 - DEBUG - Stored bid data for timestamp 1744272900000
+10-04-2025 10:16:00 - DEBUG - Processing ask message with timestamp 1744272900000
+10-04-2025 10:16:00 - DEBUG - Stored ask data for timestamp 1744272900000
+10-04-2025 10:16:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:15:00
+10-04-2025 10:16:00 - DEBUG - Added midpoint to queue. Queue size: ~6
+10-04-2025 10:16:00 - DEBUG - Matched ask with existing bid for timestamp 1744272900000
+10-04-2025 10:16:41 - DEBUG - Ping sent at 10:16:41
+10-04-2025 10:17:00 - DEBUG - Processing bid message with timestamp 1744272960000
+10-04-2025 10:17:00 - DEBUG - Stored bid data for timestamp 1744272960000
+10-04-2025 10:17:00 - DEBUG - Processing ask message with timestamp 1744272960000
+10-04-2025 10:17:00 - DEBUG - Stored ask data for timestamp 1744272960000
+10-04-2025 10:17:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:16:00
+10-04-2025 10:17:00 - DEBUG - Added midpoint to queue. Queue size: ~7
+10-04-2025 10:17:00 - DEBUG - Matched ask with existing bid for timestamp 1744272960000
+10-04-2025 10:17:41 - DEBUG - Ping sent at 10:17:41
+10-04-2025 10:18:00 - DEBUG - Processing bid message with timestamp 1744273020000
+10-04-2025 10:18:00 - DEBUG - Stored bid data for timestamp 1744273020000
+10-04-2025 10:18:00 - DEBUG - Processing ask message with timestamp 1744273020000
+10-04-2025 10:18:00 - DEBUG - Stored ask data for timestamp 1744273020000
+10-04-2025 10:18:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:17:00
+10-04-2025 10:18:00 - DEBUG - Added midpoint to queue. Queue size: ~8
+10-04-2025 10:18:00 - DEBUG - Matched ask with existing bid for timestamp 1744273020000
+10-04-2025 10:18:41 - DEBUG - Ping sent at 10:18:41
+10-04-2025 10:19:01 - DEBUG - Processing bid message with timestamp 1744273080000
+10-04-2025 10:19:01 - DEBUG - Stored bid data for timestamp 1744273080000
+10-04-2025 10:19:01 - DEBUG - Processing ask message with timestamp 1744273080000
+10-04-2025 10:19:01 - DEBUG - Stored ask data for timestamp 1744273080000
+10-04-2025 10:19:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:18:00
+10-04-2025 10:19:01 - DEBUG - Added midpoint to queue. Queue size: ~9
+10-04-2025 10:19:01 - DEBUG - Matched ask with existing bid for timestamp 1744273080000
+10-04-2025 10:19:41 - DEBUG - Ping sent at 10:19:41
+10-04-2025 10:20:00 - DEBUG - Processing bid message with timestamp 1744273140000
+10-04-2025 10:20:00 - DEBUG - Stored bid data for timestamp 1744273140000
+10-04-2025 10:20:00 - DEBUG - Processing ask message with timestamp 1744273140000
+10-04-2025 10:20:00 - DEBUG - Stored ask data for timestamp 1744273140000
+10-04-2025 10:20:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:19:00
+10-04-2025 10:20:00 - DEBUG - Added midpoint to queue. Queue size: ~10
+10-04-2025 10:20:00 - DEBUG - Matched ask with existing bid for timestamp 1744273140000
+10-04-2025 10:20:41 - DEBUG - Ping sent at 10:20:41
+10-04-2025 10:21:00 - DEBUG - Processing bid message with timestamp 1744273200000
+10-04-2025 10:21:00 - DEBUG - Stored bid data for timestamp 1744273200000
+10-04-2025 10:21:00 - DEBUG - Processing ask message with timestamp 1744273200000
+10-04-2025 10:21:00 - DEBUG - Stored ask data for timestamp 1744273200000
+10-04-2025 10:21:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:20:00
+10-04-2025 10:21:00 - DEBUG - Added midpoint to queue. Queue size: ~11
+10-04-2025 10:21:00 - DEBUG - Matched ask with existing bid for timestamp 1744273200000
+10-04-2025 10:21:41 - DEBUG - Ping sent at 10:21:41
+10-04-2025 10:22:00 - DEBUG - Processing bid message with timestamp 1744273260000
+10-04-2025 10:22:00 - DEBUG - Stored bid data for timestamp 1744273260000
+10-04-2025 10:22:00 - DEBUG - Processing ask message with timestamp 1744273260000
+10-04-2025 10:22:00 - DEBUG - Stored ask data for timestamp 1744273260000
+10-04-2025 10:22:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:21:00
+10-04-2025 10:22:00 - DEBUG - Added midpoint to queue. Queue size: ~12
+10-04-2025 10:22:00 - DEBUG - Matched ask with existing bid for timestamp 1744273260000
+10-04-2025 10:22:41 - DEBUG - Ping sent at 10:22:41
+10-04-2025 10:23:00 - DEBUG - Processing bid message with timestamp 1744273320000
+10-04-2025 10:23:00 - DEBUG - Stored bid data for timestamp 1744273320000
+10-04-2025 10:23:00 - DEBUG - Processing ask message with timestamp 1744273320000
+10-04-2025 10:23:00 - DEBUG - Stored ask data for timestamp 1744273320000
+10-04-2025 10:23:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:22:00
+10-04-2025 10:23:00 - DEBUG - Added midpoint to queue. Queue size: ~13
+10-04-2025 10:23:00 - DEBUG - Matched ask with existing bid for timestamp 1744273320000
+10-04-2025 10:23:41 - DEBUG - Ping sent at 10:23:41
+10-04-2025 10:24:00 - DEBUG - Processing bid message with timestamp 1744273380000
+10-04-2025 10:24:00 - DEBUG - Stored bid data for timestamp 1744273380000
+10-04-2025 10:24:00 - DEBUG - Processing ask message with timestamp 1744273380000
+10-04-2025 10:24:00 - DEBUG - Stored ask data for timestamp 1744273380000
+10-04-2025 10:24:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:23:00
+10-04-2025 10:24:00 - DEBUG - Added midpoint to queue. Queue size: ~14
+10-04-2025 10:24:00 - DEBUG - Matched ask with existing bid for timestamp 1744273380000
+10-04-2025 10:24:41 - DEBUG - Ping sent at 10:24:41
+10-04-2025 10:25:00 - DEBUG - Processing bid message with timestamp 1744273440000
+10-04-2025 10:25:00 - DEBUG - Stored bid data for timestamp 1744273440000
+10-04-2025 10:25:00 - DEBUG - Processing ask message with timestamp 1744273440000
+10-04-2025 10:25:00 - DEBUG - Stored ask data for timestamp 1744273440000
+10-04-2025 10:25:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:24:00
+10-04-2025 10:25:00 - DEBUG - Added midpoint to queue. Queue size: ~15
+10-04-2025 10:25:00 - DEBUG - Matched ask with existing bid for timestamp 1744273440000
+10-04-2025 10:25:41 - DEBUG - Ping sent at 10:25:41
+10-04-2025 10:26:00 - DEBUG - Processing bid message with timestamp 1744273500000
+10-04-2025 10:26:00 - DEBUG - Stored bid data for timestamp 1744273500000
+10-04-2025 10:26:00 - DEBUG - Processing ask message with timestamp 1744273500000
+10-04-2025 10:26:00 - DEBUG - Stored ask data for timestamp 1744273500000
+10-04-2025 10:26:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:25:00
+10-04-2025 10:26:00 - DEBUG - Added midpoint to queue. Queue size: ~16
+10-04-2025 10:26:00 - DEBUG - Matched ask with existing bid for timestamp 1744273500000
+10-04-2025 10:26:41 - DEBUG - Ping sent at 10:26:41
+10-04-2025 10:27:00 - DEBUG - Processing bid message with timestamp 1744273560000
+10-04-2025 10:27:00 - DEBUG - Stored bid data for timestamp 1744273560000
+10-04-2025 10:27:00 - DEBUG - Processing ask message with timestamp 1744273560000
+10-04-2025 10:27:00 - DEBUG - Stored ask data for timestamp 1744273560000
+10-04-2025 10:27:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:26:00
+10-04-2025 10:27:00 - DEBUG - Added midpoint to queue. Queue size: ~17
+10-04-2025 10:27:00 - DEBUG - Matched ask with existing bid for timestamp 1744273560000
+10-04-2025 10:27:41 - DEBUG - Ping sent at 10:27:41
+10-04-2025 10:28:00 - DEBUG - Processing bid message with timestamp 1744273620000
+10-04-2025 10:28:00 - DEBUG - Stored bid data for timestamp 1744273620000
+10-04-2025 10:28:00 - DEBUG - Processing ask message with timestamp 1744273620000
+10-04-2025 10:28:00 - DEBUG - Stored ask data for timestamp 1744273620000
+10-04-2025 10:28:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:27:00
+10-04-2025 10:28:00 - DEBUG - Added midpoint to queue. Queue size: ~18
+10-04-2025 10:28:00 - DEBUG - Matched ask with existing bid for timestamp 1744273620000
+10-04-2025 10:28:41 - DEBUG - Ping sent at 10:28:41
+10-04-2025 10:29:00 - DEBUG - Processing bid message with timestamp 1744273680000
+10-04-2025 10:29:00 - DEBUG - Stored bid data for timestamp 1744273680000
+10-04-2025 10:29:00 - DEBUG - Processing ask message with timestamp 1744273680000
+10-04-2025 10:29:00 - DEBUG - Stored ask data for timestamp 1744273680000
+10-04-2025 10:29:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:28:00
+10-04-2025 10:29:00 - DEBUG - Added midpoint to queue. Queue size: ~19
+10-04-2025 10:29:00 - DEBUG - Matched ask with existing bid for timestamp 1744273680000
+10-04-2025 10:29:41 - DEBUG - Ping sent at 10:29:41
+10-04-2025 10:30:00 - DEBUG - Processing bid message with timestamp 1744273740000
+10-04-2025 10:30:00 - DEBUG - Stored bid data for timestamp 1744273740000
+10-04-2025 10:30:00 - DEBUG - Processing ask message with timestamp 1744273740000
+10-04-2025 10:30:00 - DEBUG - Stored ask data for timestamp 1744273740000
+10-04-2025 10:30:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:29:00
+10-04-2025 10:30:00 - DEBUG - Added midpoint to queue. Queue size: ~20
+10-04-2025 10:30:00 - DEBUG - Matched ask with existing bid for timestamp 1744273740000
+10-04-2025 10:30:41 - DEBUG - Ping sent at 10:30:41
+10-04-2025 10:31:00 - DEBUG - Processing bid message with timestamp 1744273800000
+10-04-2025 10:31:00 - DEBUG - Stored bid data for timestamp 1744273800000
+10-04-2025 10:31:00 - DEBUG - Processing ask message with timestamp 1744273800000
+10-04-2025 10:31:00 - DEBUG - Stored ask data for timestamp 1744273800000
+10-04-2025 10:31:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:30:00
+10-04-2025 10:31:00 - DEBUG - Added midpoint to queue. Queue size: ~21
+10-04-2025 10:31:00 - DEBUG - Matched ask with existing bid for timestamp 1744273800000
+10-04-2025 10:31:41 - DEBUG - Ping sent at 10:31:41
+10-04-2025 10:32:00 - DEBUG - Processing bid message with timestamp 1744273860000
+10-04-2025 10:32:00 - DEBUG - Stored bid data for timestamp 1744273860000
+10-04-2025 10:32:00 - DEBUG - Processing ask message with timestamp 1744273860000
+10-04-2025 10:32:00 - DEBUG - Stored ask data for timestamp 1744273860000
+10-04-2025 10:32:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:31:00
+10-04-2025 10:32:00 - DEBUG - Added midpoint to queue. Queue size: ~22
+10-04-2025 10:32:00 - DEBUG - Matched ask with existing bid for timestamp 1744273860000
+10-04-2025 10:32:41 - DEBUG - Ping sent at 10:32:41
+10-04-2025 10:33:00 - DEBUG - Processing bid message with timestamp 1744273920000
+10-04-2025 10:33:00 - DEBUG - Stored bid data for timestamp 1744273920000
+10-04-2025 10:33:00 - DEBUG - Processing ask message with timestamp 1744273920000
+10-04-2025 10:33:00 - DEBUG - Stored ask data for timestamp 1744273920000
+10-04-2025 10:33:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:32:00
+10-04-2025 10:33:00 - DEBUG - Added midpoint to queue. Queue size: ~23
+10-04-2025 10:33:00 - DEBUG - Matched ask with existing bid for timestamp 1744273920000
+10-04-2025 10:33:41 - DEBUG - Ping sent at 10:33:41
+10-04-2025 10:34:00 - DEBUG - Processing bid message with timestamp 1744273980000
+10-04-2025 10:34:00 - DEBUG - Stored bid data for timestamp 1744273980000
+10-04-2025 10:34:00 - DEBUG - Processing ask message with timestamp 1744273980000
+10-04-2025 10:34:00 - DEBUG - Stored ask data for timestamp 1744273980000
+10-04-2025 10:34:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:33:00
+10-04-2025 10:34:00 - DEBUG - Added midpoint to queue. Queue size: ~24
+10-04-2025 10:34:00 - DEBUG - Matched ask with existing bid for timestamp 1744273980000
+10-04-2025 10:34:41 - DEBUG - Ping sent at 10:34:41
+10-04-2025 10:35:00 - DEBUG - Processing bid message with timestamp 1744274040000
+10-04-2025 10:35:00 - DEBUG - Stored bid data for timestamp 1744274040000
+10-04-2025 10:35:00 - DEBUG - Processing ask message with timestamp 1744274040000
+10-04-2025 10:35:00 - DEBUG - Stored ask data for timestamp 1744274040000
+10-04-2025 10:35:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:34:00
+10-04-2025 10:35:00 - DEBUG - Added midpoint to queue. Queue size: ~25
+10-04-2025 10:35:00 - DEBUG - Matched ask with existing bid for timestamp 1744274040000
+10-04-2025 10:35:41 - DEBUG - Ping sent at 10:35:41
+10-04-2025 10:36:00 - DEBUG - Processing bid message with timestamp 1744274100000
+10-04-2025 10:36:00 - DEBUG - Stored bid data for timestamp 1744274100000
+10-04-2025 10:36:00 - DEBUG - Processing ask message with timestamp 1744274100000
+10-04-2025 10:36:00 - DEBUG - Stored ask data for timestamp 1744274100000
+10-04-2025 10:36:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:35:00
+10-04-2025 10:36:00 - DEBUG - Added midpoint to queue. Queue size: ~26
+10-04-2025 10:36:00 - DEBUG - Matched ask with existing bid for timestamp 1744274100000
+10-04-2025 10:36:41 - DEBUG - Ping sent at 10:36:41
+10-04-2025 10:37:00 - DEBUG - Processing bid message with timestamp 1744274160000
+10-04-2025 10:37:00 - DEBUG - Stored bid data for timestamp 1744274160000
+10-04-2025 10:37:00 - DEBUG - Processing ask message with timestamp 1744274160000
+10-04-2025 10:37:00 - DEBUG - Stored ask data for timestamp 1744274160000
+10-04-2025 10:37:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:36:00
+10-04-2025 10:37:00 - DEBUG - Added midpoint to queue. Queue size: ~27
+10-04-2025 10:37:00 - DEBUG - Matched ask with existing bid for timestamp 1744274160000
+10-04-2025 10:37:41 - DEBUG - Ping sent at 10:37:41
+10-04-2025 10:38:00 - DEBUG - Processing bid message with timestamp 1744274220000
+10-04-2025 10:38:00 - DEBUG - Stored bid data for timestamp 1744274220000
+10-04-2025 10:38:00 - DEBUG - Processing ask message with timestamp 1744274220000
+10-04-2025 10:38:00 - DEBUG - Stored ask data for timestamp 1744274220000
+10-04-2025 10:38:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:37:00
+10-04-2025 10:38:00 - DEBUG - Added midpoint to queue. Queue size: ~28
+10-04-2025 10:38:00 - DEBUG - Matched ask with existing bid for timestamp 1744274220000
+10-04-2025 10:38:41 - DEBUG - Ping sent at 10:38:41
+10-04-2025 10:39:00 - DEBUG - Processing bid message with timestamp 1744274280000
+10-04-2025 10:39:00 - DEBUG - Stored bid data for timestamp 1744274280000
+10-04-2025 10:39:00 - DEBUG - Processing ask message with timestamp 1744274280000
+10-04-2025 10:39:00 - DEBUG - Stored ask data for timestamp 1744274280000
+10-04-2025 10:39:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:38:00
+10-04-2025 10:39:00 - DEBUG - Added midpoint to queue. Queue size: ~29
+10-04-2025 10:39:00 - DEBUG - Matched ask with existing bid for timestamp 1744274280000
+10-04-2025 10:39:41 - DEBUG - Ping sent at 10:39:41
+10-04-2025 10:40:00 - DEBUG - Processing bid message with timestamp 1744274340000
+10-04-2025 10:40:00 - DEBUG - Stored bid data for timestamp 1744274340000
+10-04-2025 10:40:00 - DEBUG - Processing ask message with timestamp 1744274340000
+10-04-2025 10:40:00 - DEBUG - Stored ask data for timestamp 1744274340000
+10-04-2025 10:40:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:39:00
+10-04-2025 10:40:00 - DEBUG - Added midpoint to queue. Queue size: ~30
+10-04-2025 10:40:00 - DEBUG - Matched ask with existing bid for timestamp 1744274340000
+10-04-2025 10:40:41 - DEBUG - Ping sent at 10:40:41
+10-04-2025 10:41:00 - DEBUG - Processing bid message with timestamp 1744274400000
+10-04-2025 10:41:00 - DEBUG - Stored bid data for timestamp 1744274400000
+10-04-2025 10:41:00 - DEBUG - Processing ask message with timestamp 1744274400000
+10-04-2025 10:41:00 - DEBUG - Stored ask data for timestamp 1744274400000
+10-04-2025 10:41:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:40:00
+10-04-2025 10:41:00 - DEBUG - Added midpoint to queue. Queue size: ~31
+10-04-2025 10:41:00 - DEBUG - Matched ask with existing bid for timestamp 1744274400000
+10-04-2025 10:41:41 - DEBUG - Ping sent at 10:41:41
+10-04-2025 10:42:01 - DEBUG - Processing bid message with timestamp 1744274460000
+10-04-2025 10:42:01 - DEBUG - Stored bid data for timestamp 1744274460000
+10-04-2025 10:42:01 - DEBUG - Processing ask message with timestamp 1744274460000
+10-04-2025 10:42:01 - DEBUG - Stored ask data for timestamp 1744274460000
+10-04-2025 10:42:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:41:00
+10-04-2025 10:42:01 - DEBUG - Added midpoint to queue. Queue size: ~32
+10-04-2025 10:42:01 - DEBUG - Matched ask with existing bid for timestamp 1744274460000
+10-04-2025 10:42:41 - DEBUG - Ping sent at 10:42:41
+10-04-2025 10:43:01 - DEBUG - Processing bid message with timestamp 1744274520000
+10-04-2025 10:43:01 - DEBUG - Stored bid data for timestamp 1744274520000
+10-04-2025 10:43:01 - DEBUG - Processing ask message with timestamp 1744274520000
+10-04-2025 10:43:01 - DEBUG - Stored ask data for timestamp 1744274520000
+10-04-2025 10:43:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:42:00
+10-04-2025 10:43:01 - DEBUG - Added midpoint to queue. Queue size: ~33
+10-04-2025 10:43:01 - DEBUG - Matched ask with existing bid for timestamp 1744274520000
+10-04-2025 10:43:41 - DEBUG - Ping sent at 10:43:41
+10-04-2025 10:44:00 - DEBUG - Processing bid message with timestamp 1744274580000
+10-04-2025 10:44:00 - DEBUG - Stored bid data for timestamp 1744274580000
+10-04-2025 10:44:00 - DEBUG - Processing ask message with timestamp 1744274580000
+10-04-2025 10:44:00 - DEBUG - Stored ask data for timestamp 1744274580000
+10-04-2025 10:44:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:43:00
+10-04-2025 10:44:00 - DEBUG - Added midpoint to queue. Queue size: ~34
+10-04-2025 10:44:00 - DEBUG - Matched ask with existing bid for timestamp 1744274580000
+10-04-2025 10:44:41 - DEBUG - Ping sent at 10:44:41
+10-04-2025 10:45:00 - DEBUG - Processing bid message with timestamp 1744274640000
+10-04-2025 10:45:00 - DEBUG - Stored bid data for timestamp 1744274640000
+10-04-2025 10:45:00 - DEBUG - Processing ask message with timestamp 1744274640000
+10-04-2025 10:45:00 - DEBUG - Stored ask data for timestamp 1744274640000
+10-04-2025 10:45:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:44:00
+10-04-2025 10:45:00 - DEBUG - Added midpoint to queue. Queue size: ~35
+10-04-2025 10:45:00 - DEBUG - Matched ask with existing bid for timestamp 1744274640000
+10-04-2025 10:45:41 - DEBUG - Ping sent at 10:45:41
+10-04-2025 10:46:00 - DEBUG - Processing bid message with timestamp 1744274700000
+10-04-2025 10:46:00 - DEBUG - Stored bid data for timestamp 1744274700000
+10-04-2025 10:46:00 - DEBUG - Processing ask message with timestamp 1744274700000
+10-04-2025 10:46:00 - DEBUG - Stored ask data for timestamp 1744274700000
+10-04-2025 10:46:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:45:00
+10-04-2025 10:46:00 - DEBUG - Added midpoint to queue. Queue size: ~36
+10-04-2025 10:46:00 - DEBUG - Matched ask with existing bid for timestamp 1744274700000
+10-04-2025 10:46:41 - DEBUG - Ping sent at 10:46:41
+10-04-2025 10:47:00 - DEBUG - Processing bid message with timestamp 1744274760000
+10-04-2025 10:47:00 - DEBUG - Stored bid data for timestamp 1744274760000
+10-04-2025 10:47:00 - DEBUG - Processing ask message with timestamp 1744274760000
+10-04-2025 10:47:00 - DEBUG - Stored ask data for timestamp 1744274760000
+10-04-2025 10:47:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:46:00
+10-04-2025 10:47:00 - DEBUG - Added midpoint to queue. Queue size: ~37
+10-04-2025 10:47:00 - DEBUG - Matched ask with existing bid for timestamp 1744274760000
+10-04-2025 10:47:41 - DEBUG - Ping sent at 10:47:41
+10-04-2025 10:48:00 - DEBUG - Processing bid message with timestamp 1744274820000
+10-04-2025 10:48:00 - DEBUG - Stored bid data for timestamp 1744274820000
+10-04-2025 10:48:00 - DEBUG - Processing ask message with timestamp 1744274820000
+10-04-2025 10:48:00 - DEBUG - Stored ask data for timestamp 1744274820000
+10-04-2025 10:48:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:47:00
+10-04-2025 10:48:00 - DEBUG - Added midpoint to queue. Queue size: ~38
+10-04-2025 10:48:00 - DEBUG - Matched ask with existing bid for timestamp 1744274820000
+10-04-2025 10:48:41 - DEBUG - Ping sent at 10:48:41
+10-04-2025 10:49:00 - DEBUG - Processing bid message with timestamp 1744274880000
+10-04-2025 10:49:00 - DEBUG - Stored bid data for timestamp 1744274880000
+10-04-2025 10:49:00 - DEBUG - Processing ask message with timestamp 1744274880000
+10-04-2025 10:49:00 - DEBUG - Stored ask data for timestamp 1744274880000
+10-04-2025 10:49:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:48:00
+10-04-2025 10:49:00 - DEBUG - Added midpoint to queue. Queue size: ~39
+10-04-2025 10:49:00 - DEBUG - Matched ask with existing bid for timestamp 1744274880000
+10-04-2025 10:49:41 - DEBUG - Ping sent at 10:49:41
+10-04-2025 10:50:00 - DEBUG - Processing bid message with timestamp 1744274940000
+10-04-2025 10:50:00 - DEBUG - Stored bid data for timestamp 1744274940000
+10-04-2025 10:50:00 - DEBUG - Processing ask message with timestamp 1744274940000
+10-04-2025 10:50:00 - DEBUG - Stored ask data for timestamp 1744274940000
+10-04-2025 10:50:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:49:00
+10-04-2025 10:50:00 - DEBUG - Added midpoint to queue. Queue size: ~40
+10-04-2025 10:50:00 - DEBUG - Matched ask with existing bid for timestamp 1744274940000
+10-04-2025 10:50:41 - DEBUG - Ping sent at 10:50:41
+10-04-2025 10:51:00 - DEBUG - Processing bid message with timestamp 1744275000000
+10-04-2025 10:51:00 - DEBUG - Stored bid data for timestamp 1744275000000
+10-04-2025 10:51:00 - DEBUG - Processing ask message with timestamp 1744275000000
+10-04-2025 10:51:00 - DEBUG - Stored ask data for timestamp 1744275000000
+10-04-2025 10:51:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:50:00
+10-04-2025 10:51:00 - DEBUG - Added midpoint to queue. Queue size: ~41
+10-04-2025 10:51:00 - DEBUG - Matched ask with existing bid for timestamp 1744275000000
+10-04-2025 10:51:41 - DEBUG - Ping sent at 10:51:41
+10-04-2025 10:52:00 - DEBUG - Processing bid message with timestamp 1744275060000
+10-04-2025 10:52:00 - DEBUG - Stored bid data for timestamp 1744275060000
+10-04-2025 10:52:00 - DEBUG - Processing ask message with timestamp 1744275060000
+10-04-2025 10:52:00 - DEBUG - Stored ask data for timestamp 1744275060000
+10-04-2025 10:52:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:51:00
+10-04-2025 10:52:00 - DEBUG - Added midpoint to queue. Queue size: ~42
+10-04-2025 10:52:00 - DEBUG - Matched ask with existing bid for timestamp 1744275060000
+10-04-2025 10:52:41 - DEBUG - Ping sent at 10:52:41
+10-04-2025 10:53:01 - DEBUG - Processing bid message with timestamp 1744275120000
+10-04-2025 10:53:01 - DEBUG - Stored bid data for timestamp 1744275120000
+10-04-2025 10:53:01 - DEBUG - Processing ask message with timestamp 1744275120000
+10-04-2025 10:53:01 - DEBUG - Stored ask data for timestamp 1744275120000
+10-04-2025 10:53:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:52:00
+10-04-2025 10:53:01 - DEBUG - Added midpoint to queue. Queue size: ~43
+10-04-2025 10:53:01 - DEBUG - Matched ask with existing bid for timestamp 1744275120000
+10-04-2025 10:53:41 - DEBUG - Ping sent at 10:53:41
+10-04-2025 10:54:00 - DEBUG - Processing bid message with timestamp 1744275180000
+10-04-2025 10:54:00 - DEBUG - Stored bid data for timestamp 1744275180000
+10-04-2025 10:54:00 - DEBUG - Processing ask message with timestamp 1744275180000
+10-04-2025 10:54:00 - DEBUG - Stored ask data for timestamp 1744275180000
+10-04-2025 10:54:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:53:00
+10-04-2025 10:54:00 - DEBUG - Added midpoint to queue. Queue size: ~44
+10-04-2025 10:54:00 - DEBUG - Matched ask with existing bid for timestamp 1744275180000
+10-04-2025 10:54:41 - DEBUG - Ping sent at 10:54:41
+10-04-2025 10:55:00 - DEBUG - Processing bid message with timestamp 1744275240000
+10-04-2025 10:55:00 - DEBUG - Stored bid data for timestamp 1744275240000
+10-04-2025 10:55:00 - DEBUG - Processing ask message with timestamp 1744275240000
+10-04-2025 10:55:00 - DEBUG - Stored ask data for timestamp 1744275240000
+10-04-2025 10:55:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-10 10:54:00
+10-04-2025 10:55:00 - DEBUG - Added midpoint to queue. Queue size: ~45
+10-04-2025 10:55:00 - DEBUG - Matched ask with existing bid for timestamp 1744275240000
+10-04-2025 10:55:41 - DEBUG - Ping sent at 10:55:41
+10-04-2025 10:56:34 - INFO - Data processor thread started
+10-04-2025 10:56:34 - INFO - LiveDataHandler processor thread started
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:10:00
+10-04-2025 10:56:34 - INFO - Starting live trading service
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 1
+10-04-2025 10:56:34 - INFO - Initializing model-based strategy
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:11:00
+10-04-2025 10:56:34 - INFO - Backtest starting with model-based strategy
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 2
+10-04-2025 10:56:34 - INFO - Trading loop started
+10-04-2025 10:56:34 - INFO - Live trading service started
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:12:00
+10-04-2025 10:56:34 - DEBUG - Getting latest data. recent_data size: 2
+10-04-2025 10:56:34 - INFO - Running indefinitely (Ctrl+C to stop)
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 3
+10-04-2025 10:56:34 - ERROR - Error in trading loop: 'str' object has no attribute 'minute'
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:13:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 4
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:14:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 5
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:15:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 6
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:16:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 7
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:17:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 8
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:18:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 9
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:19:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 10
+10-04-2025 10:56:34 - INFO - Saved 10 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250410_101040.csv
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:20:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 11
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:21:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 12
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:22:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 13
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:23:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 14
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:24:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 15
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:25:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 16
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:26:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 17
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:27:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 18
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:28:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 19
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:29:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 20
+10-04-2025 10:56:34 - INFO - Saved 20 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250410_101040.csv
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:30:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 21
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:31:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 22
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:32:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 23
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:33:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 24
+10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:34:00
+10-04-2025 10:56:34 - DEBUG - Added midpoint to recent_data. Size: 25
+10-04-2025 10:56:35 - DEBUG - Generated features. New shape: (25, 66)
+10-04-2025 10:56:35 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - DEBUG - Final feature set for model: 40 features, 25 rows
+10-04-2025 10:56:35 - DEBUG - Running prediction on data with shape (25, 40)
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 0 0 0 0 0 0 0 1 0 1 1 1 1 1 0 0]
+10-04-2025 10:56:35 - DEBUG - Got midpoint from queue: 2025-04-10 10:35:00
+10-04-2025 10:56:35 - DEBUG - Added midpoint to recent_data. Size: 26
+10-04-2025 10:56:35 - DEBUG - Generated features. New shape: (26, 66)
+10-04-2025 10:56:35 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - DEBUG - Final feature set for model: 40 features, 26 rows
+10-04-2025 10:56:35 - DEBUG - Running prediction on data with shape (26, 40)
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - INFO - Model prediction: [1 1 1 1 0 1 1 1 1 0 1 0 0 0 0 0 1 0 1 1 1 1 1 1 0 1]
+10-04-2025 10:56:35 - DEBUG - Got midpoint from queue: 2025-04-10 10:36:00
+10-04-2025 10:56:35 - DEBUG - Added midpoint to recent_data. Size: 27
+10-04-2025 10:56:35 - DEBUG - Generated features. New shape: (27, 66)
+10-04-2025 10:56:35 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - DEBUG - Final feature set for model: 40 features, 27 rows
+10-04-2025 10:56:35 - DEBUG - Running prediction on data with shape (27, 40)
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - INFO - Model prediction: [1 1 1 1 0 1 1 1 1 0 1 0 0 0 0 0 0 0 1 1 0 1 1 0 0 1 1]
+10-04-2025 10:56:35 - DEBUG - Got midpoint from queue: 2025-04-10 10:37:00
+10-04-2025 10:56:35 - DEBUG - Added midpoint to recent_data. Size: 28
+10-04-2025 10:56:35 - DEBUG - Generated features. New shape: (28, 66)
+10-04-2025 10:56:35 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - DEBUG - Final feature set for model: 40 features, 28 rows
+10-04-2025 10:56:35 - DEBUG - Running prediction on data with shape (28, 40)
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 0 1 0 0 0 1 0 1 0 1 1 0 1 1 0 0 1 1 1]
+10-04-2025 10:56:35 - DEBUG - Got midpoint from queue: 2025-04-10 10:38:00
+10-04-2025 10:56:35 - DEBUG - Added midpoint to recent_data. Size: 29
+10-04-2025 10:56:35 - DEBUG - Generated features. New shape: (29, 66)
+10-04-2025 10:56:35 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:35 - DEBUG - Final feature set for model: 40 features, 29 rows
+10-04-2025 10:56:35 - DEBUG - Running prediction on data with shape (29, 40)
+10-04-2025 10:56:35 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 0 1 0 0 0 1 0 0 0 1 1 0 1 1 0 0 1 1 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:39:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 30
+10-04-2025 10:56:36 - INFO - Saved 30 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250410_101040.csv
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (30, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 30 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (30, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 0 1 0 0 0 1 0 1 0 1 1 0 1 1 0 0 1 1 0 1 0]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:40:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 31
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (31, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 31 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (31, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 1 1 1 0 0 1 1 1 0 1 1 0 0 1 0 0 1 1 0 1 0 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:41:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 32
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (32, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 32 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (32, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 0 1 0 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:42:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 33
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (33, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 33 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (33, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 0 0 0 1 1 1 1 0 0 0 0 0 1 1 0 0 1 1 0 0 1 1 0 1 1 1 1 0 1 0 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:43:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 34
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (34, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 34 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (34, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 0 0 0 1 1 1 1 0 1 0 0 0 1 1 1 0 1 1 0 0 1 1 0 1 1 1 1 0 1 0 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:44:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 35
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (35, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 35 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (35, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 0 1 1 1 0 1 1 0 1 1 1 1 0 1 0 1 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:45:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 36
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (36, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 36 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (36, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 1 1 0 0 0 0 0 1 0 1 1 0 0 1 1 0 1 1 1 1 0 1 1 1 1 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:46:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 37
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (37, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 37 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (37, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 1 1 0 1 0 0 1 1 0 1 1 1 0 1 1 0 1 1 1 1 0 1 0 1 1 1 1 0]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:47:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 38
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (38, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 38 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (38, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 1 1 1 0 1 1 1 1 1 1 0 1 0 1 1 1 0 1 1 1 0 1 1 0 1 1 1 1 0 1 0 1 1 1 1 1
+ 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:48:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 39
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (39, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 39 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (39, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 1 0 1 1 0 0 1 0 0 1 1 1 1 0 1 1 1 1 1 1 1
+ 1 0]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:49:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 40
+10-04-2025 10:56:36 - INFO - Saved 40 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250410_101040.csv
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (40, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 40 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (40, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 1 1 0 1 1 0 0 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:50:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 41
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (41, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - DEBUG - Final feature set for model: 40 features, 41 rows
+10-04-2025 10:56:36 - DEBUG - Running prediction on data with shape (41, 40)
+10-04-2025 10:56:36 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:36 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 1 1 1 1 1 0
+ 1 1 1 1]
+10-04-2025 10:56:36 - DEBUG - Got midpoint from queue: 2025-04-10 10:51:00
+10-04-2025 10:56:36 - DEBUG - Added midpoint to recent_data. Size: 42
+10-04-2025 10:56:36 - DEBUG - Generated features. New shape: (42, 66)
+10-04-2025 10:56:36 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - DEBUG - Final feature set for model: 40 features, 42 rows
+10-04-2025 10:56:37 - DEBUG - Running prediction on data with shape (42, 40)
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 1 0 1 1 1 0 1 0 0 1 1 1 0 0 1 1 1 1 1 1 1
+ 1 1 1 0 1]
+10-04-2025 10:56:37 - DEBUG - Got midpoint from queue: 2025-04-10 10:52:00
+10-04-2025 10:56:37 - DEBUG - Added midpoint to recent_data. Size: 43
+10-04-2025 10:56:37 - DEBUG - Generated features. New shape: (43, 66)
+10-04-2025 10:56:37 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - DEBUG - Final feature set for model: 40 features, 43 rows
+10-04-2025 10:56:37 - DEBUG - Running prediction on data with shape (43, 40)
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 1 1 1 0 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 1 1 1 0]
+10-04-2025 10:56:37 - DEBUG - Got midpoint from queue: 2025-04-10 10:53:00
+10-04-2025 10:56:37 - DEBUG - Added midpoint to recent_data. Size: 44
+10-04-2025 10:56:37 - DEBUG - Generated features. New shape: (44, 66)
+10-04-2025 10:56:37 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - DEBUG - Final feature set for model: 40 features, 44 rows
+10-04-2025 10:56:37 - DEBUG - Running prediction on data with shape (44, 40)
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 1 0 1 0 1]
+10-04-2025 10:56:37 - DEBUG - Got midpoint from queue: 2025-04-10 10:54:00
+10-04-2025 10:56:37 - DEBUG - Added midpoint to recent_data. Size: 45
+10-04-2025 10:56:37 - DEBUG - Generated features. New shape: (45, 66)
+10-04-2025 10:56:37 - DEBUG - Adding 8 missing expected features: {'low_raw', 'high_original', 'close_original', 'open_original', 'high_raw', 'close_raw', 'open_raw', 'low_original'}
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - DEBUG - Final feature set for model: 40 features, 45 rows
+10-04-2025 10:56:37 - DEBUG - Running prediction on data with shape (45, 40)
+10-04-2025 10:56:37 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day                int32
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+10-04-2025 10:56:37 - INFO - Model prediction: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 1 1 1 1 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 1 0 1 0 1 1]
+10-04-2025 10:56:39 - DEBUG - Getting latest data. recent_data size: 45
+10-04-2025 10:56:39 - ERROR - Error in trading loop: 'str' object has no attribute 'minute'
+10-04-2025 10:56:41 - DEBUG - Ping sent at 10:56:41
+10-04-2025 10:56:42 - INFO - Received shutdown signal, stopping trading...
+10-04-2025 10:56:42 - INFO - Stopping live trading service
+10-04-2025 10:56:44 - INFO - Trading loop exited
+10-04-2025 10:56:44 - INFO - Closing all positions: 0 positions
+10-04-2025 10:56:45 - INFO - Sleeping for 5 seconds before closing ALL active positions..
+10-04-2025 10:56:50 - INFO - All positions closed successfully
+10-04-2025 10:56:50 - INFO - Backtest completed with model-based strategy
+10-04-2025 10:56:50 - INFO - Live trading service stopped
+10-04-2025 10:56:50 - ERROR - Error in live trading: [SYS] unknown error (_ssl.c:2426)
+10-04-2025 10:56:50 - ERROR - Traceback (most recent call last):
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 204, in run_live_trading
+    time.sleep(60)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 196, in signal_handler
+    broker.end_session()
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/capitalcom.py", line 48, in end_session
+    return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/rest_api/session.py", line 84, in end_session
+    conn.request("DELETE", "/api/v1/session", payload, headers)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1283, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1329, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1278, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1038, in _send_output
+    self.send(msg)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 999, in send
+    self.sock.sendall(data)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/ssl.py", line 1270, in sendall
+    v = self.send(byte_view[count:])
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/ssl.py", line 1239, in send
+    return self._sslobj.write(data)
+ssl.SSLError: [SYS] unknown error (_ssl.c:2426)
+
+10-04-2025 10:56:50 - WARNING - Trading service is not running
+10-04-2025 10:56:50 - CRITICAL - Uncaught exception
+Traceback (most recent call last):
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/main.py", line 164, in <module>
+    exit(main())
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/main.py", line 161, in main
+    live_trading_runner.run_live_trading("config/live_trading_config.yaml", "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl")
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 216, in run_live_trading
+    broker.end_session()
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/capitalcom.py", line 48, in end_session
+    return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/rest_api/session.py", line 84, in end_session
+    conn.request("DELETE", "/api/v1/session", payload, headers)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1283, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1294, in _send_request
+    self.putrequest(method, url, **skips)
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1120, in putrequest
+    raise CannotSendRequest(self.__state)
+http.client.CannotSendRequest: Request-sent
+10-04-2025 10:57:25 - INFO - Received shutdown signal, stopping trading...
+10-04-2025 10:57:25 - WARNING - Trading service is not running
