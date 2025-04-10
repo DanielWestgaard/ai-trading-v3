@@ -375,6 +375,7 @@
 10-04-2025 10:55:00 - DEBUG - Added midpoint to queue. Queue size: ~45
 10-04-2025 10:55:00 - DEBUG - Matched ask with existing bid for timestamp 1744275240000
 10-04-2025 10:55:41 - DEBUG - Ping sent at 10:55:41
+# THIS WAS WHERE I PRESSED ctrl+c, what is happening underneath? Some execution logic or something done wrong?
 10-04-2025 10:56:34 - INFO - Data processor thread started
 10-04-2025 10:56:34 - INFO - LiveDataHandler processor thread started
 10-04-2025 10:56:34 - DEBUG - Got midpoint from queue: 2025-04-10 10:10:00
