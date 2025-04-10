@@ -169,9 +169,11 @@ class ModelBasedStrategy(BaseStrategy):
                 # No position - check for entry
                 if current_position == 0:
                     if self.signal_filter.should_generate_signal(symbol, 1):  # Bullish consensus
+                        logging.info(f"SIGNAL GENERATION: BUY conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.BUY, data.timestamp)
                         self.position_manager.open_position(symbol, data.timestamp, 1)
                     elif self.signal_filter.should_generate_signal(symbol, -1):  # Bearish consensus
+                        logging.info(f"SIGNAL GENERATION: SELL conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.SELL, data.timestamp)
                         self.position_manager.open_position(symbol, data.timestamp, -1)
                 
@@ -179,9 +181,11 @@ class ModelBasedStrategy(BaseStrategy):
                 elif current_position > 0:
                     if (self.position_manager.can_exit(symbol) and 
                         self.signal_filter.should_generate_signal(symbol, -1)):
+                        logging.info(f"SIGNAL GENERATION: EXIT LONG conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.EXIT_LONG, data.timestamp)
                         self.position_manager.close_position(symbol, data.timestamp)
                     elif self.position_manager.should_exit(symbol):  # Force exit after max hold time
+                        logging.info(f"SIGNAL GENERATION: Force EXIT LONG (max hold time) conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.EXIT_LONG, data.timestamp)
                         self.position_manager.close_position(symbol, data.timestamp)
                 
@@ -189,9 +193,11 @@ class ModelBasedStrategy(BaseStrategy):
                 elif current_position < 0:
                     if (self.position_manager.can_exit(symbol) and 
                         self.signal_filter.should_generate_signal(symbol, 1)):
+                        logging.info(f"SIGNAL GENERATION: EXIT SHORT conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.EXIT_SHORT, data.timestamp)
                         self.position_manager.close_position(symbol, data.timestamp)
                     elif self.position_manager.should_exit(symbol):  # Force exit after max hold time
+                        logging.info(f"SIGNAL GENERATION: Force EXIT SHORT (max hold time) conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.EXIT_SHORT, data.timestamp)
                         self.position_manager.close_position(symbol, data.timestamp)
                 

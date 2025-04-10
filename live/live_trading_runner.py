@@ -2,8 +2,9 @@ import os
 import sys
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import argparse
+import pandas as pd
 import yaml
 import signal
 import threading
@@ -90,6 +91,58 @@ def create_risk_manager(config):
     
     return risk_manager
 
+def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveDataHandler):
+    # Fetch historical data for warm-up
+    logging.info(f"Fetching historical data for warm-up period")
+    for symbol in symbols:
+        # Calculate date range for historical data
+        lookback_bars = 250  # More than needed to ensure enough after processing
+        to_date = (datetime.now() - timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M")  #datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        
+        # Calculate from_date based on the timeframe
+        timeframe_minutes = {"MINUTE": 1, "MINUTE_5": 5, "MINUTE_15": 15, 
+                            "MINUTE_30": 30, "HOUR": 60, "HOUR_4": 240, 
+                            "DAY": 1440}.get(timeframe, 60)
+        
+        minutes_to_subtract = timeframe_minutes * lookback_bars
+        from_date = (datetime.now() - timedelta(minutes=minutes_to_subtract)).strftime("%Y-%m-%dT%H:%M:%S")
+        
+        logging.info(f"Fetching historical data for {symbol} from {from_date} to {to_date}")
+        
+        historical_data = broker.get_historical_data(
+            epic=symbol,
+            resolution=timeframe,
+            from_date=from_date,
+            to_date=to_date,
+            max=lookback_bars,
+            print_answer=True
+        )
+        
+        # Format and warm up the data handler
+        if "prices" in historical_data:
+            formatted_history = []
+            for candle in historical_data["prices"]:
+                formatted_candle = {
+                    "epic": symbol,
+                    "resolution": timeframe,
+                    "t": pd.to_datetime(candle.get("snapshotTime")).timestamp() * 1000,
+                    "datetime": pd.to_datetime(candle.get("snapshotTime")),
+                    "open": (candle.get("openPrice", {}).get("bid", 0) + 
+                            candle.get("openPrice", {}).get("ask", 0)) / 2,
+                    "high": (candle.get("highPrice", {}).get("bid", 0) + 
+                            candle.get("highPrice", {}).get("ask", 0)) / 2,
+                    "low": (candle.get("lowPrice", {}).get("bid", 0) + 
+                            candle.get("lowPrice", {}).get("ask", 0)) / 2,
+                    "close": (candle.get("closePrice", {}).get("bid", 0) + 
+                            candle.get("closePrice", {}).get("ask", 0)) / 2,
+                    "volume": candle.get("lastTradedVolume", 0)
+                }
+                formatted_history.append(formatted_candle)
+            
+            # Warm up the data handler with historical data
+            data_handler.warm_up_with_historical_data(formatted_history)
+        else:
+            logging.warning(f"No historical data received for {symbol}")
 
 def run_live_trading(config_path, model_path, duration_hours=None):
     """
@@ -166,6 +219,9 @@ def run_live_trading(config_path, model_path, duration_hours=None):
             logging.info(f"Subscribing to market data for {symbol}")
             timeframe = config.get('timeframe', 'MINUTE')
             
+            # Warming up the system with enough (lookback) bars to ensure enough data for features to be calculated
+            warmup_system(symbols=symbols, timeframe=timeframe, broker=broker, data_handler=data_handler)
+                
             # Custom message handler to forward data to the data handler
             def custom_message_handler(ws, message):
                 data_handler.process_message(message)

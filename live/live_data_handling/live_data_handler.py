@@ -60,7 +60,8 @@ class LiveDataHandler:
         self.model_features = model_features
         
         # Data processing state
-        self.min_data_points = 25  # Minimum data points needed before generating features
+        self.startup_mode = True
+        self.min_data_points = 15  # Minimum data points needed before generating features
         self.initialized_processing = False
         self.have_run_prediction = False  # Track if we've successfully run a prediction
         
@@ -193,7 +194,7 @@ class LiveDataHandler:
                 "epic": bid_data["epic"],
                 "resolution": bid_data["resolution"],
                 "t": bid_data["t"],
-                "datetime": datetime.fromtimestamp(bid_data["t"] / 1000),  # No strftime
+                "datetime": datetime.fromtimestamp(bid_data["t"] / 1000),  # Store as actual datetime object, not string
                 "open": (bid_data["o"] + ask_data["o"]) / 2,
                 "high": (bid_data["h"] + ask_data["h"]) / 2,
                 "low": (bid_data["l"] + ask_data["l"]) / 2,
@@ -289,6 +290,8 @@ class LiveDataHandler:
                                 self.logger.warning("Prepared model input is None or empty - still working on data processing")
                     except Exception as e:
                         self.logger.error(f"Error in model prediction or strategy execution: {e}")
+                        self.logger.error(f"Model input shape: {model_input.shape}")
+                        self.logger.error(f"Model input columns: {model_input.columns.tolist()}")
                         import traceback
                         self.logger.error(traceback.format_exc())
                 
@@ -569,3 +572,28 @@ class LiveDataHandler:
             else:
                 latest = self.recent_data[-n:] if len(self.recent_data) >= n else self.recent_data
                 return pd.DataFrame(latest)
+    
+    def warm_up_with_historical_data(self, historical_data):
+        """
+        Initialize the data handler with historical data before starting live processing.
+        
+        Args:
+            historical_data: List of OHLCV dictionaries with historical market data
+        """
+        logging.info(f"Warming up data handler with {len(historical_data)} historical data points")
+        
+        # Convert historical data to the expected format
+        for data_point in historical_data:
+            # Ensure we have the datetime as an actual datetime object
+            if 'timestamp' in data_point and 'datetime' not in data_point:
+                data_point['datetime'] = datetime.fromtimestamp(data_point['timestamp'] / 1000)
+            elif 't' in data_point and 'datetime' not in data_point:
+                data_point['datetime'] = datetime.fromtimestamp(data_point['t'] / 1000)
+            
+            # Add to recent data
+            self.recent_data.append(data_point)
+        
+        # Save the initial data to the output file
+        self._save_to_file()
+        
+        logging.info(f"Data handler warmed up with {len(self.recent_data)} data points")

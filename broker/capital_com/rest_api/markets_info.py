@@ -38,11 +38,13 @@ def historical_prices(X_SECURITY_TOKEN, CST,
     Returns:
 
     """
+    logging.info("Inside historical_prices() markets_info.py")
     payload = ''
     headers = {
         'X-SECURITY-TOKEN': X_SECURITY_TOKEN,
         'CST': CST
     }
+    print(f"About to send this string:  /api/v1/prices/{epic}?resolution={resolution}&max={max}&from={from_date}&to={to_date}")
     conn.request("GET", f"/api/v1/prices/{epic}?resolution={resolution}&max={max}&from={from_date}&to={to_date}", payload, headers)
     #conn.request("GET", "/api/v1/prices/SILVER?resolution=MINUTE&max=10&from=2020-02-24T00:00:00&to=2020-02-24T01:00:00", payload, headers)
     res = conn.getresponse()
