@@ -14,10 +14,10 @@ model_type: 'xgboost'  # Model type (xgboost, random_forest, etc.)
 
 # Strategy settings
 strategy:
-  prediction_threshold: 0.55  # Threshold for prediction to generate signal
+  prediction_threshold: 0.5  # Threshold for prediction to generate signal
   confidence_threshold: 0.0  # Minimum confidence needed for signal
   lookback_window: 5  # Number of past predictions to consider
-  consensus_threshold: 0.7  # Minimum consensus needed for signal
+  consensus_threshold: 0.5  # Minimum consensus needed for signal
   min_hold_bars: 12  # Minimum holding time (in bars)
   max_hold_bars: 288  # Maximum holding time (in bars)
   decision_timeframe: 60  # Timeframe for trading decisions (in minutes)

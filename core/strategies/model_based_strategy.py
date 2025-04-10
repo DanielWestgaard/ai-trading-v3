@@ -95,10 +95,12 @@ class ModelBasedStrategy(BaseStrategy):
             List of signal events
         """
         signals = []
+        logging.debug(f"generate_signals called with {len(market_data)} symbols")
         # Synchronize position tracking with actual portfolio positions
         self.synchronize_positions(portfolio)
         
         for symbol, data in market_data.items():
+            logging.debug(f"Processing symbol {symbol} with timestamp {data.timestamp}")
             if symbol not in self.symbols:
                 continue
             
@@ -109,7 +111,10 @@ class ModelBasedStrategy(BaseStrategy):
             self.resampler.add_bar(symbol, data.timestamp, data.data)
             
             # Only make decisions at the higher timeframe boundaries
-            if not self.resampler.should_make_decision(data.timestamp):
+            should_decide = self.resampler.should_make_decision(data.timestamp)
+            logging.debug(f"Resampler decision: {should_decide}")
+            
+            if not should_decide:
                 continue
             
             # Get resampled data
@@ -166,13 +171,22 @@ class ModelBasedStrategy(BaseStrategy):
                 # Generate signal based on prediction and confidence
                 signal = None
                 
+                logging.debug(f"Prediction for {symbol}: {prediction}")
+                
                 # No position - check for entry
                 if current_position == 0:
-                    if self.signal_filter.should_generate_signal(symbol, 1):  # Bullish consensus
+                    # Log before checking filter
+                    logging.debug(f"Checking signal filter for {symbol} - position=0, prediction={prediction}")
+                    
+                    should_buy = self.signal_filter.should_generate_signal(symbol, 1)
+                    should_sell = self.signal_filter.should_generate_signal(symbol, -1)
+                    logging.debug(f"Signal filter result for BUY: {should_buy}")
+                    
+                    if should_buy:  # Bullish consensus
                         logging.info(f"SIGNAL GENERATION: BUY conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.BUY, data.timestamp)
                         self.position_manager.open_position(symbol, data.timestamp, 1)
-                    elif self.signal_filter.should_generate_signal(symbol, -1):  # Bearish consensus
+                    elif should_sell:  # Bearish consensus
                         logging.info(f"SIGNAL GENERATION: SELL conditions met for {symbol}")
                         signal = self.create_signal(symbol, SignalType.SELL, data.timestamp)
                         self.position_manager.open_position(symbol, data.timestamp, -1)
