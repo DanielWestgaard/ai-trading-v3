@@ -465,9 +465,12 @@ class LiveTradingService:
         if isinstance(latest_data, dict):
             # Single data point
             symbol = latest_data.get('epic')
+            timestamp = latest_data.get('datetime', datetime.now())
+            if isinstance(timestamp, str):
+                timestamp = pd.to_datetime(timestamp)
             return {
                 symbol: MarketEvent(
-                    timestamp=latest_data.get('datetime', datetime.now()),
+                    timestamp=timestamp,
                     data=latest_data
                 )
             }
@@ -476,8 +479,11 @@ class LiveTradingService:
             market_data = {}
             for data_point in latest_data:
                 symbol = data_point.get('epic')
+                timestamp = data_point.get('datetime', datetime.now())
+                if isinstance(timestamp, str):
+                    timestamp = pd.to_datetime(timestamp)   
                 market_data[symbol] = MarketEvent(
-                    timestamp=data_point.get('datetime', datetime.now()),
+                    timestamp=timestamp,
                     data=data_point
                 )
             return market_data

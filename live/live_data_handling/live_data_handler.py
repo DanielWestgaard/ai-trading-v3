@@ -193,7 +193,7 @@ class LiveDataHandler:
                 "epic": bid_data["epic"],
                 "resolution": bid_data["resolution"],
                 "t": bid_data["t"],
-                "datetime": datetime.fromtimestamp(bid_data["t"] / 1000).strftime('%Y-%m-%d %H:%M:%S'),
+                "datetime": datetime.fromtimestamp(bid_data["t"] / 1000),  # No strftime
                 "open": (bid_data["o"] + ask_data["o"]) / 2,
                 "high": (bid_data["h"] + ask_data["h"]) / 2,
                 "low": (bid_data["l"] + ask_data["l"]) / 2,
