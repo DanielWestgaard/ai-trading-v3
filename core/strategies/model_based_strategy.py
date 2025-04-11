@@ -5,10 +5,10 @@ import logging
 from typing import Dict, List, Union, Tuple, Optional, Any
 
 from core.risk.position_management import PositionManager
-from backtesting.signal_filter import SignalFilter
+from core.signal_filter import SignalFilter
 from core.strategies.base_strategy import BaseStrategy
 from core.events import SignalEvent, SignalType
-from backtesting.timeframe_resampler import TimeframeResampler
+from core.timeframe_resampler import TimeframeResampler
 
 class ModelBasedStrategy(BaseStrategy):
     """Trading strategy based on ML model predictions."""
