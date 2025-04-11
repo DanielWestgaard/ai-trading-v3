@@ -97,7 +97,7 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
     for symbol in symbols:
         # Calculate date range for historical data
         lookback_bars = 250  # More than needed to ensure enough after processing
-        to_date = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S")  #datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        to_date = (datetime.now() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%S")
         
         # Calculate from_date based on the timeframe
         timeframe_minutes = {"MINUTE": 1, "MINUTE_5": 5, "MINUTE_15": 15, 
@@ -121,19 +121,36 @@ def warmup_system(symbols, timeframe, broker: CapitalCom, data_handler: LiveData
         if "prices" in historical_data:
             formatted_history = []
             for candle in historical_data["prices"]:
+                # Calculate OHLC midpoints
+                open_price = (candle.get("openPrice", {}).get("bid", 0) + 
+                             candle.get("openPrice", {}).get("ask", 0)) / 2
+                high_price = (candle.get("highPrice", {}).get("bid", 0) + 
+                             candle.get("highPrice", {}).get("ask", 0)) / 2
+                low_price = (candle.get("lowPrice", {}).get("bid", 0) + 
+                            candle.get("lowPrice", {}).get("ask", 0)) / 2
+                close_price = (candle.get("closePrice", {}).get("bid", 0) + 
+                              candle.get("closePrice", {}).get("ask", 0)) / 2
+                
                 formatted_candle = {
                     "epic": symbol,
                     "resolution": timeframe,
                     "t": pd.to_datetime(candle.get("snapshotTime")).timestamp() * 1000,
                     "datetime": pd.to_datetime(candle.get("snapshotTime")),
-                    "open": (candle.get("openPrice", {}).get("bid", 0) + 
-                            candle.get("openPrice", {}).get("ask", 0)) / 2,
-                    "high": (candle.get("highPrice", {}).get("bid", 0) + 
-                            candle.get("highPrice", {}).get("ask", 0)) / 2,
-                    "low": (candle.get("lowPrice", {}).get("bid", 0) + 
-                            candle.get("lowPrice", {}).get("ask", 0)) / 2,
-                    "close": (candle.get("closePrice", {}).get("bid", 0) + 
-                            candle.get("closePrice", {}).get("ask", 0)) / 2,
+                    # Include standard OHLC fields
+                    "open": open_price,
+                    "high": high_price,
+                    "low": low_price,
+                    "close": close_price,
+                    # Include raw fields that match what the model expects
+                    "open_raw": open_price,
+                    "high_raw": high_price,
+                    "low_raw": low_price,
+                    "close_raw": close_price,
+                    # Also include _original versions for consistency
+                    "open_original": open_price,
+                    "high_original": high_price,
+                    "low_original": low_price,
+                    "close_original": close_price,
                     "volume": candle.get("lastTradedVolume", 0)
                 }
                 formatted_history.append(formatted_candle)

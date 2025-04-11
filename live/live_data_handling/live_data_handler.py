@@ -345,11 +345,60 @@ class LiveDataHandler:
             df_with_features = self.feature_generator.transform(df)
             self.logger.debug(f"Generated features. New shape: {df_with_features.shape}")
             
+            # Log column names to help with debugging
+            self.logger.debug(f"Columns after feature generation: {df_with_features.columns.tolist()[:10]} (showing first 10)")
+            
             # Custom preprocessing for live data
             df_prepared = self._simplified_feature_preparation(df_with_features)
             
+            # Log column names after preprocessing
+            self.logger.debug(f"Columns after feature preparation: {df_prepared.columns.tolist()[:10]} (showing first 10)")
+            
+            # Create a case-insensitive column lookup dictionary
+            col_lookup = {col.lower(): col for col in df_prepared.columns}
+            
+            # Helper function to find a column regardless of case
+            def find_column(base_name):
+                # Try exact match first
+                if base_name in df_prepared.columns:
+                    return base_name
+                
+                # Try lowercase match
+                if base_name.lower() in col_lookup:
+                    return col_lookup[base_name.lower()]
+                    
+                # Try capitalized
+                capitalized = base_name.capitalize()
+                if capitalized in df_prepared.columns:
+                    return capitalized
+                    
+                # Not found
+                return None
+            
+            # Ensure price data is available in all required formats
+            for base_col in ['open', 'high', 'low', 'close']:
+                # Find the actual column name for this price component
+                actual_col = find_column(base_col)
+                
+                # If the column doesn't exist in any form, create it with zeros
+                if actual_col is None:
+                    self.logger.warning(f"Could not find {base_col} data in any case format, creating with zeros")
+                    df_prepared[base_col] = 0.0
+                    actual_col = base_col
+                
+                # Create the raw and original versions if they don't exist
+                raw_col = f'{base_col}_raw'
+                orig_col = f'{base_col}_original'
+                
+                if find_column(raw_col) is None:
+                    df_prepared[raw_col] = df_prepared[actual_col].copy()
+                    self.logger.debug(f"Created {raw_col} from {actual_col}")
+                    
+                if find_column(orig_col) is None:
+                    df_prepared[orig_col] = df_prepared[actual_col].copy()
+                    self.logger.debug(f"Created {orig_col} from {actual_col}")
+            
             # CRITICAL FIX: Add missing '_raw' and '_original' columns that the model expects
-            # First, check what's missing
             if self.model_features:
                 # Find which expected features are missing from our processed data
                 missing_features = set(self.model_features) - set(df_prepared.columns)
@@ -362,45 +411,38 @@ class LiveDataHandler:
                         # Handle *_raw features - these should be the unmodified values
                         if feature.endswith('_raw'):
                             base_feature = feature.replace('_raw', '')
-                            if base_feature.lower() in df_prepared.columns:
-                                # Use the lowercase version
-                                df_prepared[feature] = df_prepared[base_feature.lower()].copy()
-                            elif base_feature in df_prepared.columns:
-                                # Use the exact case version
-                                df_prepared[feature] = df_prepared[base_feature].copy()
+                            base_col = find_column(base_feature)
+                            
+                            if base_col:
+                                df_prepared[feature] = df_prepared[base_col].copy()
                             else:
-                                # If we can't find the base feature, look for its capitalized version
-                                capitalized = base_feature.capitalize()
-                                if capitalized in df_prepared.columns:
-                                    df_prepared[feature] = df_prepared[capitalized].copy()
-                                else:
-                                    # Last resort - just use a reasonable value
-                                    self.logger.warning(f"Could not find appropriate value for {feature}, using zeros")
-                                    df_prepared[feature] = 0.0
+                                # Last resort - just use a reasonable value
+                                self.logger.warning(f"Could not find any version of {base_feature} for {feature}, using zeros")
+                                df_prepared[feature] = 0.0
                         
                         # Handle *_original features - these should be the unmodified values
                         elif feature.endswith('_original'):
                             base_feature = feature.replace('_original', '')
-                            if base_feature.lower() in df_prepared.columns:
-                                # Use the lowercase version
-                                df_prepared[feature] = df_prepared[base_feature.lower()].copy()
-                            elif base_feature in df_prepared.columns:
-                                # Use the exact case version
-                                df_prepared[feature] = df_prepared[base_feature].copy()
+                            base_col = find_column(base_feature)
+                            
+                            if base_col:
+                                df_prepared[feature] = df_prepared[base_col].copy()
                             else:
-                                # If we can't find the base feature, look for its capitalized version
-                                capitalized = base_feature.capitalize()
-                                if capitalized in df_prepared.columns:
-                                    df_prepared[feature] = df_prepared[capitalized].copy()
-                                else:
-                                    # Last resort - just use a reasonable value
-                                    self.logger.warning(f"Could not find appropriate value for {feature}, using zeros")
-                                    df_prepared[feature] = 0.0
+                                # Last resort - just use a reasonable value
+                                self.logger.warning(f"Could not find any version of {base_feature} for {feature}, using zeros")
+                                df_prepared[feature] = 0.0
                         
                         # Handle simple missing features
-                        elif feature == 'volume' and 'volume' not in df_prepared.columns:
+                        elif feature.lower() == 'volume' and find_column('volume') is None:
                             # Create synthetic volume if needed
-                            high_low_diff = df_prepared['high'] - df_prepared['low'] if 'high' in df_prepared.columns and 'low' in df_prepared.columns else 0.01
+                            high_col = find_column('high')
+                            low_col = find_column('low')
+                            
+                            if high_col and low_col:
+                                high_low_diff = df_prepared[high_col] - df_prepared[low_col]
+                            else:
+                                high_low_diff = 0.01
+                                
                             df_prepared['volume'] = (high_low_diff * 1000000).astype(int)
                         
                         # Any other missing features
@@ -511,12 +553,12 @@ class LiveDataHandler:
             result['close_return'] = result['Close'].pct_change()
         
         # 3. Handle NaN values from calculations
-        result = result.fillna(method='bfill').fillna(method='ffill')
+        result = result.bfill().ffill()
         
         # 4. Simple Z-score normalization for technical indicators
         numeric_cols = result.select_dtypes(include=['number']).columns
         technical_indicators = [col for col in numeric_cols if col not in price_cols + 
-                              ['Date', 'timestamp', 't', 'Volume', 'spread']]
+                            ['Date', 'timestamp', 't', 'Volume', 'spread']]
         
         for col in technical_indicators:
             # Skip if already a return
