@@ -52,8 +52,8 @@ class ModelBasedStrategy(BaseStrategy):
         )
         
         self.resampler = TimeframeResampler(
-            base_timeframe=5,  # 5-minute data
-            target_timeframe=kwargs.get('decision_timeframe', 60)  # 1-hour decisions
+            base_timeframe=1,  # 1-minute data
+            target_timeframe=kwargs.get('decision_timeframe', 5)  # 5 for 5 min decisions, 60 for 1-hour decisions 
         )
         
         # Initialize with base strategy

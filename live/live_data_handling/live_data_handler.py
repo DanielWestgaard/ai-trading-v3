@@ -61,7 +61,7 @@ class LiveDataHandler:
         
         # Data processing state
         self.startup_mode = True
-        self.min_data_points = 15  # Minimum data points needed before generating features
+        self.min_data_points = 5  # Minimum data points needed before generating features
         self.initialized_processing = False
         self.have_run_prediction = False  # Track if we've successfully run a prediction
         
