@@ -13,6 +13,8 @@ from backtesting.backtest_runner import BacktestRunner
 from utils import data_utils
 
 
+# Should stay in data pipeline, core responsibility is data preparation: transforming raw input data into structured training/testing sets, respecting temporal order
+# TODO: Fit this into the splitter in under processors/ 
 class TimeSeriesSplit:
     """
     Time Series Cross-Validation Splitter that respects temporal order.
