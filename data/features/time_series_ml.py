@@ -1432,7 +1432,7 @@ class MLModelStrategy:
         
         This is needed because we can't inherit from BaseStrategy directly.
         """
-        from backtesting.strategies.base_strategy import BaseStrategy
+        from core.strategies.base_strategy import BaseStrategy
         return BaseStrategy.create_signal(
             self, symbol, signal_type, timestamp, strength, reason, metadata
         )
