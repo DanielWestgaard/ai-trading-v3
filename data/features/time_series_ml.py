@@ -341,6 +341,7 @@ class TimeSeriesSplit:
         return fig
 
 
+# Can be deleted?
 class MLModelStrategy:
     """
     Strategy that uses a trained ML model to generate trading signals.
