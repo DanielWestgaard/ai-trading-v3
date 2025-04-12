@@ -1,4 +1,6 @@
-# IMPLEMENTED IN time_series_ml.py
+# The code implemented in this should be focusing on logic that's part of the data preprocessing flow. Especially 
+# something used before model training (e.g., splitting the full dataset chronologically to avoid data leakage).
+# If you want to make reusable datasets ready for training, validation, or inference
 
 class TimeSeriesSplitter:
     """Handles time series-specific train/validation/test splitting"""
