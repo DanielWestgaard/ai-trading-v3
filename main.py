@@ -67,7 +67,7 @@ def main():
         result, saved_file = data_pipeline.run(save_intermediate=False)
       
     if args.walk_forward_analysis:
-        from data.features.time_series_ml import WalkForwardAnalysis
+        from backtesting.walk_forward_analysis import WalkForwardAnalysis
 
         # Load your processed data
         data = pd.read_csv("data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv", 
