@@ -1,7 +1,7 @@
 {
     "backtest_id": "indicator_crossover_gbpusd",
     "strategy": {
-        "class_path": "backtesting.strategies.indicator_crossover_strategy.IndicatorCrossoverStrategy",
+        "class_path": "core.strategies.indicator_crossover_strategy.IndicatorCrossoverStrategy",
         "parameters": {
             "symbols": ["GBPUSD"],
             "fast_indicator": "ema_200",

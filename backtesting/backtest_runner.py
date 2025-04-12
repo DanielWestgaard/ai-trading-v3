@@ -11,10 +11,10 @@ import importlib
 
 from backtesting.event_backtester import EventDrivenBacktester
 from backtesting.data.market_data import CSVMarketData, DataFrameMarketData, PipelineMarketData
-from backtesting.portfolio import Portfolio
-from backtesting.performance import PerformanceTracker
+from core.portfolio.portfolio import Portfolio
+from core.performance.performance import PerformanceTracker
 from backtesting.visualization import BacktestVisualizer
-from backtesting.risk_manager import RiskManager
+from core.risk.risk_manager import RiskManager
 import config.system_config as sys_config
 
 

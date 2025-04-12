@@ -15,7 +15,7 @@ import config.market_config as config
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 
 # POSITIONS
-def all_positions(X_SECURITY_TOKEN, CST, print_answer=True):
+def all_positions(X_SECURITY_TOKEN, CST, print_answer):
     """Returns all open positions for the active account"""
     payload = ''
     headers = {
@@ -31,7 +31,7 @@ def all_positions(X_SECURITY_TOKEN, CST, print_answer=True):
     return data.decode("utf-8")
 
 def create_new_position(X_SECURITY_TOKEN, CST, 
-                     symbol, direction, size, stop_amount, profit_amount,
+                     symbol, direction, size, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
                      print_answer=True):
     """
     Create orders and positions.
@@ -44,21 +44,42 @@ def create_new_position(X_SECURITY_TOKEN, CST,
         symbol: Instrument epic identifier. Ex. SILVER
         direction: Deal direction. Must be BUY or SELL
         size: Deal size. Ex. 1
-        stop_amount: Loss amount when a stop loss will be triggered. Ex. 4
-        profit_amount: Profit amount when a take profit will be triggered. Ex. 20
+        stop_amount: Loss amount when a stop loss will be triggered (dollars). Ex. 4
+        profit_amount: Profit amount when a take profit will be triggered (dollars). Ex. 20
         print_answer: If true, prints response body and headers. Default is False
     
     Return:
         Deal Reference / deal ID
     """
-    payload = json.dumps({
-        "epic": symbol,
-        "direction": direction,
-        "size": size,
-        "guaranteedStop": False,
-        "stopAmount": stop_amount, 
-        "profitAmount": profit_amount
-    })
+    if stop_amount is not None and profit_amount is not None:  # have added dollar amount of SL/TP
+        logging.info("Recieved request of using dollar amout as SL/TP.")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+            "stopAmount": stop_amount, 
+            "profitAmount": profit_amount
+        })
+    elif stop_level is not None and profit_level is not None:  # have added price level/value as SL/TP
+        logging.info("Recieved request of using price level as SL/TP.")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+            "stopLevel": stop_level,
+            "profitLevel": profit_level
+        })
+    else:  # Not having any stop loss or take profit
+        logging.warning("Did not recieve SL/TP values!")
+        payload = json.dumps({
+            "epic": symbol,
+            "direction": direction,
+            "size": size,
+            "guaranteedStop": False,
+        })
+        
     headers = {
         'X-SECURITY-TOKEN': X_SECURITY_TOKEN,
         'CST': CST,
@@ -77,7 +98,7 @@ def create_new_position(X_SECURITY_TOKEN, CST,
     
     return deal_ref
     
-def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer=True):
+def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer):
     """
     Close the position of trade related with dealId for a confirmed trade.
     Note: The deal reference you get as "confirmation" from successfully creating a new position
@@ -106,6 +127,38 @@ def close_position(X_SECURITY_TOKEN, CST, dealID, print_answer=True):
         print(json.dumps(parsed_data, indent=4))
     return data.decode("utf-8")
 
+def update_position(X_SECURITY_TOKEN, CST, dealID, print_answer,
+                    stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,):
+    if stop_amount is not None and profit_amount is not None:  # have added dollar amount of SL/TP
+        logging.info("Recieved request of using dollar amout as SL/TP.")
+        payload = json.dumps({
+            "guaranteedStop": False,
+            "stopAmount": stop_amount,
+            "profitAmount": profit_amount
+        })
+    elif stop_level is not None and profit_level is not None:  # have added price level/value as SL/TP
+        logging.info("Recieved request of using price level as SL/TP.")
+        payload = json.dumps({
+            "guaranteedStop": False,
+            "stopLevel": stop_level,
+            "profitLevel": profit_level
+        })
+    else:  # Not having any stop loss or take profit
+        logging.error("Did not recieve SL/TP values! What is there to change then?")
+        return None
+    
+    headers = {
+        'X-SECURITY-TOKEN': X_SECURITY_TOKEN,
+        'CST': CST,
+        'Content-Type': 'application/json'
+    }
+    conn.request("PUT", f"/api/v1/positions/{dealID}", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    if print_answer:
+        parsed_data = json.loads(data.decode("utf-8"))
+        print(json.dumps(parsed_data, indent=4))
+    return data.decode("utf-8")
 
 # ORDERS - not really needed for current scope?
 def all_orders(X_SECURITY_TOKEN, CST, print_answer=True):

@@ -1,0 +1,74 @@
+09-04-2025 12:47:37 - INFO - Logging system initialized. Environment: development
+09-04-2025 12:47:37 - INFO - Hello
+09-04-2025 12:47:37 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+09-04-2025 12:47:37 - INFO - Successfully loaded model from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+09-04-2025 12:47:37 - INFO - Inside broker
+09-04-2025 12:47:37 - INFO - Loaded credentials. Length: 3
+09-04-2025 12:47:38 - INFO - Starting session with Capital.com...
+09-04-2025 12:47:38 - INFO - About to start a new session.
+09-04-2025 12:47:38 - INFO - Using encrypted password to start session.
+09-04-2025 12:47:38 - INFO - AccountID and/or all_accounts is None. Initializing them now.
+09-04-2025 12:47:38 - INFO - Will not print out response of all accounts.
+09-04-2025 12:47:38 - INFO - Found accountId matching account USD_testing!
+09-04-2025 12:47:38 - INFO - Successfully switched to account USD_testing!
+09-04-2025 12:47:38 - INFO - Switched to demo account
+09-04-2025 12:47:38 - INFO - LiveDataHandler processor thread started
+09-04-2025 12:47:38 - INFO - Subscribing to GBPUSD MINUTE data...
+09-04-2025 12:47:38 - INFO - Subscribing to live market data for GBPUSD at MINUTE resolution...
+09-04-2025 12:47:39 - INFO - Websocket connected
+09-04-2025 12:47:39 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:40 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:42 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:43 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:44 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:45 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:46 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:47 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:48 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:49 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:50 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:51 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:52 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:53 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:54 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:55 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:56 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:57 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:58 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:47:59 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:00 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:01 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:02 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:03 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:04 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:05 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:06 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:07 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:08 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:09 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:10 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:11 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:12 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:13 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:14 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:15 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:16 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:17 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:18 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:19 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:20 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:21 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:22 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:23 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:24 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:25 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:26 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:27 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:28 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:29 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:30 - INFO - Received keyboard interrupt, shutting down...
+09-04-2025 12:48:30 - ERROR - Error in data processor: type object 'Queue' has no attribute 'Empty'
+09-04-2025 12:48:30 - INFO - LiveDataHandler processor thread stopped
+09-04-2025 12:48:30 - INFO - Data handler stopped
+09-04-2025 12:48:30 - INFO - Ending session with Capital.com...
+09-04-2025 12:48:30 - INFO - Ended session: {"status":"SUCCESS"}

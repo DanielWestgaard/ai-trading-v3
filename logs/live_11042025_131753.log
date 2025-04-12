@@ -1,0 +1,1583 @@
+11-04-2025 13:17:53 - INFO - Logging system initialized. Environment: development
+11-04-2025 13:17:53 - INFO - Loading model from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+11-04-2025 13:17:53 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+11-04-2025 13:17:53 - INFO - Model loaded from model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl
+11-04-2025 13:17:53 - INFO - Loaded credentials. Length: 3
+11-04-2025 13:17:54 - INFO - Starting session with Capital.com...
+11-04-2025 13:17:54 - INFO - About to start a new session.
+11-04-2025 13:17:54 - INFO - Using encrypted password to start session.
+11-04-2025 13:17:55 - INFO - AccountID and/or all_accounts is None. Initializing them now.
+11-04-2025 13:17:56 - INFO - Will not print out response of all accounts.
+11-04-2025 13:17:56 - INFO - Found accountId matching account USD_testing!
+11-04-2025 13:17:56 - INFO - Successfully switched to account USD_testing!
+11-04-2025 13:17:56 - INFO - Switched to account: USD_testing
+11-04-2025 13:17:56 - INFO - Initializing model-based strategy
+11-04-2025 13:17:56 - INFO - Subscribing to market data for GBPUSD
+11-04-2025 13:17:56 - INFO - Fetching historical data for warm-up period
+11-04-2025 13:17:56 - INFO - Fetching historical data for GBPUSD from 2025-04-11T07:07:56 to 2025-04-11T11:17:56
+11-04-2025 13:17:56 - INFO - Inside historical_prices() markets_info.py
+11-04-2025 13:17:56 - INFO - Warming up data handler with 250 historical data points
+11-04-2025 13:17:56 - INFO - Saved 250 records to /Users/dmartinsen/pers-prog/ai-trading-v3/live/temp_live/live_data_GBPUSD_20250411_131756.csv
+11-04-2025 13:17:56 - INFO - Data handler warmed up with 250 data points
+11-04-2025 13:17:56 - INFO - Successfully retrieved 250 previous bars.
+11-04-2025 13:17:56 - INFO - About to initiate subscribtion to live market data...
+11-04-2025 13:17:56 - INFO - Websocket connected
+11-04-2025 13:17:57 - INFO - Data processor thread started
+11-04-2025 13:17:57 - INFO - LiveDataHandler processor thread started
+11-04-2025 13:17:57 - INFO - Starting live trading service
+11-04-2025 13:17:57 - INFO - Initializing model-based strategy
+11-04-2025 13:17:57 - INFO - Backtest starting with model-based strategy
+11-04-2025 13:17:57 - INFO - Trading loop started
+11-04-2025 13:17:57 - DEBUG - Getting latest data. recent_data size: 250
+11-04-2025 13:17:57 - INFO - Live trading service started
+11-04-2025 13:17:57 - INFO - Running indefinitely (Ctrl+C to stop)
+11-04-2025 13:17:57 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:17:57 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:17:57 - DEBUG - Resampler decision: False
+11-04-2025 13:17:58 - DEBUG - Getting latest data. recent_data size: 250
+11-04-2025 13:17:58 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:17:58 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:17:58 - DEBUG - Resampler decision: False
+11-04-2025 13:17:59 - DEBUG - Getting latest data. recent_data size: 250
+11-04-2025 13:17:59 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:17:59 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:17:59 - DEBUG - Resampler decision: False
+11-04-2025 13:18:00 - DEBUG - Processing bid message with timestamp 1744370220000
+11-04-2025 13:18:00 - DEBUG - Stored bid data for timestamp 1744370220000
+11-04-2025 13:18:00 - DEBUG - Processing ask message with timestamp 1744370220000
+11-04-2025 13:18:00 - DEBUG - Stored ask data for timestamp 1744370220000
+11-04-2025 13:18:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-11 13:17:00
+11-04-2025 13:18:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+11-04-2025 13:18:00 - DEBUG - Got midpoint from queue: 2025-04-11 13:17:00
+11-04-2025 13:18:00 - DEBUG - Matched ask with existing bid for timestamp 1744370220000
+11-04-2025 13:18:00 - DEBUG - Added midpoint to recent_data. Size: 251
+11-04-2025 13:18:00 - DEBUG - Generated features. New shape: (251, 66)
+11-04-2025 13:18:00 - DEBUG - Adding 8 missing expected features: {'open_original', 'high_original', 'low_raw', 'close_original', 'low_original', 'high_raw', 'open_raw', 'close_raw'}
+11-04-2025 13:18:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:18:00 - DEBUG - Final feature set for model: 40 features, 251 rows
+11-04-2025 13:18:00 - DEBUG - Running prediction on data with shape (251, 40)
+11-04-2025 13:18:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:18:00 - INFO - Model prediction: [1 1 1 1 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 0
+ 1 1 1 0 1 0 1 1 0 1 0 1 0 0 1 0 0 0 1 1 0 0 0 0 0 0 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 0 1 1 1 1 0 1 1 1 1 0 0 0 0 0 1 1 1 1 1 1 1 1 0 0 0 0 0 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 0 0 0 0 1 0 1 0 1 1 0 1 1 0 1 1 0 1 0 1 1 0 1 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1]
+11-04-2025 13:18:00 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:00 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:00 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:00 - DEBUG - Resampler decision: False
+11-04-2025 13:18:01 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:01 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:01 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:01 - DEBUG - Resampler decision: False
+11-04-2025 13:18:02 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:02 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:02 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:02 - DEBUG - Resampler decision: False
+11-04-2025 13:18:03 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:03 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:03 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:03 - DEBUG - Resampler decision: False
+11-04-2025 13:18:04 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:04 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:04 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:04 - DEBUG - Resampler decision: False
+11-04-2025 13:18:05 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:05 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:05 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:05 - DEBUG - Resampler decision: False
+11-04-2025 13:18:06 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:06 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:06 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:06 - DEBUG - Resampler decision: False
+11-04-2025 13:18:07 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:07 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:07 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:07 - DEBUG - Resampler decision: False
+11-04-2025 13:18:08 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:08 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:08 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:08 - DEBUG - Resampler decision: False
+11-04-2025 13:18:09 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:09 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:09 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:09 - DEBUG - Resampler decision: False
+11-04-2025 13:18:10 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:10 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:10 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:10 - DEBUG - Resampler decision: False
+11-04-2025 13:18:11 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:11 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:11 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:11 - DEBUG - Resampler decision: False
+11-04-2025 13:18:12 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:12 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:12 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:12 - DEBUG - Resampler decision: False
+11-04-2025 13:18:13 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:13 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:13 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:13 - DEBUG - Resampler decision: False
+11-04-2025 13:18:14 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:14 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:14 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:14 - DEBUG - Resampler decision: False
+11-04-2025 13:18:15 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:15 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:15 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:15 - DEBUG - Resampler decision: False
+11-04-2025 13:18:16 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:16 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:16 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:16 - DEBUG - Resampler decision: False
+11-04-2025 13:18:17 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:17 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:17 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:17 - DEBUG - Resampler decision: False
+11-04-2025 13:18:18 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:18 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:18 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:18 - DEBUG - Resampler decision: False
+11-04-2025 13:18:19 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:19 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:19 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:19 - DEBUG - Resampler decision: False
+11-04-2025 13:18:20 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:20 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:20 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:20 - DEBUG - Resampler decision: False
+11-04-2025 13:18:21 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:21 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:21 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:21 - DEBUG - Resampler decision: False
+11-04-2025 13:18:22 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:22 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:22 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:22 - DEBUG - Resampler decision: False
+11-04-2025 13:18:23 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:23 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:23 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:23 - DEBUG - Resampler decision: False
+11-04-2025 13:18:24 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:24 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:24 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:24 - DEBUG - Resampler decision: False
+11-04-2025 13:18:25 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:25 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:25 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:25 - DEBUG - Resampler decision: False
+11-04-2025 13:18:26 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:26 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:26 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:26 - DEBUG - Resampler decision: False
+11-04-2025 13:18:27 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:27 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:27 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:27 - DEBUG - Resampler decision: False
+11-04-2025 13:18:28 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:28 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:28 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:28 - DEBUG - Resampler decision: False
+11-04-2025 13:18:29 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:29 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:29 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:29 - DEBUG - Resampler decision: False
+11-04-2025 13:18:30 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:30 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:30 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:30 - DEBUG - Resampler decision: False
+11-04-2025 13:18:31 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:31 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:31 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:31 - DEBUG - Resampler decision: False
+11-04-2025 13:18:32 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:32 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:32 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:32 - DEBUG - Resampler decision: False
+11-04-2025 13:18:33 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:33 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:33 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:33 - DEBUG - Resampler decision: False
+11-04-2025 13:18:34 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:34 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:34 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:34 - DEBUG - Resampler decision: False
+11-04-2025 13:18:35 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:35 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:35 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:35 - DEBUG - Resampler decision: False
+11-04-2025 13:18:36 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:36 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:36 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:36 - DEBUG - Resampler decision: False
+11-04-2025 13:18:37 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:37 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:37 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:37 - DEBUG - Resampler decision: False
+11-04-2025 13:18:38 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:38 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:38 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:38 - DEBUG - Resampler decision: False
+11-04-2025 13:18:39 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:39 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:39 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:39 - DEBUG - Resampler decision: False
+11-04-2025 13:18:40 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:40 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:40 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:40 - DEBUG - Resampler decision: False
+11-04-2025 13:18:41 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:41 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:41 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:41 - DEBUG - Resampler decision: False
+11-04-2025 13:18:42 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:42 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:42 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:42 - DEBUG - Resampler decision: False
+11-04-2025 13:18:43 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:43 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:43 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:43 - DEBUG - Resampler decision: False
+11-04-2025 13:18:44 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:44 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:44 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:44 - DEBUG - Resampler decision: False
+11-04-2025 13:18:45 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:45 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:45 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:45 - DEBUG - Resampler decision: False
+11-04-2025 13:18:46 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:46 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:46 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:46 - DEBUG - Resampler decision: False
+11-04-2025 13:18:47 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:47 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:47 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:47 - DEBUG - Resampler decision: False
+11-04-2025 13:18:48 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:48 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:48 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:48 - DEBUG - Resampler decision: False
+11-04-2025 13:18:49 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:49 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:49 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:49 - DEBUG - Resampler decision: False
+11-04-2025 13:18:50 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:50 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:50 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:50 - DEBUG - Resampler decision: False
+11-04-2025 13:18:51 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:51 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:51 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:51 - DEBUG - Resampler decision: False
+11-04-2025 13:18:52 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:52 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:52 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:52 - DEBUG - Resampler decision: False
+11-04-2025 13:18:53 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:53 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:53 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:53 - DEBUG - Resampler decision: False
+11-04-2025 13:18:54 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:54 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:54 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:54 - DEBUG - Resampler decision: False
+11-04-2025 13:18:55 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:55 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:55 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:55 - DEBUG - Resampler decision: False
+11-04-2025 13:18:56 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:56 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:56 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:56 - DEBUG - Resampler decision: False
+11-04-2025 13:18:57 - DEBUG - Ping sent at 13:18:57
+11-04-2025 13:18:57 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:57 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:57 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:57 - DEBUG - Resampler decision: False
+11-04-2025 13:18:57 - INFO - Trading summary - Active positions: None
+11-04-2025 13:18:57 - INFO - Portfolio equity: 10000.00, Cash: 10000.00
+11-04-2025 13:18:57 - INFO - Pending signals: 0
+11-04-2025 13:18:58 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:58 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:58 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:58 - DEBUG - Resampler decision: False
+11-04-2025 13:18:59 - DEBUG - Getting latest data. recent_data size: 251
+11-04-2025 13:18:59 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:18:59 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:17:00
+11-04-2025 13:18:59 - DEBUG - Resampler decision: False
+11-04-2025 13:19:00 - DEBUG - Processing bid message with timestamp 1744370280000
+11-04-2025 13:19:00 - DEBUG - Stored bid data for timestamp 1744370280000
+11-04-2025 13:19:00 - DEBUG - Processing ask message with timestamp 1744370280000
+11-04-2025 13:19:00 - DEBUG - Stored ask data for timestamp 1744370280000
+11-04-2025 13:19:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-11 13:18:00
+11-04-2025 13:19:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+11-04-2025 13:19:00 - DEBUG - Got midpoint from queue: 2025-04-11 13:18:00
+11-04-2025 13:19:00 - DEBUG - Matched ask with existing bid for timestamp 1744370280000
+11-04-2025 13:19:00 - DEBUG - Added midpoint to recent_data. Size: 252
+11-04-2025 13:19:00 - DEBUG - Generated features. New shape: (252, 66)
+11-04-2025 13:19:00 - DEBUG - Adding 8 missing expected features: {'open_original', 'high_original', 'low_raw', 'close_original', 'low_original', 'high_raw', 'open_raw', 'close_raw'}
+11-04-2025 13:19:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:19:00 - DEBUG - Final feature set for model: 40 features, 252 rows
+11-04-2025 13:19:00 - DEBUG - Running prediction on data with shape (252, 40)
+11-04-2025 13:19:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:19:00 - INFO - Model prediction: [1 1 1 1 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 0 1 0 1 1 0 1 0 1 1 1 1 0 0 0 1 1 0 0 0 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 0 1 0 1 1 0 1 1 1 1 0 0 0 0 0 1 1 0 1 1 1 1 1 0 0 0 0 0 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 0 0 0 0 1 0 1 0 1 1 0 1 1 1 1 1 0 1 0 1 0 0 1 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1]
+11-04-2025 13:19:00 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:00 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:00 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:00 - DEBUG - Resampler decision: False
+11-04-2025 13:19:01 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:01 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:01 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:01 - DEBUG - Resampler decision: False
+11-04-2025 13:19:02 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:02 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:02 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:02 - DEBUG - Resampler decision: False
+11-04-2025 13:19:03 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:03 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:03 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:03 - DEBUG - Resampler decision: False
+11-04-2025 13:19:04 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:04 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:04 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:04 - DEBUG - Resampler decision: False
+11-04-2025 13:19:05 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:05 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:05 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:05 - DEBUG - Resampler decision: False
+11-04-2025 13:19:06 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:06 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:06 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:06 - DEBUG - Resampler decision: False
+11-04-2025 13:19:07 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:07 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:07 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:07 - DEBUG - Resampler decision: False
+11-04-2025 13:19:08 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:08 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:08 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:08 - DEBUG - Resampler decision: False
+11-04-2025 13:19:09 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:09 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:09 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:09 - DEBUG - Resampler decision: False
+11-04-2025 13:19:10 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:10 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:10 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:10 - DEBUG - Resampler decision: False
+11-04-2025 13:19:11 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:11 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:11 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:11 - DEBUG - Resampler decision: False
+11-04-2025 13:19:12 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:12 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:12 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:12 - DEBUG - Resampler decision: False
+11-04-2025 13:19:13 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:13 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:13 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:13 - DEBUG - Resampler decision: False
+11-04-2025 13:19:14 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:14 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:14 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:14 - DEBUG - Resampler decision: False
+11-04-2025 13:19:15 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:15 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:15 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:15 - DEBUG - Resampler decision: False
+11-04-2025 13:19:16 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:16 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:16 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:16 - DEBUG - Resampler decision: False
+11-04-2025 13:19:17 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:17 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:17 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:17 - DEBUG - Resampler decision: False
+11-04-2025 13:19:18 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:18 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:18 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:18 - DEBUG - Resampler decision: False
+11-04-2025 13:19:19 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:19 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:19 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:19 - DEBUG - Resampler decision: False
+11-04-2025 13:19:20 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:20 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:20 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:20 - DEBUG - Resampler decision: False
+11-04-2025 13:19:21 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:21 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:21 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:21 - DEBUG - Resampler decision: False
+11-04-2025 13:19:22 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:22 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:22 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:22 - DEBUG - Resampler decision: False
+11-04-2025 13:19:23 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:23 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:23 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:23 - DEBUG - Resampler decision: False
+11-04-2025 13:19:24 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:24 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:24 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:24 - DEBUG - Resampler decision: False
+11-04-2025 13:19:25 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:25 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:25 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:25 - DEBUG - Resampler decision: False
+11-04-2025 13:19:26 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:26 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:26 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:26 - DEBUG - Resampler decision: False
+11-04-2025 13:19:27 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:27 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:27 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:27 - DEBUG - Resampler decision: False
+11-04-2025 13:19:28 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:28 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:28 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:28 - DEBUG - Resampler decision: False
+11-04-2025 13:19:29 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:29 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:29 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:29 - DEBUG - Resampler decision: False
+11-04-2025 13:19:30 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:30 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:30 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:30 - DEBUG - Resampler decision: False
+11-04-2025 13:19:31 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:31 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:31 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:31 - DEBUG - Resampler decision: False
+11-04-2025 13:19:32 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:32 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:32 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:32 - DEBUG - Resampler decision: False
+11-04-2025 13:19:33 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:33 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:33 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:33 - DEBUG - Resampler decision: False
+11-04-2025 13:19:34 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:34 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:34 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:34 - DEBUG - Resampler decision: False
+11-04-2025 13:19:35 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:35 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:35 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:35 - DEBUG - Resampler decision: False
+11-04-2025 13:19:36 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:36 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:36 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:36 - DEBUG - Resampler decision: False
+11-04-2025 13:19:37 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:37 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:37 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:37 - DEBUG - Resampler decision: False
+11-04-2025 13:19:38 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:38 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:38 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:38 - DEBUG - Resampler decision: False
+11-04-2025 13:19:39 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:39 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:39 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:39 - DEBUG - Resampler decision: False
+11-04-2025 13:19:40 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:40 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:40 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:40 - DEBUG - Resampler decision: False
+11-04-2025 13:19:42 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:42 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:42 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:42 - DEBUG - Resampler decision: False
+11-04-2025 13:19:43 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:43 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:43 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:43 - DEBUG - Resampler decision: False
+11-04-2025 13:19:44 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:44 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:44 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:44 - DEBUG - Resampler decision: False
+11-04-2025 13:19:45 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:45 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:45 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:45 - DEBUG - Resampler decision: False
+11-04-2025 13:19:46 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:46 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:46 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:46 - DEBUG - Resampler decision: False
+11-04-2025 13:19:47 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:47 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:47 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:47 - DEBUG - Resampler decision: False
+11-04-2025 13:19:48 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:48 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:48 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:48 - DEBUG - Resampler decision: False
+11-04-2025 13:19:49 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:49 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:49 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:49 - DEBUG - Resampler decision: False
+11-04-2025 13:19:50 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:50 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:50 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:50 - DEBUG - Resampler decision: False
+11-04-2025 13:19:51 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:51 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:51 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:51 - DEBUG - Resampler decision: False
+11-04-2025 13:19:52 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:52 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:52 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:52 - DEBUG - Resampler decision: False
+11-04-2025 13:19:53 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:53 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:53 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:53 - DEBUG - Resampler decision: False
+11-04-2025 13:19:54 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:54 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:54 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:54 - DEBUG - Resampler decision: False
+11-04-2025 13:19:55 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:55 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:55 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:55 - DEBUG - Resampler decision: False
+11-04-2025 13:19:56 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:56 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:56 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:56 - DEBUG - Resampler decision: False
+11-04-2025 13:19:57 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:57 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:57 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:57 - DEBUG - Resampler decision: False
+11-04-2025 13:19:57 - DEBUG - Ping sent at 13:19:57
+11-04-2025 13:19:58 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:58 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:58 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:58 - DEBUG - Resampler decision: False
+11-04-2025 13:19:58 - INFO - Trading summary - Active positions: None
+11-04-2025 13:19:58 - INFO - Portfolio equity: 10000.00, Cash: 10000.00
+11-04-2025 13:19:58 - INFO - Pending signals: 0
+11-04-2025 13:19:59 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:19:59 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:19:59 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:19:59 - DEBUG - Resampler decision: False
+11-04-2025 13:20:00 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:20:00 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:00 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:20:00 - DEBUG - Resampler decision: False
+11-04-2025 13:20:01 - DEBUG - Getting latest data. recent_data size: 252
+11-04-2025 13:20:01 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:01 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:18:00
+11-04-2025 13:20:01 - DEBUG - Resampler decision: False
+11-04-2025 13:20:01 - DEBUG - Processing bid message with timestamp 1744370340000
+11-04-2025 13:20:01 - DEBUG - Stored bid data for timestamp 1744370340000
+11-04-2025 13:20:01 - DEBUG - Processing ask message with timestamp 1744370340000
+11-04-2025 13:20:01 - DEBUG - Stored ask data for timestamp 1744370340000
+11-04-2025 13:20:01 - DEBUG - Created midpoint for GBPUSD at 2025-04-11 13:19:00
+11-04-2025 13:20:01 - DEBUG - Added midpoint to queue. Queue size: ~1
+11-04-2025 13:20:01 - DEBUG - Got midpoint from queue: 2025-04-11 13:19:00
+11-04-2025 13:20:01 - DEBUG - Matched ask with existing bid for timestamp 1744370340000
+11-04-2025 13:20:01 - DEBUG - Added midpoint to recent_data. Size: 253
+11-04-2025 13:20:01 - DEBUG - Generated features. New shape: (253, 66)
+11-04-2025 13:20:01 - DEBUG - Adding 8 missing expected features: {'open_original', 'high_original', 'low_raw', 'close_original', 'low_original', 'high_raw', 'open_raw', 'close_raw'}
+11-04-2025 13:20:01 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:20:01 - DEBUG - Final feature set for model: 40 features, 253 rows
+11-04-2025 13:20:01 - DEBUG - Running prediction on data with shape (253, 40)
+11-04-2025 13:20:01 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:20:01 - INFO - Model prediction: [1 1 1 0 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 1 1 0 0 0 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 0 0 0 1 1 1 0 1 0 1 1 0 1 1 1 1 0 0 0 0 0 1 1 0 1 1 1 1 1 0 0 0 0 0 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 0 0 0 0 1 0 1 0 0 1 0 1 1 1 1 1 0 1 0 1 0 0 1 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 0 0 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1 0]
+11-04-2025 13:20:02 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:02 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:02 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:02 - DEBUG - Resampler decision: False
+11-04-2025 13:20:03 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:03 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:03 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:03 - DEBUG - Resampler decision: False
+11-04-2025 13:20:04 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:04 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:04 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:04 - DEBUG - Resampler decision: False
+11-04-2025 13:20:05 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:05 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:05 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:05 - DEBUG - Resampler decision: False
+11-04-2025 13:20:06 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:06 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:06 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:06 - DEBUG - Resampler decision: False
+11-04-2025 13:20:07 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:07 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:07 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:07 - DEBUG - Resampler decision: False
+11-04-2025 13:20:08 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:08 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:08 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:08 - DEBUG - Resampler decision: False
+11-04-2025 13:20:09 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:09 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:09 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:09 - DEBUG - Resampler decision: False
+11-04-2025 13:20:10 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:10 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:10 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:10 - DEBUG - Resampler decision: False
+11-04-2025 13:20:11 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:11 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:11 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:11 - DEBUG - Resampler decision: False
+11-04-2025 13:20:12 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:12 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:12 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:12 - DEBUG - Resampler decision: False
+11-04-2025 13:20:13 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:13 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:13 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:13 - DEBUG - Resampler decision: False
+11-04-2025 13:20:14 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:14 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:14 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:14 - DEBUG - Resampler decision: False
+11-04-2025 13:20:15 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:15 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:15 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:15 - DEBUG - Resampler decision: False
+11-04-2025 13:20:16 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:16 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:16 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:16 - DEBUG - Resampler decision: False
+11-04-2025 13:20:17 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:17 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:17 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:17 - DEBUG - Resampler decision: False
+11-04-2025 13:20:18 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:18 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:18 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:18 - DEBUG - Resampler decision: False
+11-04-2025 13:20:19 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:19 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:19 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:19 - DEBUG - Resampler decision: False
+11-04-2025 13:20:20 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:20 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:20 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:20 - DEBUG - Resampler decision: False
+11-04-2025 13:20:21 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:21 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:21 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:21 - DEBUG - Resampler decision: False
+11-04-2025 13:20:22 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:22 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:22 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:22 - DEBUG - Resampler decision: False
+11-04-2025 13:20:23 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:23 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:23 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:23 - DEBUG - Resampler decision: False
+11-04-2025 13:20:24 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:24 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:24 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:24 - DEBUG - Resampler decision: False
+11-04-2025 13:20:25 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:25 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:25 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:25 - DEBUG - Resampler decision: False
+11-04-2025 13:20:26 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:26 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:26 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:26 - DEBUG - Resampler decision: False
+11-04-2025 13:20:27 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:27 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:27 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:27 - DEBUG - Resampler decision: False
+11-04-2025 13:20:28 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:28 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:28 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:28 - DEBUG - Resampler decision: False
+11-04-2025 13:20:29 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:29 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:29 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:29 - DEBUG - Resampler decision: False
+11-04-2025 13:20:30 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:30 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:30 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:30 - DEBUG - Resampler decision: False
+11-04-2025 13:20:31 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:31 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:31 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:31 - DEBUG - Resampler decision: False
+11-04-2025 13:20:32 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:32 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:32 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:32 - DEBUG - Resampler decision: False
+11-04-2025 13:20:33 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:33 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:33 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:33 - DEBUG - Resampler decision: False
+11-04-2025 13:20:34 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:34 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:34 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:34 - DEBUG - Resampler decision: False
+11-04-2025 13:20:35 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:35 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:35 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:35 - DEBUG - Resampler decision: False
+11-04-2025 13:20:36 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:36 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:36 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:36 - DEBUG - Resampler decision: False
+11-04-2025 13:20:37 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:37 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:37 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:37 - DEBUG - Resampler decision: False
+11-04-2025 13:20:38 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:38 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:38 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:38 - DEBUG - Resampler decision: False
+11-04-2025 13:20:39 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:39 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:39 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:39 - DEBUG - Resampler decision: False
+11-04-2025 13:20:40 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:40 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:40 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:40 - DEBUG - Resampler decision: False
+11-04-2025 13:20:41 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:41 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:41 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:41 - DEBUG - Resampler decision: False
+11-04-2025 13:20:42 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:42 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:42 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:42 - DEBUG - Resampler decision: False
+11-04-2025 13:20:43 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:43 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:43 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:43 - DEBUG - Resampler decision: False
+11-04-2025 13:20:44 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:44 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:44 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:44 - DEBUG - Resampler decision: False
+11-04-2025 13:20:45 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:45 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:45 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:45 - DEBUG - Resampler decision: False
+11-04-2025 13:20:46 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:46 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:46 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:46 - DEBUG - Resampler decision: False
+11-04-2025 13:20:47 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:47 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:47 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:47 - DEBUG - Resampler decision: False
+11-04-2025 13:20:48 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:48 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:48 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:48 - DEBUG - Resampler decision: False
+11-04-2025 13:20:49 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:49 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:49 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:49 - DEBUG - Resampler decision: False
+11-04-2025 13:20:50 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:50 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:50 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:50 - DEBUG - Resampler decision: False
+11-04-2025 13:20:51 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:51 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:51 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:51 - DEBUG - Resampler decision: False
+11-04-2025 13:20:52 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:52 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:52 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:52 - DEBUG - Resampler decision: False
+11-04-2025 13:20:53 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:53 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:53 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:53 - DEBUG - Resampler decision: False
+11-04-2025 13:20:54 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:54 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:54 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:54 - DEBUG - Resampler decision: False
+11-04-2025 13:20:55 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:55 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:55 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:55 - DEBUG - Resampler decision: False
+11-04-2025 13:20:56 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:56 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:56 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:56 - DEBUG - Resampler decision: False
+11-04-2025 13:20:57 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:57 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:57 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:57 - DEBUG - Resampler decision: False
+11-04-2025 13:20:57 - DEBUG - Ping sent at 13:20:57
+11-04-2025 13:20:58 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:58 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:58 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:58 - DEBUG - Resampler decision: False
+11-04-2025 13:20:58 - INFO - Trading summary - Active positions: None
+11-04-2025 13:20:58 - INFO - Portfolio equity: 10000.00, Cash: 10000.00
+11-04-2025 13:20:58 - INFO - Pending signals: 0
+11-04-2025 13:20:59 - DEBUG - Getting latest data. recent_data size: 253
+11-04-2025 13:20:59 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:20:59 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:19:00
+11-04-2025 13:20:59 - DEBUG - Resampler decision: False
+11-04-2025 13:21:00 - DEBUG - Processing bid message with timestamp 1744370400000
+11-04-2025 13:21:00 - DEBUG - Stored bid data for timestamp 1744370400000
+11-04-2025 13:21:00 - DEBUG - Processing ask message with timestamp 1744370400000
+11-04-2025 13:21:00 - DEBUG - Stored ask data for timestamp 1744370400000
+11-04-2025 13:21:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-11 13:20:00
+11-04-2025 13:21:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+11-04-2025 13:21:00 - DEBUG - Got midpoint from queue: 2025-04-11 13:20:00
+11-04-2025 13:21:00 - DEBUG - Matched ask with existing bid for timestamp 1744370400000
+11-04-2025 13:21:00 - DEBUG - Added midpoint to recent_data. Size: 254
+11-04-2025 13:21:00 - DEBUG - Generated features. New shape: (254, 66)
+11-04-2025 13:21:00 - DEBUG - Adding 8 missing expected features: {'open_original', 'high_original', 'low_raw', 'close_original', 'low_original', 'high_raw', 'open_raw', 'close_raw'}
+11-04-2025 13:21:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:21:00 - DEBUG - Final feature set for model: 40 features, 254 rows
+11-04-2025 13:21:00 - DEBUG - Running prediction on data with shape (254, 40)
+11-04-2025 13:21:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:21:00 - INFO - Model prediction: [1 1 1 0 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
+ 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 1 1 0 0 0 0 0 1 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 0 0 0 1 1 1 0 1 1 1 1 0 1 1 1 1 0 0 0 0 0 1 1 0 1 1 1 1 1 0 0 0 0 0 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 0 0 0 0 1 0 1 0 0 1 0 1 1 1 1 1 0 1 0 1 0 0 1 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 0 0 1 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1 0 0]
+11-04-2025 13:21:00 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:00 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:00 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:00 - DEBUG - Resampler decision: True
+11-04-2025 13:21:00 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:05 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:05 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:05 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:05 - DEBUG - Resampler decision: True
+11-04-2025 13:21:05 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:10 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:10 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:10 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:10 - DEBUG - Resampler decision: True
+11-04-2025 13:21:10 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:15 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:15 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:15 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:15 - DEBUG - Resampler decision: True
+11-04-2025 13:21:15 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:20 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:20 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:20 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:20 - DEBUG - Resampler decision: True
+11-04-2025 13:21:20 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:25 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:25 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:25 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:25 - DEBUG - Resampler decision: True
+11-04-2025 13:21:25 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:30 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:30 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:30 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:30 - DEBUG - Resampler decision: True
+11-04-2025 13:21:30 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:35 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:35 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:35 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:35 - DEBUG - Resampler decision: True
+11-04-2025 13:21:35 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:40 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:40 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:40 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:40 - DEBUG - Resampler decision: True
+11-04-2025 13:21:40 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:45 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:45 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:45 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:45 - DEBUG - Resampler decision: True
+11-04-2025 13:21:45 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:50 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:50 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:50 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:50 - DEBUG - Resampler decision: True
+11-04-2025 13:21:50 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:55 - DEBUG - Getting latest data. recent_data size: 254
+11-04-2025 13:21:55 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:21:55 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:20:00
+11-04-2025 13:21:55 - DEBUG - Resampler decision: True
+11-04-2025 13:21:55 - ERROR - Error in trading loop: 'open_raw'
+11-04-2025 13:21:57 - DEBUG - Ping sent at 13:21:57
+11-04-2025 13:22:00 - DEBUG - Processing bid message with timestamp 1744370460000
+11-04-2025 13:22:00 - DEBUG - Stored bid data for timestamp 1744370460000
+11-04-2025 13:22:00 - DEBUG - Processing ask message with timestamp 1744370460000
+11-04-2025 13:22:00 - DEBUG - Stored ask data for timestamp 1744370460000
+11-04-2025 13:22:00 - DEBUG - Created midpoint for GBPUSD at 2025-04-11 13:21:00
+11-04-2025 13:22:00 - DEBUG - Added midpoint to queue. Queue size: ~1
+11-04-2025 13:22:00 - DEBUG - Matched ask with existing bid for timestamp 1744370460000
+11-04-2025 13:22:00 - DEBUG - Got midpoint from queue: 2025-04-11 13:21:00
+11-04-2025 13:22:00 - DEBUG - Added midpoint to recent_data. Size: 255
+11-04-2025 13:22:00 - DEBUG - Generated features. New shape: (255, 66)
+11-04-2025 13:22:00 - DEBUG - Adding 8 missing expected features: {'open_original', 'high_original', 'low_raw', 'close_original', 'low_original', 'high_raw', 'open_raw', 'close_raw'}
+11-04-2025 13:22:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:22:00 - DEBUG - Final feature set for model: 40 features, 255 rows
+11-04-2025 13:22:00 - DEBUG - Running prediction on data with shape (255, 40)
+11-04-2025 13:22:00 - DEBUG - Column dtypes: gk_volatility            float64
+volume                   float64
+open_return              float64
+low_return               float64
+high_return              float64
+volatility_5             float64
+price_accel              float64
+roc_5                    float64
+roc_1                    float64
+volatility_10            float64
+volatility_20            float64
+volatility_30            float64
+macd_hist                float64
+roc_10                   float64
+macd_signal              float64
+roc_20                   float64
+dist_to_support_20       float64
+dist_to_resistance_10    float64
+rsi_14                   float64
+normalized_atr           float64
+stoch_d                  float64
+dist_to_support_10       float64
+dist_to_resistance_20    float64
+macd                     float64
+atr_14                   float64
+stoch_k                  float64
+hour_of_day              float64
+ema_200                  float64
+open_raw                 float64
+high_raw                 float64
+low_raw                  float64
+close_raw                float64
+open_original            float64
+high_original            float64
+low_original             float64
+close_original           float64
+day_of_week                int32
+month                      int32
+sma_50                   float64
+ema_50                   float64
+dtype: object
+11-04-2025 13:22:00 - INFO - Model prediction: [1 1 1 0 1 1 1 1 1 0 0 0 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 1 1 0 0 0 0 0 0 1 0 0 0 1 1 1 1 1 1 1
+ 1 1 0 0 0 1 1 1 0 1 1 1 1 0 1 1 1 1 0 0 0 0 0 1 1 0 1 1 1 1 1 0 0 0 0 0 0
+ 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 0 0 0 0 1 0 1 0 0 1 0 1 1 1 1 1 0 1 0 1 0 0 1 0 1 1 1 1 1 1 1
+ 1 1 0 1 0 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 0 1 1 1 1
+ 1 1 1 1 1 0 1 0 1 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1 0 0 0]
+11-04-2025 13:22:00 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:00 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:00 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:00 - DEBUG - Resampler decision: False
+11-04-2025 13:22:00 - INFO - Trading summary - Active positions: None
+11-04-2025 13:22:00 - INFO - Portfolio equity: 10000.00, Cash: 10000.00
+11-04-2025 13:22:00 - INFO - Pending signals: 0
+11-04-2025 13:22:01 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:01 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:01 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:01 - DEBUG - Resampler decision: False
+11-04-2025 13:22:02 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:02 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:02 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:02 - DEBUG - Resampler decision: False
+11-04-2025 13:22:03 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:03 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:03 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:03 - DEBUG - Resampler decision: False
+11-04-2025 13:22:04 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:04 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:04 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:04 - DEBUG - Resampler decision: False
+11-04-2025 13:22:05 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:05 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:05 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:05 - DEBUG - Resampler decision: False
+11-04-2025 13:22:06 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:06 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:06 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:06 - DEBUG - Resampler decision: False
+11-04-2025 13:22:07 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:07 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:07 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:07 - DEBUG - Resampler decision: False
+11-04-2025 13:22:08 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:08 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:08 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:08 - DEBUG - Resampler decision: False
+11-04-2025 13:22:09 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:09 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:09 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:09 - DEBUG - Resampler decision: False
+11-04-2025 13:22:10 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:10 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:10 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:10 - DEBUG - Resampler decision: False
+11-04-2025 13:22:11 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:11 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:11 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:11 - DEBUG - Resampler decision: False
+11-04-2025 13:22:12 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:12 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:12 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:12 - DEBUG - Resampler decision: False
+11-04-2025 13:22:13 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:13 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:13 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:13 - DEBUG - Resampler decision: False
+11-04-2025 13:22:14 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:14 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:14 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:14 - DEBUG - Resampler decision: False
+11-04-2025 13:22:15 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:15 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:15 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:15 - DEBUG - Resampler decision: False
+11-04-2025 13:22:16 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:16 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:16 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:16 - DEBUG - Resampler decision: False
+11-04-2025 13:22:17 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:17 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:17 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:17 - DEBUG - Resampler decision: False
+11-04-2025 13:22:18 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:18 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:18 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:18 - DEBUG - Resampler decision: False
+11-04-2025 13:22:19 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:19 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:19 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:19 - DEBUG - Resampler decision: False
+11-04-2025 13:22:20 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:20 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:20 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:20 - DEBUG - Resampler decision: False
+11-04-2025 13:22:21 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:21 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:21 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:21 - DEBUG - Resampler decision: False
+11-04-2025 13:22:22 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:22 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:22 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:22 - DEBUG - Resampler decision: False
+11-04-2025 13:22:23 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:23 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:23 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:23 - DEBUG - Resampler decision: False
+11-04-2025 13:22:24 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:24 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:24 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:24 - DEBUG - Resampler decision: False
+11-04-2025 13:22:25 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:25 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:25 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:25 - DEBUG - Resampler decision: False
+11-04-2025 13:22:26 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:26 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:26 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:26 - DEBUG - Resampler decision: False
+11-04-2025 13:22:27 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:27 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:27 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:27 - DEBUG - Resampler decision: False
+11-04-2025 13:22:28 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:28 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:28 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:28 - DEBUG - Resampler decision: False
+11-04-2025 13:22:29 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:29 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:29 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:29 - DEBUG - Resampler decision: False
+11-04-2025 13:22:30 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:30 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:30 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:30 - DEBUG - Resampler decision: False
+11-04-2025 13:22:31 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:31 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:31 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:31 - DEBUG - Resampler decision: False
+11-04-2025 13:22:32 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:32 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:32 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:32 - DEBUG - Resampler decision: False
+11-04-2025 13:22:33 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:33 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:33 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:33 - DEBUG - Resampler decision: False
+11-04-2025 13:22:34 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:34 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:34 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:34 - DEBUG - Resampler decision: False
+11-04-2025 13:22:35 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:35 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:35 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:35 - DEBUG - Resampler decision: False
+11-04-2025 13:22:36 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:36 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:36 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:36 - DEBUG - Resampler decision: False
+11-04-2025 13:22:37 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:37 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:37 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:37 - DEBUG - Resampler decision: False
+11-04-2025 13:22:38 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:38 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:38 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:38 - DEBUG - Resampler decision: False
+11-04-2025 13:22:39 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:39 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:39 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:39 - DEBUG - Resampler decision: False
+11-04-2025 13:22:40 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:40 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:40 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:40 - DEBUG - Resampler decision: False
+11-04-2025 13:22:41 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:41 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:41 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:41 - DEBUG - Resampler decision: False
+11-04-2025 13:22:42 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:42 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:42 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:42 - DEBUG - Resampler decision: False
+11-04-2025 13:22:43 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:43 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:43 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:43 - DEBUG - Resampler decision: False
+11-04-2025 13:22:44 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:44 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:44 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:44 - DEBUG - Resampler decision: False
+11-04-2025 13:22:45 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:45 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:45 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:45 - DEBUG - Resampler decision: False
+11-04-2025 13:22:46 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:46 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:46 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:46 - DEBUG - Resampler decision: False
+11-04-2025 13:22:47 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:47 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:47 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:47 - DEBUG - Resampler decision: False
+11-04-2025 13:22:48 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:48 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:48 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:48 - DEBUG - Resampler decision: False
+11-04-2025 13:22:49 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:49 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:49 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:49 - DEBUG - Resampler decision: False
+11-04-2025 13:22:50 - DEBUG - Getting latest data. recent_data size: 255
+11-04-2025 13:22:50 - DEBUG - generate_signals called with 1 symbols
+11-04-2025 13:22:50 - DEBUG - Processing symbol GBPUSD with timestamp 2025-04-11 13:21:00
+11-04-2025 13:22:50 - DEBUG - Resampler decision: False
+11-04-2025 13:22:51 - INFO - Received shutdown signal, stopping trading...
+11-04-2025 13:22:51 - INFO - Stopping live trading service
+11-04-2025 13:22:51 - INFO - Trading loop exited
+11-04-2025 13:22:51 - INFO - Closing all positions: 0 positions
+11-04-2025 13:22:51 - INFO - Sleeping for 5 seconds before closing ALL active positions..
+11-04-2025 13:22:56 - INFO - All positions closed successfully
+11-04-2025 13:22:56 - INFO - Backtest completed with model-based strategy
+11-04-2025 13:22:56 - INFO - Live trading service stopped
+11-04-2025 13:22:56 - ERROR - Error in live trading: Remote end closed connection without response
+11-04-2025 13:22:56 - ERROR - Traceback (most recent call last):
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 260, in run_live_trading
+    time.sleep(60)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/live/live_trading_runner.py", line 252, in signal_handler
+    broker.end_session()
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/capitalcom.py", line 48, in end_session
+    return session.end_session(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst)
+  File "/Users/dmartinsen/pers-prog/ai-trading-v3/broker/capital_com/rest_api/session.py", line 85, in end_session
+    res = conn.getresponse()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/opt/homebrew/Cellar/python@3.10/3.10.16/Frameworks/Python.framework/Versions/3.10/lib/python3.10/http/client.py", line 287, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+11-04-2025 13:22:56 - WARNING - Trading service is not running
+11-04-2025 13:22:57 - INFO - Ended session: {"status":"SUCCESS"}
+11-04-2025 13:22:57 - INFO - Live trading session ended
+11-04-2025 13:22:57 - DEBUG - Ping sent at 13:22:57
+11-04-2025 13:23:01 - INFO - Received shutdown signal, stopping trading...
+11-04-2025 13:23:01 - WARNING - Trading service is not running
+11-04-2025 13:23:01 - INFO - Ended session: {"errorCode":"error.invalid.session.token"}

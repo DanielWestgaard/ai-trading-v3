@@ -165,7 +165,7 @@ def encrypt_password(password, api_key):
     except Exception as e:
         raise RuntimeError(e)
 
-def switch_active_account(account_id, X_SECURITY_TOKEN, CST, print_answer):
+def switch_active_account(account_id, account_name, X_SECURITY_TOKEN, CST, print_answer):
     """Switch active account based on account ID."""
     payload = json.dumps({
         "accountId": account_id
@@ -181,4 +181,4 @@ def switch_active_account(account_id, X_SECURITY_TOKEN, CST, print_answer):
     if print_answer:
         parsed_data = json.loads(data.decode("utf-8"))
         print(json.dumps(parsed_data, indent=4))
-    logging.info("Successfully switched account!")
+    logging.info(f"Successfully switched to account {account_name}!")

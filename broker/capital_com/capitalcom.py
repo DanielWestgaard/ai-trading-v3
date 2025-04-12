@@ -12,6 +12,7 @@ import broker.capital_com.rest_api.account as account
 import broker.capital_com.rest_api.session as session
 import broker.capital_com.rest_api.trading as trading
 import broker.capital_com.rest_api.markets_info as markets_info
+import broker.capital_com.web_socket.web_socket as web_socket
 
 
 class CapitalCom(BaseBroker):
@@ -19,7 +20,6 @@ class CapitalCom(BaseBroker):
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize the broker with configuration."""
-        logging.info("Inside broker")
         
         try: 
             # Getting secrets
@@ -50,12 +50,15 @@ class CapitalCom(BaseBroker):
     def session_details(self, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
         return session.session_details(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
     
-    def switch_active_account(self, account_id=None, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
+    def switch_active_account(self, account_id=None, account_name=None, X_SECURITY_TOKEN=None, CST=None, print_answer=False):
         if account_id is None or self.all_accounts is None:
             logging.info("AccountID and/or all_accounts is None. Initializing them now.")
             self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
-            self.account_id = br_util.get_account_id_by_name(self.all_accounts, mark_config.ACCOUNT_TEST)
-        return session.switch_active_account(self.account_id, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+            self.account_id, self.account_name = br_util.get_account_id_by_name(self.all_accounts, account_name=account_name or mark_config.ACCOUNT_TEST)
+        if self.account_id is None and self.account_name is None:
+            logging.error("Error switching active account! Unable to switch!")
+            return None
+        return session.switch_active_account(self.account_id, self.account_name, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
     
     # ==================== DATA METHODS ====================
     
@@ -101,15 +104,31 @@ class CapitalCom(BaseBroker):
     
     # ==================== TRADING METHODS ====================
     
-    def place_market_order(self, 
-                          symbol: str, 
-                          side: str, 
-                          quantity: float,
-                          take_profit: Optional[float] = None,
-                          stop_loss: Optional[float] = None) -> Dict:
-        """Place a market order."""
-        logging.info(f"Placing market order for {symbol}")
-        return {}  # Return empty dict
+    def all_positions(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True):
+        """Returns all open positions for the active account."""
+        return trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst,print_answer=print_answer)
+    
+    def place_market_order(self, symbol, direction, size, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
+                            X_SECURITY_TOKEN=None, CST=None,
+                            print_answer=True):
+        """
+        Create orders and positions.
+        Note: The deal reference you get as "confirmation" from successfully creating a new position
+        is not the same dealReference the order has (when active) and not the same as dealId.
+        
+        Args:
+            symbol: Instrument epic identifier. Ex. SILVER
+            direction: Deal direction. Must be BUY or SELL
+            size: Deal size. Ex. 1
+            stop_amount: Loss amount when a stop loss will be triggered. Ex. 4
+            profit_amount: Profit amount when a take profit will be triggered. Ex. 20
+            print_answer: If true, prints response body and headers. Default is False
+        
+        Return:
+            Deal Reference / deal ID
+        """
+        return trading.create_new_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
+                                        symbol=symbol, direction=direction, size=size, stop_amount=stop_amount, profit_amount=profit_amount, stop_level=stop_level, profit_level=profit_level)
     
     def place_limit_order(self,
                          symbol: str,
@@ -122,15 +141,79 @@ class CapitalCom(BaseBroker):
         logging.info(f"Placing limit order for {symbol}")
         return {}  # Return empty dict
     
-    def cancel_order(self, order_id: str) -> bool:
-        """Cancel an existing order."""
-        logging.info(f"Canceling order {order_id}")
-        return True
+    def close_order(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True) -> bool:
+        """Close an existing order. This går ut ifra that the model/we only have one active trade open at a time."""
+        logging.error("Not made yet")
+        return False
     
-    def modify_position(self,
-                       position_id: str,
-                       take_profit: Optional[float] = None,
-                       stop_loss: Optional[float] = None) -> bool:
-        """Modify an existing position."""
-        logging.info(f"Modifying position {position_id}")
-        return True
+    def close_all_orders(self, X_SECURITY_TOKEN=None, CST=None, print_answer=True) -> bool:
+        """Close an existing order. This is based on the principle that the model/we only have one active trade open at a time."""
+        try:
+            all_positions_after_new = trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+            
+            dealIds = br_util.process_positions(all_positions_after_new)
+            
+            logging.info(f"Sleeping for 5 seconds before closing ALL active positions..")
+            time.sleep(5)
+            
+            for dealId in dealIds:
+                logging.info(f"Closing trade/position with dealId: {dealId}")
+                trading.close_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
+                                       dealID=dealId)
+            return True
+        except Exception as e:
+            logging.error(f"Unable to close all positions. Error: {e}")
+            return False
+    
+    def modify_position(self, dealId=None, stop_amount=None, profit_amount=None, stop_level=None, profit_level=None,
+                        X_SECURITY_TOKEN=None, CST=None,
+                        print_answer=True) -> bool:
+        """Modify an existing position. Note!! As with the close all order method, this wil modify the 'last' dealID, so really it is only meant for one active position. Must find a better solution later.
+        The issue is that creating and placing an order, doesn't give you the right dealreference - it is only temporary. So to close a position, we need to get all active positions from active positions, and
+        extract all dealIds there. So i have no way of filtering based on a position. I think this will work for now, but should be solved later. Perhaps based on the time it was placed, amount or symbol?"""
+        try:
+            if dealId is None:
+                all_positions_after_new = trading.all_positions(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
+                
+                dealIds = br_util.process_positions(all_positions_after_new)  # Getting all dealIDs
+                if len(dealIds) >= 2:
+                    logging.error(f"There are {len(dealIds)} active positions, which is more than 1! Will not confinue to modify! Either specify the dealId, or close not-relevant positions.")
+                    return False
+                for deal_ID in dealIds:
+                    dealId = deal_ID
+            trading.update_position(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer,
+                                    stop_amount=stop_amount, profit_amount=profit_amount, stop_level=stop_level, profit_level=profit_level, dealID=dealId)
+            return True
+        except Exception as e:
+            logging.error(f"Unable to modify position: {e}")
+            return False
+        
+    # ==================== LIVE DATA ====================
+    
+    def sub_live_market_data(self, symbol, timeframe, message_handler=None, X_SECURITY_TOKEN=None, CST=None):
+        try:
+            logging.info("About to initiate subscribtion to live market data...")
+            
+            # Initiating the subscription
+            ws = web_socket.sub_live_market_data(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token,
+                                                 CST=CST or self.cst,
+                                                 epic=symbol,
+                                                 resolution=timeframe,
+                                                 custom_message_handler=message_handler)
+            # Set up automatic pinging every 1 minutes (60 seconds) to make sure we don't time out
+            web_socket.setup_ping_timer(ws=ws,
+                                        X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token,
+                                        CST=CST or self.cst,
+                                        interval_seconds=60)
+            # Simple "hack" so that the program isn't terminated
+            # try:
+            #     while True:
+            #         time.sleep(1)
+            # except KeyboardInterrupt:
+            #     print("Program terminated by user")
+            
+            return True
+        except Exception as e:
+            logging.error(f"Error occured: {e}")
+            
+            return False

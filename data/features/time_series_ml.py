@@ -1448,7 +1448,7 @@ class MLModelStrategy:
         Returns:
             List of signal events
         """
-        from backtesting.events import SignalType
+        from core.events import SignalType
         
         signals = []
         

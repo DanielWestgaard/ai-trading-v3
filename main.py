@@ -1,8 +1,9 @@
 import argparse
+import time
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 
-from backtesting.strategies.model_based_strategy import ModelBasedStrategy
+from core.strategies.model_based_strategy import ModelBasedStrategy
 from data.pipelines.data_pipeline import DataPipeline
 from data.processors.cleaner import DataCleaner
 from models.model_factory import ModelFactory
@@ -13,6 +14,8 @@ import config.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model
+import live.run_live_integration as run_live_integration  # Old
+import live.live_trading_runner as live_trading_runner
 
 
 def parse_arguments():
@@ -26,26 +29,36 @@ def parse_arguments():
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
+    parser.add_argument('--live-integration', action='store_true', default=True, help='Test backtesting (simple)')
     
     return parser.parse_args()
 
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
-    logger.info("Hello")
+    logger = log_utils.setup_logging(name="live", log_to_file=True, log_level=sys_config.DEBUG_LOG_LEVEL)
+    
     if args.broker_func:
         broker = CapitalCom()
         broker.start_session()
         # broker.session_details(print_answer=True)
-        # broker.switch_active_account(print_answer=True)
+        #broker.switch_active_account(print_answer=False)
         # broker.list_all_accounts(print_answer=True)
-        # broker.get_historical_data(epic="SILVER", resolution="MINUTE_5",
-        #                            from_date="2020-02-24T00:00:00", to_date="2020-02-24T01:00:00",
+        # broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
+        #                            max=1000,
+        #                            from_date="2025-04-10T12:00:00", to_date="2025-04-10T13:10:00",
         #                            print_answer=True)
-        broker.fetch_and_save_historical_prices(epic="GBPUSD", resolution="MINUTE_5",
-                                                from_date="2024-01-01T00:00:00", to_date="2025-01-01T01:00:00",
-                                                print_answer=False)
+        # broker.fetch_and_save_historical_prices(epic="GBPUSD", resolution="MINUTE_5",
+        #                                         from_date="2024-01-01T00:00:00", to_date="2025-01-01T01:00:00",
+        #                                         print_answer=False)
+        
+        # broker.place_market_order(symbol="GBPUSD", direction="BUY", size="100", stop_level="1.27642", profit_level="1.28024")
+        # broker.all_positions()
+        # broker.modify_position(stop_level="1.25", profit_level="1.29")
+        # broker.close_all_orders(print_answer=False)
+        # broker.all_positions()
+        
+        #broker.sub_live_market_data(symbol="GBPUSD", timeframe="MINUTE")
         
         broker.end_session()
 
@@ -134,7 +147,7 @@ def main():
             model = ModelFactory.create_model(model_type)
 
             # 2. Load the saved model from disk
-            model_path = "model_related_storage/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+            model_path = "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
             success = model.load(model_path)
             if success:
                 run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
@@ -144,6 +157,9 @@ def main():
     if args.test_backtest:
         config_file = sys_config.CONFIG_BACKTESTING_PATH
         run_backtest.main(config_file=config_file)
+
+    if args.live_integration:
+        live_trading_runner.run_live_trading("config/live_trading_config.yaml", "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl")
 
 if __name__ == "__main__":
     exit(main())
