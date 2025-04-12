@@ -1,0 +1,42 @@
+backtest_id: ma_crossover_gbpusd
+strategy:
+  class_path: core.strategies.simple_ma_crossover.SimpleMovingAverageCrossover
+  parameters:
+    symbols:
+      - GBPUSD
+    short_window: 20
+    long_window: 50
+    use_sma: true
+    use_close: true
+    signal_threshold: 0.0
+    price_column: close_original
+
+market_data:
+  type: pipeline
+  parameters:
+    processed_data_path: data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+    symbols:
+      - GBPUSD
+    date_col: date
+
+initial_capital: 10000.0
+
+risk_manager:
+  position_sizing_method: percent
+  position_sizing_params:
+    percent: 10.0
+  max_position_size: null
+  max_portfolio_risk: 20.0
+  auto_stop_loss: true
+  stop_loss_method: percent
+  stop_loss_params:
+    percent: 2.0
+  auto_take_profit: true
+  take_profit_method: risk_reward
+  take_profit_params:
+    risk_reward_ratio: 2.0
+
+slippage_model: fixed
+slippage_params:
+  percent: 0.05
+  commission_percent: 0.1
