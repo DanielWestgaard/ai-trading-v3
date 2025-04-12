@@ -10,7 +10,7 @@ DEFAULT_LOG_LEVEL = logging.INFO
 DEBUG_LOG_LEVEL = logging.DEBUG
 
 # Directories
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # ai-trading-v3/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ai-trading-v3/
 BASE_LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 DIFFERENT_LOG_DIRS = ['training', 'data', 'trash', "trades", "performance", "backtesting"]
 BASE_DATA_DIR = os.path.join(BASE_DIR, 'data', 'storage')
@@ -31,7 +31,10 @@ ML_MODEL_RESULTS_DIR = os.path.join(MODEL_BASE_DIR, 'ml_model_results')
 MODEL_METADATA_DIR = os.path.join(MODEL_BASE_DIR, 'metadata')
 
 # Backtesting config
-CONFIG_BACKTESTING_PATH = os.path.join(BASE_CONFIG_DIR, 'indicator_strategy_config.json')
+BACKTESTING_CONFIG_PATH = os.path.join(BASE_CONFIG_DIR, 'backtesting', 'indicator_strategy_config.yaml')
+
+# Live config
+LIVE_TRADING_CONFIG_PATH = os.path.join(BASE_CONFIG_DIR, 'live', 'live_trading_config.yaml')
 
 # Environments
 DEV_ENV = "development"
