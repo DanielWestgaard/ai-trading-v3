@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 
 
-import config.market_config as config
+import config.constants.market_config as config
 
 
 # Global variables

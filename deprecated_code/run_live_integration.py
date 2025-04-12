@@ -12,7 +12,7 @@ from models.model_factory import ModelFactory
 from data.features.feature_generator import FeatureGenerator
 from data.features.feature_preparator import FeaturePreparator
 from data.processors.normalizer import DataNormalizer
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 def load_model_and_features(model_path: str = None):

@@ -18,7 +18,7 @@ from core.strategies.model_based_strategy import ModelBasedStrategy
 from core.risk.risk_manager import RiskManager, PositionSizer
 from live.execution_service.live_trading_service import LiveTradingService
 from live.live_data_handling.live_data_handler import LiveDataHandler
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 def load_config(config_path):

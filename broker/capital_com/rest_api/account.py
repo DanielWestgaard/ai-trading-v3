@@ -6,7 +6,7 @@ import logging
 import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import config.market_config as config
+import config.constants.market_config as config
 
 # Global variables
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)

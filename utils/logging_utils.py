@@ -7,7 +7,7 @@ from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 import json
 import traceback
 
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 # Global logger configuration state
 _is_configured = False

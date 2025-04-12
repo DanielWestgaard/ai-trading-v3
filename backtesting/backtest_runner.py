@@ -15,7 +15,7 @@ from core.portfolio.portfolio import Portfolio
 from core.performance.performance import PerformanceTracker
 from backtesting.visualization import BacktestVisualizer
 from core.risk.risk_manager import RiskManager
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 class BacktestRunner:

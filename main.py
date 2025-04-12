@@ -9,8 +9,8 @@ from data.processors.cleaner import DataCleaner
 from models.model_factory import ModelFactory
 import utils.logging_utils as log_utils
 from broker.capital_com.capitalcom import CapitalCom
-import config.data_config as data_config
-import config.system_config as sys_config
+import config.constants.data_config as data_config
+import config.constants.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model

@@ -1,5 +1,5 @@
 import os
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 # API related variables
 encryption = "false"  # Want to use password encryption? true for yes, false for no, TODO: implement this

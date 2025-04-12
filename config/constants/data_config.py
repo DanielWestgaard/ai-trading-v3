@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import os
 from typing import List, Dict, Any, Optional
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 # Directories
 TESTING_RAW_FILE = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, 'raw_GBPUSD_m5_20240101_20250101.csv')

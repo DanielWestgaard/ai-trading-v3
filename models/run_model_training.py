@@ -17,7 +17,7 @@ from models.model_factory import ModelFactory
 from backtesting.backtest_runner import BacktestRunner
 from core.strategies.model_based_strategy import ModelBasedStrategy
 from backtesting.data.market_data import PipelineMarketData
-from config import data_config
+from config.constants import data_config
 
 
 def load_data(data_path):
