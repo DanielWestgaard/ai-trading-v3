@@ -14,7 +14,6 @@ import config.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model
-import live.run_live_integration as run_live_integration  # Old
 import live.live_trading_runner as live_trading_runner
 
 
