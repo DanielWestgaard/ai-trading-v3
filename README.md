@@ -20,9 +20,9 @@ I have a quite large project (v2). I came really close to deploying a model on a
 ```
 algotrading/
 ├── config/                  # Configuration files
-│   ├── model_config.yaml    # Model hyperparameters
-│   ├── market_config.yaml   # Market-specific settings (forex, indices)
-│   └── system_config.yaml   # System-wide settings
+│   ├── backtesting/         YAML configuration file for how backtesting will run
+│   ├── live/                # YAML configuration file for how live system will run
+│   ├── constants/           # System settings, file settings, constants and paths
 │
 ├── brokers/                 # Broker API integration
 │   ├── base.py              # Abstract broker interface
