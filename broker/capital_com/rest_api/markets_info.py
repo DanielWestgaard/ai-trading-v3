@@ -12,10 +12,10 @@ from cryptography.hazmat.backends import default_backend
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 
-import config.market_config as config
+import config.constants.market_config as config
 from utils.broker_utils import convert_json_to_ohlcv_csv
-import config.system_config as sys_config
-import config.market_config as mark_config
+import config.constants.system_config as sys_config
+import config.constants.market_config as mark_config
 import utils.data_utils as data_utils
 
 

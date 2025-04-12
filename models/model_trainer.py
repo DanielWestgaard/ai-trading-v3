@@ -10,7 +10,7 @@ import seaborn as sns
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.preprocessing import StandardScaler
 from models.model_factory import ModelFactory
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 class ModelTrainer:
     """Class for training and evaluating prediction models."""

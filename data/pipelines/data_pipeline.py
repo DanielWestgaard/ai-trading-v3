@@ -8,8 +8,8 @@ from data.features.feature_generator import FeatureGenerator
 from data.features.feature_preparator import FeaturePreparator
 from data.processors.normalizer import DataNormalizer
 from data.features.feature_selector import FeatureSelector
-import config.data_config as data_config
-import config.system_config as sys_config
+import config.constants.data_config as data_config
+import config.constants.system_config as sys_config
 from utils import data_utils
 
 

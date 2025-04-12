@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from models.base_model import BaseModel
 from typing import Dict, List, Union, Tuple, Optional, Any
-import config.system_config as sys_congig
+import config.constants.system_config as sys_congig
 
 class XGBoostModel(BaseModel):
     """XGBoost model implementation."""

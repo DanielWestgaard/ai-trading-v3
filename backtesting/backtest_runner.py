@@ -9,13 +9,15 @@ import time
 from typing import Dict, List, Optional, Union, Any
 import importlib
 
+import yaml
+
 from backtesting.event_backtester import EventDrivenBacktester
 from backtesting.data.market_data import CSVMarketData, DataFrameMarketData, PipelineMarketData
 from core.portfolio.portfolio import Portfolio
 from core.performance.performance import PerformanceTracker
 from backtesting.visualization import BacktestVisualizer
 from core.risk.risk_manager import RiskManager
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 class BacktestRunner:
@@ -61,14 +63,19 @@ class BacktestRunner:
     
     def load_config(self, config_path: str):
         """
-        Load configuration from a JSON file.
+        Load configuration from a file (YAML or JSON).
         
         Args:
             config_path: Path to configuration file
         """
         try:
             with open(config_path, 'r') as f:
-                self.config = json.load(f)
+                # Determine file type based on extension
+                if config_path.endswith('.yaml') or config_path.endswith('.yml'):
+                    self.config = yaml.safe_load(f)
+                else:
+                    # Fall back to JSON for backward compatibility
+                    self.config = json.load(f)
             logging.info(f"Loaded configuration from {config_path}")
         except Exception as e:
             logging.error(f"Error loading configuration: {str(e)}")
@@ -76,17 +83,21 @@ class BacktestRunner:
     
     def save_config(self, config_path: Optional[str] = None):
         """
-        Save current configuration to a JSON file.
+        Save current configuration to a file.
         
         Args:
-            config_path: Path to save configuration (default: config.json in output_dir)
+            config_path: Path to save configuration (default: config.yaml in output_dir)
         """
         if not config_path:
-            config_path = os.path.join(self.output_dir, 'config.json')
+            config_path = os.path.join(self.output_dir, 'config.yaml')  # Changed extension
         
         try:
             with open(config_path, 'w') as f:
-                json.dump(self.config, f, indent=4)
+                # Determine file type based on extension
+                if config_path.endswith('.yaml') or config_path.endswith('.yml'):
+                    yaml.dump(self.config, f, default_flow_style=False, sort_keys=False)
+                else:
+                    json.dump(self.config, f, indent=2)
             logging.info(f"Saved configuration to {config_path}")
         except Exception as e:
             logging.error(f"Error saving configuration: {str(e)}")

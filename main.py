@@ -9,8 +9,8 @@ from data.processors.cleaner import DataCleaner
 from models.model_factory import ModelFactory
 import utils.logging_utils as log_utils
 from broker.capital_com.capitalcom import CapitalCom
-import config.data_config as data_config
-import config.system_config as sys_config
+import config.constants.data_config as data_config
+import config.constants.system_config as sys_config
 import models.run_model_training as run_model
 import backtesting.run_backtest as run_backtest
 import models.base_model as base_model
@@ -35,7 +35,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="live", log_to_file=True, log_level=sys_config.DEBUG_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="live", log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
@@ -154,11 +154,13 @@ def main():
                 logger.error("Could not find model.")
         
     if args.test_backtest:
-        config_file = sys_config.CONFIG_BACKTESTING_PATH
+        config_file = sys_config.BACKTESTING_CONFIG_PATH
         run_backtest.main(config_file=config_file)
 
     if args.live_integration:
-        live_trading_runner.run_live_trading("config/live_trading_config.yaml", "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl")
+        config_file = sys_config.LIVE_TRADING_CONFIG_PATH
+        model_path = "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+        live_trading_runner.run_live_trading(config_file, model_path)
 
 if __name__ == "__main__":
     exit(main())

@@ -11,7 +11,7 @@ import os
 import time
 import matplotlib.pyplot as plt
 
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 from utils import data_utils
 
 

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Dict, List, Union, Tuple, Optional, Any
 from datetime import datetime
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 class ModelFeatureSelector:

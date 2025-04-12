@@ -10,7 +10,7 @@ from cryptography.hazmat.backends import default_backend
 import json
 
 from utils.broker_utils import extract_deal_reference, load_secrets
-import config.market_config as config
+import config.constants.market_config as config
 
 conn = http.client.HTTPSConnection(config.BASE_DEMO_URL)
 

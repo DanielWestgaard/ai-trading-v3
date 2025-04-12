@@ -5,8 +5,8 @@ from datetime import datetime
 import sys
 import json
 
-import config.system_config as sys_config
-import config.market_config as mark_config
+import config.constants.system_config as sys_config
+import config.constants.market_config as mark_config
 
 
 def load_secrets_alpaca(file_path="secrets/secrets.txt"):

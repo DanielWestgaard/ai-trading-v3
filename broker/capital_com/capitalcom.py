@@ -7,7 +7,7 @@ from datetime import datetime
 
 from broker.base_interface import BaseBroker
 import utils.broker_utils as br_util
-import config.market_config as mark_config
+import config.constants.market_config as mark_config
 import broker.capital_com.rest_api.account as account
 import broker.capital_com.rest_api.session as session
 import broker.capital_com.rest_api.trading as trading

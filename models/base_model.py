@@ -7,7 +7,7 @@ import pickle
 import logging
 from datetime import datetime
 from typing import Dict, List, Union, Tuple, Optional, Any
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 class BaseModel(ABC):
     """Abstract base class for all prediction models."""

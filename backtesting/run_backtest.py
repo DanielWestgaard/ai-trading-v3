@@ -21,7 +21,7 @@ from backtesting.backtest_runner import BacktestRunner
 from core.strategies.simple_ma_crossover import SimpleMovingAverageCrossover, MACDStrategy
 from backtesting.data.market_data import CSVMarketData, PipelineMarketData
 import utils.logging_utils as log_utils
-import config.system_config as sys_config
+import config.constants.system_config as sys_config
 
 
 def parse_args():
