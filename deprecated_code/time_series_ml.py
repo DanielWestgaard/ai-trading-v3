@@ -1,16 +1,22 @@
+import os
 import pandas as pd
 import numpy as np
 import logging
 import matplotlib.pyplot as plt
+import joblib
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Union, Tuple
+from typing import Dict, List, Optional, Union, Any, Callable, Tuple
+from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, precision_score, recall_score, f1_score
+import json
 
-from data.processors.base_processor import BaseProcessor
+from backtesting.backtest_runner import BacktestRunner
+from utils import data_utils
 
 
-class TimeSeriesSplitter(BaseProcessor):
+# Implemented in processors/splitter
+class TimeSeriesSplit:
     """
-    Time Series Split Processor that respects temporal order.
+    Time Series Cross-Validation Splitter that respects temporal order.
     Designed to work with your existing data pipeline.
     """
     
@@ -24,7 +30,7 @@ class TimeSeriesSplitter(BaseProcessor):
                  n_splits: Optional[int] = None,
                  date_column: str = 'date'):
         """
-        Initialize Time Series Splitter processor.
+        Initialize Time Series Splitter.
         
         Args:
             train_period: Length of the training period
@@ -39,9 +45,6 @@ class TimeSeriesSplitter(BaseProcessor):
             n_splits: Number of splits (if specified, overrides other parameters)
             date_column: Name of the date/timestamp column
         """
-        logging.info("Initializing TimeSeriesSplitter with train_period=%s, test_period=%s", 
-                    train_period, test_period)
-        
         self.train_period = train_period
         self.test_period = test_period
         self.step_size = step_size if step_size is not None else test_period
@@ -50,10 +53,6 @@ class TimeSeriesSplitter(BaseProcessor):
         self.end_date = end_date
         self.n_splits = n_splits
         self.date_column = date_column
-        
-        # Store the generated splits
-        self.splits = None
-        self.current_split_index = 0
     
     def _parse_period(self, period: Union[str, int, timedelta], 
                     reference_index: pd.DatetimeIndex) -> Union[int, timedelta]:
@@ -101,65 +100,7 @@ class TimeSeriesSplitter(BaseProcessor):
         logging.warning(f"Unrecognized period type: {type(period)}. Using default 30 days.")
         return timedelta(days=30)
 
-    def fit(self, data: pd.DataFrame) -> 'TimeSeriesSplitter':
-        """
-        Generate and store train/test splits respecting temporal order.
-        
-        Args:
-            data: DataFrame containing time series data
-            
-        Returns:
-            Self (fitted splitter)
-        """
-        logging.info("Generating time series splits for data with shape %s", data.shape)
-        
-        # Generate splits
-        self.splits = self._generate_splits(data)
-        self.current_split_index = 0
-        
-        logging.info("Created %d time series splits", len(self.splits))
-        return self
-    
-    def transform(self, data: pd.DataFrame) -> pd.DataFrame:
-        """
-        Returns the current split data with a 'split_type' column indicating train or test.
-        If called repeatedly, will cycle through all available splits.
-        
-        Args:
-            data: DataFrame containing time series data (ignored if splits already generated)
-            
-        Returns:
-            DataFrame with 'split_type' column indicating 'train' or 'test'
-        """
-        if self.splits is None:
-            logging.warning("No splits available. Fitting the splitter first.")
-            self.fit(data)
-        
-        if not self.splits:
-            logging.warning("No valid splits were generated. Returning original data.")
-            return data
-        
-        # Get the current split and prepare to return the next one on the next call
-        train_data, test_data = self.splits[self.current_split_index]
-        self.current_split_index = (self.current_split_index + 1) % len(self.splits)
-        
-        # Mark the data as train or test
-        train_data = train_data.copy()
-        test_data = test_data.copy()
-        train_data['split_type'] = 'train'
-        test_data['split_type'] = 'test'
-        
-        # Combine and return
-        combined = pd.concat([train_data, test_data])
-        combined['split_index'] = self.current_split_index
-        
-        logging.info("Returning split %d of %d (train: %d rows, test: %d rows)",
-                   self.current_split_index, len(self.splits), 
-                   len(train_data), len(test_data))
-        
-        return combined
-    
-    def _generate_splits(self, data: pd.DataFrame) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
+    def split(self, data: pd.DataFrame) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
         """
         Generate train/test splits respecting temporal order.
         
@@ -336,49 +277,19 @@ class TimeSeriesSplitter(BaseProcessor):
         
         return splits
     
-    def get_splits(self) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
-        """
-        Get all generated splits.
-        
-        Returns:
-            List of (train_data, test_data) tuples
-        """
-        if self.splits is None:
-            logging.warning("Splits not yet generated. Call fit() first.")
-            return []
-        return self.splits
-    
-    def plot_splits(self, data: pd.DataFrame = None, value_column: str = 'close', 
-                  figsize: tuple = (15, 8)):
+    def plot_splits(self, data: pd.DataFrame, value_column: str = 'close_original', 
+                  figsize: tuple = (15, 8)) -> plt.Figure:
         """
         Visualize the train/test splits.
         
         Args:
-            data: DataFrame containing time series data (if None, uses the data from fit)
+            data: DataFrame containing time series data
             value_column: Name of the value column to plot
             figsize: Figure size
             
         Returns:
             Matplotlib figure
         """
-        if self.splits is None and data is None:
-            logging.warning("No data available for visualization. Call fit() first or provide data.")
-            return None
-            
-        # If splits not generated but data provided, generate them now
-        if self.splits is None and data is not None:
-            self.fit(data)
-            
-        # Get first split if splits exist but no data provided
-        if data is None:
-            if not self.splits:
-                logging.warning("No splits available for visualization.")
-                return None
-                
-            # Use the first split's data to reconstruct the full dataset
-            train_data, test_data = self.splits[0]
-            data = pd.concat([train_data, test_data])
-            
         # Create a copy to avoid modifying the original
         df = data.copy()
         
@@ -402,22 +313,24 @@ class TimeSeriesSplitter(BaseProcessor):
                 else:
                     raise ValueError("No suitable numeric column found for visualization")
         
+        splits = self.split(df)
+        
         fig, ax = plt.subplots(figsize=figsize)
         
         # Plot full dataset
         ax.plot(df[self.date_column], df[value_column], label='Full Dataset', color='grey', alpha=0.5)
         
         # Plot each split
-        colors = plt.cm.viridis(np.linspace(0, 1, len(self.splits)))
+        colors = plt.cm.viridis(np.linspace(0, 1, len(splits)))
         
-        for i, (train, test) in enumerate(self.splits):
+        for i, (train, test) in enumerate(splits):
             ax.scatter(train[self.date_column], train[value_column], color=colors[i], marker='.', s=30, alpha=0.5,
-                      label=f'Train {i+1}' if i < 3 or i == len(self.splits)-1 else '')
+                      label=f'Train {i+1}' if i < 3 or i == len(splits)-1 else '')
             ax.scatter(test[self.date_column], test[value_column], color=colors[i], marker='x', s=30,
-                      label=f'Test {i+1}' if i < 3 or i == len(self.splits)-1 else '')
+                      label=f'Test {i+1}' if i < 3 or i == len(splits)-1 else '')
         
-        if len(self.splits) > 4:
-            ax.plot([], [], ' ', label=f'... and {len(self.splits) - 4} more splits')
+        if len(splits) > 4:
+            ax.plot([], [], ' ', label=f'... and {len(splits) - 4} more splits')
         
         ax.set_title('Time Series Cross-Validation Splits')
         ax.set_xlabel('Date')
