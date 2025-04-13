@@ -10,3 +10,5 @@ cryptography
 scipy
 xgboost
 graphviz
+pytest
+pytest-cov

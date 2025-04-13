@@ -8,3 +8,8 @@ This is only temporary information during the development of tests. Once it is c
 
 ## Data pipeline testing 
 ...
+
+# How to run examples:
+- ```pytest tests/data/test_cleaner.py::TestDataCleaner::test_initialization```
+- ```pytest tests/data/test_cleaner.py```
+- ```pytest```
