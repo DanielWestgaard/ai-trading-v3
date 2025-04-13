@@ -27,3 +27,16 @@
 - End-to-end tests: Validate complete data flows through the pipeline
 - Performance tests: Measure throughput, latency, and resource usage
 - Data quality tests: Validate business rules and data quality expectations
+
+## Data Pipeline Testing: Your First Line of Defense
+Your data pipeline deserves the most rigorous testing in your entire codebase. Here's why:
+
+- Garbage In = Garbage Out: All models, strategies, and decisions depend on clean, accurate data. Testing data transformations is your foundation.
+- Silent Failure Risk: Data bugs are often silent and won't throw exceptions—they just produce wrong results that propagate through your system.
+- Financial Impact: In live trading, data errors directly translate to financial losses.
+
+Time-Series Specific Pitfalls:
+- Look-ahead bias (using future data)
+- Survivorship bias
+- Timeline alignment issues
+- Timezone inconsistencies
