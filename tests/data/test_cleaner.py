@@ -73,6 +73,15 @@ class TestDataCleaner(unittest.TestCase):
             'Volume': [1000, 1200, 900, 1500, 1300, 700, 1000]
         })
         
+        self.volume_outlier_data = pd.DataFrame({
+            'Timestamp': dates,
+            'Open': [100, 105, 103, 103, 106, 107, 105, 104, 102, 101],
+            'High': [110, 115, 108, 108, 116, 117, 115, 114, 112, 111],
+            'Low': [95, 100, 97, 98, 101, 102, 100, 99, 97, 96],
+            'Close': [105, 107, 102, 104, 110, 112, 108, 105, 100, 98],
+            'Volume': [1000, 1200, 900, 800, 1500, 1300, 1100, 900, 700, 20000]  # Outlier in last row
+        })
+        
         # Create default cleaner instance
         self.cleaner = DataCleaner()
     
@@ -122,8 +131,8 @@ class TestDataCleaner(unittest.TestCase):
     
     def test_handle_missing_values(self):
         """Test the handling of missing values"""
-        # Fit and transform the data
-        cleaner = DataCleaner(missing_method='ffill')
+        # Fit and transform the data - setting preserve_original_case to False for this test
+        cleaner = DataCleaner(missing_method='ffill', preserve_original_case=False)
         transformed_data = cleaner.fit_transform(self.sample_data)
         
         # Check that there are no NaN values in the result
@@ -134,7 +143,7 @@ class TestDataCleaner(unittest.TestCase):
         self.assertEqual(transformed_data['open'].iloc[2], self.sample_data['Open'].iloc[1])
         
         # Test interpolation method
-        cleaner_interp = DataCleaner(missing_method='interpolate')
+        cleaner_interp = DataCleaner(missing_method='interpolate', preserve_original_case=False)
         transformed_interp = cleaner_interp.fit_transform(self.sample_data)
         
         # Check that there are no NaN values in the result
@@ -149,8 +158,8 @@ class TestDataCleaner(unittest.TestCase):
         """Test the detection and handling of outliers"""
         # Test with different outlier methods
         
-        # 1. Z-score method
-        cleaner_zscore = DataCleaner(outlier_method='zscore', outlier_threshold=2.0)
+        # 1. Z-score method - setting preserve_original_case to False for this test
+        cleaner_zscore = DataCleaner(outlier_method='zscore', outlier_threshold=2.0, preserve_original_case=False)
         result_zscore = cleaner_zscore.fit_transform(self.outlier_data)
         
         # The last row had an extreme value (500) for Open which should be capped
@@ -158,14 +167,14 @@ class TestDataCleaner(unittest.TestCase):
         self.assertLess(result_zscore['open'].iloc[-1], self.outlier_data['Open'].iloc[-1])
         
         # 2. IQR method
-        cleaner_iqr = DataCleaner(outlier_method='iqr', outlier_threshold=1.5)
+        cleaner_iqr = DataCleaner(outlier_method='iqr', outlier_threshold=1.5, preserve_original_case=False)
         result_iqr = cleaner_iqr.fit_transform(self.outlier_data)
         
         # Check that the outlier was reduced
         self.assertLess(result_iqr['open'].iloc[-1], self.outlier_data['Open'].iloc[-1])
         
         # 3. Winsorize method
-        cleaner_winsorize = DataCleaner(outlier_method='winsorize')
+        cleaner_winsorize = DataCleaner(outlier_method='winsorize', preserve_original_case=False)
         result_winsorize = cleaner_winsorize.fit_transform(self.outlier_data)
         
         # Check that the outlier was reduced
@@ -173,7 +182,8 @@ class TestDataCleaner(unittest.TestCase):
     
     def test_ensure_ohlc_validity(self):
         """Test ensuring OHLC validity (High ≥ Open ≥ Close ≥ Low)"""
-        cleaner = DataCleaner(ensure_ohlc_validity=True)
+        # Setting preserve_original_case to False for this test
+        cleaner = DataCleaner(ensure_ohlc_validity=True, preserve_original_case=False)
         result = cleaner.fit_transform(self.invalid_ohlc)
         
         # Check that High is always the maximum
@@ -266,7 +276,7 @@ class TestDataCleaner(unittest.TestCase):
     def test_end_to_end(self):
         """Test the complete data cleaning process end-to-end"""
         # Create a complex test case with multiple issues
-        dates = pd.date_range(start='2023-01-01', periods=15, freq='1D')
+        dates = pd.date_range(start='2023-01-01', periods=15, freq='min')
         
         complex_data = pd.DataFrame({
             'Timestamp': dates,
@@ -277,7 +287,8 @@ class TestDataCleaner(unittest.TestCase):
             'Volume': [1000, 1200, np.nan, 800, 1500, 1300, 1100, 900, 700, 1000, 1100, 1200, 1300, 1400, 20000]  # Missing and outlier
         })
         
-        # Configure cleaner with all options enabled
+        # Configure cleaner with all options enabled - but note that volume outliers won't be handled
+        # because _handle_outliers only processes price_cols
         complete_cleaner = DataCleaner(
             missing_method='ffill',
             outlier_method='zscore',
@@ -299,9 +310,85 @@ class TestDataCleaner(unittest.TestCase):
             self.assertLessEqual(result['Low'].iloc[i], result['Open'].iloc[i])
             self.assertLessEqual(result['Low'].iloc[i], result['Close'].iloc[i])
         
-        # Check that extreme outliers were handled
+        # Check that extreme outliers were handled for High (price column)
+        self.assertLess(result['High'].iloc[-1], complex_data['High'].iloc[-1])
+        
+        # MODIFY THIS LINE: Don't check Volume outlier since the current implementation
+        # doesn't handle volume outliers (it only processes price_cols)
+        # Instead, verify Volume is the same as in the original data
+        self.assertEqual(result['Volume'].iloc[-1], complex_data['Volume'].iloc[-1])
+        
+    def test_volume_outlier_handling(self):
+        """Test that volume outliers are handled when requested"""
+        # Create cleaner with volume outlier handling enabled
+        cleaner = DataCleaner(
+            outlier_method='zscore',
+            outlier_threshold=2.0,
+            handle_volume_outliers=True,
+            preserve_original_case=True
+        )
+        
+        # Fit and transform the data
+        result = cleaner.fit_transform(self.volume_outlier_data)
+        
+        # Check that the volume outlier was reduced
+        self.assertLess(result['Volume'].iloc[-1], self.volume_outlier_data['Volume'].iloc[-1])
+        
+        # Create cleaner with volume outlier handling disabled (default)
+        cleaner_no_volume = DataCleaner(
+            outlier_method='zscore',
+            outlier_threshold=2.0,
+            handle_volume_outliers=False,
+            preserve_original_case=True
+        )
+        
+        # Fit and transform the data
+        result_no_volume = cleaner_no_volume.fit_transform(self.volume_outlier_data)
+        
+        # Check that the volume outlier was NOT changed
+        self.assertEqual(result_no_volume['Volume'].iloc[-1], self.volume_outlier_data['Volume'].iloc[-1])
+    
+    def test_end_to_end_with_volume_outliers(self):
+        """Test the complete data cleaning process with volume outlier handling"""
+        # Create a complex test case with multiple issues including volume outliers
+        dates = pd.date_range(start='2023-01-01', periods=15, freq='min')
+        
+        complex_data = pd.DataFrame({
+            'Timestamp': dates,
+            'Open': [100, 105, np.nan, 103, 106, 107, 105, 104, 102, 101, 103, 104, 105, 106, 107],
+            'High': [95, 115, 108, 108, 105, 117, 115, 103, 112, 111, 113, 114, 115, 116, 400],  # Invalid High and outlier
+            'Low': [105, 100, 97, 108, 101, 102, 100, 99, 97, 96, 98, 99, 100, 101, 102],      # Invalid Low
+            'Close': [105, 107, 102, 104, 110, 112, 108, 105, 100, 98, 99, 100, 101, 102, 103],
+            'Volume': [1000, 1200, np.nan, 800, 1500, 1300, 1100, 900, 700, 1000, 1100, 1200, 1300, 1400, 20000]  # Missing and outlier
+        })
+        
+        # Configure cleaner with all options enabled, including volume outlier handling
+        complete_cleaner = DataCleaner(
+            missing_method='ffill',
+            outlier_method='zscore',
+            outlier_threshold=2.5,
+            ensure_ohlc_validity=True,
+            preserve_original_case=True,
+            handle_volume_outliers=True
+        )
+        
+        result = complete_cleaner.fit_transform(complex_data)
+        
+        # Check that result maintains expected properties
+        self.assertEqual(len(result), len(complex_data))  # Same number of rows
+        self.assertEqual(result.isna().sum().sum(), 0)    # No missing values
+        
+        # Check OHLC validity
+        for i in range(len(result)):
+            self.assertGreaterEqual(result['High'].iloc[i], result['Open'].iloc[i])
+            self.assertGreaterEqual(result['High'].iloc[i], result['Close'].iloc[i])
+            self.assertLessEqual(result['Low'].iloc[i], result['Open'].iloc[i])
+            self.assertLessEqual(result['Low'].iloc[i], result['Close'].iloc[i])
+        
+        # Check that extreme outliers were handled for both High and Volume
         self.assertLess(result['High'].iloc[-1], complex_data['High'].iloc[-1])
         self.assertLess(result['Volume'].iloc[-1], complex_data['Volume'].iloc[-1])
+
 
 
 if __name__ == '__main__':

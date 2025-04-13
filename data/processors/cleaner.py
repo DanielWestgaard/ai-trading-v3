@@ -19,7 +19,8 @@ class DataCleaner(BaseProcessor):
                  outlier_threshold: float = 3.0,
                  ensure_ohlc_validity: bool = True,
                  resample_rule: Optional[str] = None,
-                 preserve_original_case: bool = True):  # New parameter to preserve column case
+                 preserve_original_case: bool = True,
+                 handle_volume_outliers: bool = False):
         """
         Initialize the data cleaner with configuration parameters.
         
@@ -33,6 +34,7 @@ class DataCleaner(BaseProcessor):
             ensure_ohlc_validity: Fix invalid OHLC relationships
             resample_rule: Optional rule for resampling (e.g., '5min', '1h')
             preserve_original_case: Whether to preserve the original case of column names
+            handle_volume_outliers: Whether to apply outlier handling to volume data
         """
         logging.info("Initiating data cleaning with configuration: %s", 
                      {"price_cols": price_cols, "volume_col": volume_col, 
@@ -44,6 +46,7 @@ class DataCleaner(BaseProcessor):
         self.original_volume_col = volume_col
         self.original_timestamp_col = timestamp_col
         self.preserve_original_case = preserve_original_case
+        self.handle_volume_outliers = handle_volume_outliers
         
         # Convert to lowercase for internal processing
         self.price_cols = [col.lower() for col in price_cols]
@@ -89,8 +92,19 @@ class DataCleaner(BaseProcessor):
                 self._stats[f"{col}_q3"] = df[col].quantile(0.75)
                 self._stats[f"{col}_iqr"] = self._stats[f"{col}_q3"] - self._stats[f"{col}_q1"]
         
+        # Also calculate statistics for volume if handling volume outliers
+        if self.handle_volume_outliers and self.volume_col in df.columns:
+            logging.debug("Calculating statistics for volume column: %s", self.volume_col)
+            self._stats[f"{self.volume_col}_mean"] = df[self.volume_col].mean()
+            self._stats[f"{self.volume_col}_std"] = df[self.volume_col].std()
+            self._stats[f"{self.volume_col}_median"] = df[self.volume_col].median()
+            self._stats[f"{self.volume_col}_q1"] = df[self.volume_col].quantile(0.25)
+            self._stats[f"{self.volume_col}_q3"] = df[self.volume_col].quantile(0.75)
+            self._stats[f"{self.volume_col}_iqr"] = self._stats[f"{self.volume_col}_q3"] - self._stats[f"{self.volume_col}_q1"]
+        
         logging.info("DataCleaner fitting completed. Statistics calculated for %d columns.", 
-                     len([col for col in self.price_cols if col in df.columns]))
+                     len([col for col in self.price_cols if col in df.columns]) + 
+                     (1 if self.handle_volume_outliers and self.volume_col in df.columns else 0))
         return self
     
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
@@ -194,7 +208,14 @@ class DataCleaner(BaseProcessor):
                     # Handle case where first values might be NaN
                     df[col] = df[col].bfill()
                 elif self.missing_method == 'interpolate':
-                    df[col] = df[col].interpolate(method='time')
+                    # Check if we're dealing with time series data with a datetime index
+                    if isinstance(df.index, pd.DatetimeIndex):
+                        # If we have a datetime index, use time-weighted interpolation
+                        df[col] = df[col].interpolate(method='time')
+                    else:
+                        # For non-time indexed data, use linear interpolation instead
+                        df[col] = df[col].interpolate(method='linear')
+                    
                     # Handle endpoints
                     df[col] = df[col].ffill().bfill()
                 
@@ -222,6 +243,7 @@ class DataCleaner(BaseProcessor):
             logging.warning("No statistics available for outlier detection. Run fit() first.")
             return df
             
+        # Process price columns
         for col in self.price_cols:
             if col not in df.columns:
                 continue
@@ -292,6 +314,75 @@ class DataCleaner(BaseProcessor):
                     df[col] = df[col].clip(lower=lower_bound, upper=upper_bound).astype(original_dtype)
                 except Exception as e:
                     logging.error("Error winsorizing column %s: %s", col, str(e))
+        
+        # Process volume column if requested
+        if self.handle_volume_outliers and self.volume_col in df.columns:
+            logging.debug("Processing outliers for volume column: %s", self.volume_col)
+            
+            # Store original dtype to preserve it
+            original_dtype = df[self.volume_col].dtype
+            
+            if self.outlier_method == 'zscore':
+                # Z-score method
+                mean = self._stats[f"{self.volume_col}_mean"]
+                std = self._stats[f"{self.volume_col}_std"]
+                outliers = abs((df[self.volume_col] - mean) / std) > self.outlier_threshold
+                outlier_count = outliers.sum()
+                
+                if outlier_count > 0:
+                    logging.info("Found %d outliers (%.2f%%) in volume column using zscore method", 
+                            outlier_count, (outlier_count/len(df))*100)
+                    
+                    # Create replacement values
+                    replacement_values = np.where(
+                        df.loc[outliers, self.volume_col] > mean,
+                        mean + (self.outlier_threshold * std),
+                        mean - (self.outlier_threshold * std)
+                    )
+                    
+                    # Convert to the original dtype before assignment
+                    df.loc[outliers, self.volume_col] = pd.Series(replacement_values, index=df.loc[outliers].index).astype(original_dtype)
+            
+            elif self.outlier_method == 'iqr':
+                # IQR method
+                q1 = self._stats[f"{self.volume_col}_q1"]
+                q3 = self._stats[f"{self.volume_col}_q3"]
+                iqr = self._stats[f"{self.volume_col}_iqr"]
+                lower_bound = q1 - (self.outlier_threshold * iqr)
+                upper_bound = q3 + (self.outlier_threshold * iqr)
+                
+                # Count outliers before clipping
+                lower_outliers = (df[self.volume_col] < lower_bound).sum()
+                upper_outliers = (df[self.volume_col] > upper_bound).sum()
+                
+                if lower_outliers > 0 or upper_outliers > 0:
+                    logging.info("Volume column: Found %d lower outliers and %d upper outliers using IQR method", 
+                            lower_outliers, upper_outliers)
+                
+                # Clip values to bounds and convert to original dtype
+                df[self.volume_col] = df[self.volume_col].clip(lower=lower_bound, upper=upper_bound).astype(original_dtype)
+                
+            elif self.outlier_method == 'winsorize':
+                # Winsorize (clip to percentiles)
+                lower_percentile = 1
+                upper_percentile = 99
+                
+                try:
+                    lower_bound = np.percentile(df[self.volume_col].dropna(), lower_percentile)
+                    upper_bound = np.percentile(df[self.volume_col].dropna(), upper_percentile)
+                    
+                    # Count outliers before clipping
+                    lower_outliers = (df[self.volume_col] < lower_bound).sum()
+                    upper_outliers = (df[self.volume_col] > upper_bound).sum()
+                    
+                    if lower_outliers > 0 or upper_outliers > 0:
+                        logging.info("Volume column: Winsorizing %d lower outliers and %d upper outliers", 
+                                lower_outliers, upper_outliers)
+                    
+                    # Clip values to bounds and convert to original dtype
+                    df[self.volume_col] = df[self.volume_col].clip(lower=lower_bound, upper=upper_bound).astype(original_dtype)
+                except Exception as e:
+                    logging.error("Error winsorizing volume column: %s", str(e))
                 
         return df
         
