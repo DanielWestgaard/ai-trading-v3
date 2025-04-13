@@ -228,6 +228,9 @@ class DataCleaner(BaseProcessor):
                 
             logging.debug("Processing outliers for column: %s", col)
             
+            # Store original dtype to preserve it
+            original_dtype = df[col].dtype
+            
             if self.outlier_method == 'zscore':
                 # Z-score method
                 mean = self._stats[f"{col}_mean"]
@@ -237,15 +240,18 @@ class DataCleaner(BaseProcessor):
                 
                 if outlier_count > 0:
                     logging.info("Found %d outliers (%.2f%%) in column %s using zscore method", 
-                                outlier_count, (outlier_count/len(df))*100, col)
+                            outlier_count, (outlier_count/len(df))*100, col)
                     
-                    # Replace outliers with threshold values
-                    df.loc[outliers, col] = np.where(
+                    # Create replacement values
+                    replacement_values = np.where(
                         df.loc[outliers, col] > mean,
                         mean + (self.outlier_threshold * std),
                         mean - (self.outlier_threshold * std)
                     )
-                
+                    
+                    # Convert to the original dtype before assignment
+                    df.loc[outliers, col] = pd.Series(replacement_values, index=df.loc[outliers].index).astype(original_dtype)
+            
             elif self.outlier_method == 'iqr':
                 # IQR method
                 q1 = self._stats[f"{col}_q1"]
@@ -260,10 +266,10 @@ class DataCleaner(BaseProcessor):
                 
                 if lower_outliers > 0 or upper_outliers > 0:
                     logging.info("Column %s: Found %d lower outliers and %d upper outliers using IQR method", 
-                                col, lower_outliers, upper_outliers)
+                            col, lower_outliers, upper_outliers)
                 
-                # Clip values to bounds
-                df[col] = df[col].clip(lower=lower_bound, upper=upper_bound)
+                # Clip values to bounds and convert to original dtype
+                df[col] = df[col].clip(lower=lower_bound, upper=upper_bound).astype(original_dtype)
                 
             elif self.outlier_method == 'winsorize':
                 # Winsorize (clip to percentiles)
@@ -280,14 +286,15 @@ class DataCleaner(BaseProcessor):
                     
                     if lower_outliers > 0 or upper_outliers > 0:
                         logging.info("Column %s: Winsorizing %d lower outliers and %d upper outliers", 
-                                    col, lower_outliers, upper_outliers)
+                                col, lower_outliers, upper_outliers)
                     
-                    df[col] = df[col].clip(lower=lower_bound, upper=upper_bound)
+                    # Clip values to bounds and convert to original dtype
+                    df[col] = df[col].clip(lower=lower_bound, upper=upper_bound).astype(original_dtype)
                 except Exception as e:
                     logging.error("Error winsorizing column %s: %s", col, str(e))
                 
         return df
-    
+        
     def _ensure_time_continuity(self, df: pd.DataFrame) -> pd.DataFrame:
         """Ensure regular time intervals by resampling"""
         logging.debug("Ensuring time continuity with resample rule: %s", self.resample_rule)

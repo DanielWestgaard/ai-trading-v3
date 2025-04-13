@@ -25,10 +25,10 @@ def parse_arguments():
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
-    parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
+    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
-    parser.add_argument('--live-integration', action='store_true', default=True, help='Test backtesting (simple)')
+    parser.add_argument('--live-integration', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
 
@@ -67,7 +67,7 @@ def main():
         result, saved_file = data_pipeline.run(save_intermediate=False)
       
     if args.walk_forward_analysis:
-        from data.features.time_series_ml import WalkForwardAnalysis
+        from backtesting.walk_forward_analysis import WalkForwardAnalysis
 
         # Load your processed data
         data = pd.read_csv("data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv", 
