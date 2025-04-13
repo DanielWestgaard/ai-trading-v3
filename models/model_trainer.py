@@ -235,7 +235,7 @@ class ModelTrainer:
         Returns:
             Dictionary with cross-validation metrics
         """
-        from data.features.time_series_ml import TimeSeriesSplit
+        from data.processors.splitter import TimeSeriesSplitter
         
         # Extract CV parameters
         train_period = kwargs.pop('train_period', '3M')
@@ -243,7 +243,7 @@ class ModelTrainer:
         step_size = kwargs.pop('step_size', None)
         
         # Create a splitter
-        splitter = TimeSeriesSplit(
+        splitter = TimeSeriesSplitter(
             train_period=train_period,
             test_period=test_period,
             step_size=step_size,
@@ -253,8 +253,9 @@ class ModelTrainer:
         # Prepare data first to prepare target column
         _, _, target_col = self.prepare_data_for_cv(data)
         
-        # Generate splits
-        splits = splitter.split(data)
+        # Fit the splitter and get the splits
+        splitter.fit(data)
+        splits = splitter.get_splits()
         
         # Initialize containers for metrics
         cv_metrics = {}
