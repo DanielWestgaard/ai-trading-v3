@@ -386,3 +386,47 @@ def get_derived_file_path(processed_file, file_type, base_dir=None, sub_dir=None
     
     # Return the full file path
     return os.path.join(dir_path, filename)
+
+
+def _find_column_by_pattern(df, pattern):
+    """
+    Find a column in the dataframe that matches the given pattern.
+    
+    Args:
+        df: DataFrame to search in
+        pattern: String pattern to match in column names
+        
+    Returns:
+        The name of the column if found, None otherwise
+    """
+    # First check for exact match (which would be faster)
+    if pattern in df.columns:
+        return pattern
+        
+    # Then look for pattern in column names
+    for col in df.columns:
+        if pattern in col.lower():
+            return col
+            
+    # Return None if no match is found
+    return None
+
+def _get_price_columns(df):
+    """
+    Find all the necessary price columns (open, high, low, close) in the dataframe.
+    
+    Args:
+        df: DataFrame to search in
+        
+    Returns:
+        Dictionary mapping standard names to actual column names found
+    """
+    columns = {}
+    
+    # Find each price column
+    columns['open'] = _find_column_by_pattern(df, 'open')
+    columns['high'] = _find_column_by_pattern(df, 'high')
+    columns['low'] = _find_column_by_pattern(df, 'low')
+    columns['close'] = _find_column_by_pattern(df, 'close')
+    
+    return columns

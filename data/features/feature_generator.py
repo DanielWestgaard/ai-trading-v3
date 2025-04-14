@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-from data.processors.base_processor import BaseProcessor
 
+from data.processors.base_processor import BaseProcessor
+import utils.data_utils as data_util
 
 class FeatureGenerator(BaseProcessor):
     """Generates financial and technical features from OHLCV data"""
@@ -121,11 +122,18 @@ class FeatureGenerator(BaseProcessor):
         """Add technical analysis indicators"""
         result = df.copy()
         
+        # Find the necessary price columns
+        columns = data_util._get_price_columns(result)
+        close_col = columns['close']
+        high_col = columns['high']
+        low_col = columns['low']
+        
         # Ensure we have the close price column
-        if 'close' not in result.columns:
+        if not close_col:
+            # Can't add indicators without close price
             return result
-            
-        close = result['close']
+                
+        close = result[close_col]
         
         # 1. Moving Averages
         for window in [5, 10, 20, 50, 200]:
@@ -165,9 +173,9 @@ class FeatureGenerator(BaseProcessor):
             result[f'roc_{window}'] = close.pct_change(periods=window) * 100
         
         # 6. Stochastic Oscillator
-        if all(col in result.columns for col in ['high', 'low']):
-            high_14 = result['high'].rolling(window=14).max()
-            low_14 = result['low'].rolling(window=14).min()
+        if high_col and low_col:
+            high_14 = result[high_col].rolling(window=14).max()
+            low_14 = result[low_col].rolling(window=14).min()
             result['stoch_k'] = 100 * ((close - low_14) / (high_14 - low_14))
             result['stoch_d'] = result['stoch_k'].rolling(window=3).mean()
         
@@ -177,16 +185,24 @@ class FeatureGenerator(BaseProcessor):
         """Add volatility and risk metrics"""
         result = df.copy()
         
-        # Ensure we have necessary price columns
-        req_cols = ['high', 'low', 'close']
-        if not all(col in result.columns for col in req_cols):
+        # Find the necessary price columns
+        columns = data_util._get_price_columns(result)
+        open_col = columns['open']
+        high_col = columns['high']
+        low_col = columns['low']
+        close_col = columns['close']
+        
+        # Check if we have the required columns
+        if not all([high_col, low_col, close_col]):
+            # Missing required columns, can't calculate volatility metrics
             return result
         
-        # 1. Average True Range (ATR)
-        high = result['high']
-        low = result['low']
-        close = result['close']
+        # Extract price data
+        high = result[high_col]
+        low = result[low_col]
+        close = result[close_col]
         
+        # 1. Average True Range (ATR)
         tr1 = high - low  # Current high - current low
         tr2 = abs(high - close.shift())  # Current high - previous close
         tr3 = abs(low - close.shift())  # Current low - previous close
@@ -202,8 +218,8 @@ class FeatureGenerator(BaseProcessor):
             result[f'volatility_{window}'] = returns.rolling(window=window).std() * np.sqrt(252)
         
         # 3. Garman-Klass volatility estimator
-        if 'open' in result.columns:
-            open_price = result['open']
+        if open_col:
+            open_price = result[open_col]
             # Garman-Klass volatility
             result['gk_volatility'] = 0.5 * np.log(high / low)**2 - (2*np.log(2)-1) * np.log(close / open_price)**2
             
@@ -216,14 +232,23 @@ class FeatureGenerator(BaseProcessor):
         """Add price pattern recognition features"""
         result = df.copy()
         
-        # Check for required columns
-        if not all(col in result.columns for col in ['open', 'high', 'low', 'close']):
+        # Find the necessary price columns
+        columns = data_util._get_price_columns(result)
+        open_col = columns['open']
+        high_col = columns['high']
+        low_col = columns['low']
+        close_col = columns['close']
+        
+        # Check if we have all required columns
+        if not all([open_col, high_col, low_col, close_col]):
+            # Missing required columns, can't calculate price patterns
             return result
-            
-        open_price = result['open']
-        high = result['high']
-        low = result['low']
-        close = result['close']
+                
+        # Extract price data
+        open_price = result[open_col]
+        high = result[high_col]
+        low = result[low_col]
+        close = result[close_col]
         
         # 1. Candlestick pattern indicators
         
