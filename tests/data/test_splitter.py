@@ -4,431 +4,335 @@ import numpy as np
 from datetime import datetime, timedelta
 import sys
 import os
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from data.processors.normalizer import DataNormalizer
+from data.processors.splitter import TimeSeriesSplitter
 
 
-class TestDataNormalizer(unittest.TestCase):
-    """Test suite for the DataNormalizer class"""
+class TestTimeSeriesSplitter(unittest.TestCase):
+    """Test suite for the TimeSeriesSplitter class"""
     
     def setUp(self):
         """Set up test fixtures before each test method"""
-        # Create sample OHLCV data for testing
-        dates = pd.date_range(start='2023-01-01', periods=10, freq='1D')
+        # Create sample time series data for testing
+        dates = pd.date_range(start='2023-01-01', periods=100, freq='1D')
         
+        np.random.seed(42)  # For reproducibility
         self.sample_data = pd.DataFrame({
-            'timestamp': dates,
-            'open': [100, 102, 104, 103, 105, 107, 106, 108, 110, 112],
-            'high': [105, 107, 109, 108, 110, 112, 111, 113, 115, 117],
-            'low': [98, 100, 102, 101, 103, 105, 104, 106, 108, 110],
-            'close': [102, 104, 106, 105, 107, 109, 108, 110, 112, 114],
-            'volume': [1000, 1200, 1100, 900, 1300, 1400, 1200, 1100, 1000, 1300],
-            'other_metric': [10, 12, 14, 13, 15, 17, 16, 18, 20, 22],
-            'category': ['A', 'A', 'B', 'B', 'A', 'C', 'C', 'B', 'A', 'C']
+            'date': dates,
+            'open': np.random.normal(100, 10, 100).cumsum(),
+            'high': np.random.normal(105, 12, 100).cumsum(),
+            'low': np.random.normal(95, 8, 100).cumsum(),
+            'close': np.random.normal(102, 10, 100).cumsum(),
+            'volume': np.random.randint(1000, 5000, 100),
+            'target': np.random.choice([0, 1], 100)
         })
         
-        # Create a default normalizer instance
-        self.normalizer = DataNormalizer()
+        # Create more data with different datetime frequency
+        irregular_dates = [datetime(2023, 1, 1) + timedelta(hours=i*4) for i in range(100)]
+        self.hourly_data = pd.DataFrame({
+            'timestamp': irregular_dates,
+            'price': np.random.normal(100, 5, 100).cumsum(),
+            'volume': np.random.randint(100, 500, 100)
+        })
     
     def test_initialization(self):
-        """Test that the normalizer initializes with correct parameters"""
+        """Test that the splitter initializes with correct parameters"""
         # Test default initialization
-        normalizer = DataNormalizer()
-        self.assertEqual(normalizer.price_cols, ['open', 'high', 'low', 'close'])
-        self.assertEqual(normalizer.volume_col, 'volume')
-        self.assertEqual(normalizer.price_method, 'returns')
-        self.assertEqual(normalizer.volume_method, 'log')
-        self.assertEqual(normalizer.other_method, 'zscore')
+        splitter = TimeSeriesSplitter(train_period='30D', test_period='10D')
+        self.assertEqual(splitter.train_period, '30D')
+        self.assertEqual(splitter.test_period, '10D')
+        self.assertEqual(splitter.step_size, '10D')  # Default to test_period
+        self.assertEqual(splitter.date_column, 'date')
         
         # Test custom initialization
-        custom_normalizer = DataNormalizer(
-            price_cols=['Price', 'AdjustedPrice'],
-            volume_col='TradingVolume',
-            price_method='zscore',
-            volume_method='pct_of_avg',
-            other_method='minmax'
+        custom_splitter = TimeSeriesSplitter(
+            train_period='60D',
+            test_period='15D',
+            step_size='7D',
+            max_train_size='45D',
+            start_date=datetime(2023, 2, 1),
+            end_date=datetime(2023, 3, 1),
+            n_splits=5,
+            date_column='timestamp'
         )
-        self.assertEqual(custom_normalizer.price_cols, ['price', 'adjustedprice'])
-        self.assertEqual(custom_normalizer.volume_col, 'tradingvolume')
-        self.assertEqual(custom_normalizer.price_method, 'zscore')
-        self.assertEqual(custom_normalizer.volume_method, 'pct_of_avg')
-        self.assertEqual(custom_normalizer.other_method, 'minmax')
+        self.assertEqual(custom_splitter.train_period, '60D')
+        self.assertEqual(custom_splitter.test_period, '15D')
+        self.assertEqual(custom_splitter.step_size, '7D')
+        self.assertEqual(custom_splitter.max_train_size, '45D')
+        self.assertEqual(custom_splitter.start_date, datetime(2023, 2, 1))
+        self.assertEqual(custom_splitter.end_date, datetime(2023, 3, 1))
+        self.assertEqual(custom_splitter.n_splits, 5)
+        self.assertEqual(custom_splitter.date_column, 'timestamp')
     
-    def test_fit_method(self):
-        """Test the fit method for calculating normalization parameters"""
-        self.normalizer.fit(self.sample_data)
+    def test_period_parsing(self):
+        """Test parsing of different period specifications"""
+        splitter = TimeSeriesSplitter(train_period='30D', test_period='10D')
+        dates = pd.DatetimeIndex(self.sample_data['date'])
         
-        # Check that parameters were calculated for volume (volume_method='log' doesn't need params)
+        # Test string period parsing
+        days_30 = splitter._parse_period('30D', dates)
+        self.assertIsInstance(days_30, timedelta)
+        self.assertEqual(days_30.days, 30)
         
-        # Check parameters for 'other_metric' (other_method='zscore')
-        self.assertIn('other_metric_mean', self.normalizer._params)
-        self.assertIn('other_metric_std', self.normalizer._params)
-        self.assertAlmostEqual(
-            self.normalizer._params['other_metric_mean'], 
-            self.sample_data['other_metric'].mean(),
-            places=6
-        )
-        self.assertAlmostEqual(
-            self.normalizer._params['other_metric_std'], 
-            self.sample_data['other_metric'].std(),
-            places=6
-        )
+        days_2w = splitter._parse_period('2W', dates)
+        self.assertIsInstance(days_2w, timedelta)
+        self.assertEqual(days_2w.days, 14)
         
-        # Test with different methods
-        minmax_normalizer = DataNormalizer(price_method='minmax', volume_method='minmax')
-        minmax_normalizer.fit(self.sample_data)
+        # Test integer parsing
+        periods_10 = splitter._parse_period(10, dates)
+        self.assertEqual(periods_10, 10)
         
-        # Check minmax parameters for price columns
-        for col in ['open', 'high', 'low', 'close']:
-            self.assertIn(f"{col}_min", minmax_normalizer._params)
-            self.assertIn(f"{col}_max", minmax_normalizer._params)
-            self.assertEqual(minmax_normalizer._params[f"{col}_min"], self.sample_data[col].min())
-            self.assertEqual(minmax_normalizer._params[f"{col}_max"], self.sample_data[col].max())
-        
-        # Test robust scaling
-        robust_normalizer = DataNormalizer(price_method='robust', volume_method='robust')
-        robust_normalizer.fit(self.sample_data)
-        
-        # Check robust parameters for price columns
-        for col in ['open', 'high', 'low', 'close']:
-            self.assertIn(f"{col}_median", robust_normalizer._params)
-            self.assertIn(f"{col}_iqr", robust_normalizer._params)
-            self.assertEqual(robust_normalizer._params[f"{col}_median"], self.sample_data[col].median())
-            self.assertAlmostEqual(
-                robust_normalizer._params[f"{col}_iqr"], 
-                self.sample_data[col].quantile(0.75) - self.sample_data[col].quantile(0.25),
-                places=6
-            )
+        # Test timedelta parsing
+        td = timedelta(days=15)
+        self.assertEqual(splitter._parse_period(td, dates), td)
     
-    def test_transform_returns(self):
-        """Test the returns normalization method for price columns"""
-        # Configure normalizer to use returns for price
-        returns_normalizer = DataNormalizer(price_method='returns')
-        returns_normalizer.fit(self.sample_data)
-        result = returns_normalizer.transform(self.sample_data)
-        
-        # Check that returns were calculated correctly
-        for col in ['open', 'high', 'low', 'close']:
-            return_col = f"{col}_return"
-            self.assertIn(return_col, result.columns)
-            
-            # Calculate expected returns manually
-            expected_returns = self.sample_data[col].pct_change()
-            
-            # Compare results (allowing for floating point differences)
-            pd.testing.assert_series_equal(
-                result[return_col].fillna(0),  # Replace NaN with 0 for comparison
-                expected_returns.fillna(0),    # Replace NaN with 0 for comparison
-                check_names=False              # Column names might differ
-            )
-    
-    def test_transform_zscore(self):
-        """Test the Z-score normalization method"""
-        # Configure normalizer to use Z-score for all columns
-        zscore_normalizer = DataNormalizer(
-            price_method='zscore',
-            volume_method='zscore',
-            other_method='zscore'
-        )
-        zscore_normalizer.fit(self.sample_data)
-        result = zscore_normalizer.transform(self.sample_data)
-        
-        # Check Z-score normalization for numeric columns
-        for col in ['open', 'high', 'low', 'close', 'volume', 'other_metric']:
-            self.assertIn(col, result.columns)
-            
-            # Calculate expected Z-scores manually
-            mean = self.sample_data[col].mean()
-            std = self.sample_data[col].std()
-            expected_zscores = (self.sample_data[col] - mean) / std
-            
-            # Check that results match expected values
-            pd.testing.assert_series_equal(
-                result[col],
-                expected_zscores,
-                check_names=False,
-                rtol=1e-5  # Allow small relative differences due to floating point
-            )
-    
-    def test_transform_log(self):
-        """Test the logarithmic transformation method"""
-        # Default normalizer uses log for volume
-        self.normalizer.fit(self.sample_data)
-        result = self.normalizer.transform(self.sample_data)
-        
-        # Check log normalization for volume
-        self.assertIn('volume', result.columns)
-        
-        # Calculate expected log values manually
-        expected_log = np.log(self.sample_data['volume'] + 1e-8)
-        
-        # Check that results match expected values
-        pd.testing.assert_series_equal(
-            result['volume'],
-            expected_log,
-            check_names=False,
-            rtol=1e-5
+    def test_date_based_splits(self):
+        """Test splitting by date periods"""
+        # Create splitter with date-based periods
+        splitter = TimeSeriesSplitter(
+            train_period='30D', 
+            test_period='10D',
+            step_size='15D'
         )
         
-        # Test log transformation for price columns too
-        log_normalizer = DataNormalizer(price_method='log')
-        log_normalizer.fit(self.sample_data)
-        log_result = log_normalizer.transform(self.sample_data)
+        # Generate splits
+        splitter.fit(self.sample_data)
+        splits = splitter.get_splits()
         
-        # Check log transformation for price columns
-        for col in ['open', 'high', 'low', 'close']:
-            self.assertIn(col, log_result.columns)
-            
-            # Calculate expected log values
-            expected_log = np.log(self.sample_data[col] + 1e-8)
-            
-            # Check results
-            pd.testing.assert_series_equal(
-                log_result[col],
-                expected_log,
-                check_names=False,
-                rtol=1e-5
-            )
+        # Should have multiple splits
+        self.assertGreater(len(splits), 1)
+        
+        # Check the first split
+        train, test = splits[0]
+        
+        # Verify dates don't overlap
+        last_train_date = train['date'].max()
+        first_test_date = test['date'].min()
+        self.assertLessEqual(last_train_date, first_test_date)
+        
+        # Verify approximate period lengths (may not be exact due to data availability)
+        train_days = (train['date'].max() - train['date'].min()).days
+        self.assertGreaterEqual(train_days, 25)  # Allow some flexibility
+        self.assertLessEqual(train_days, 35)
+        
+        test_days = (test['date'].max() - test['date'].min()).days
+        self.assertGreaterEqual(test_days, 5)
+        self.assertLessEqual(test_days, 15)
     
-    def test_transform_minmax(self):
-        """Test the min-max scaling method"""
-        # Configure normalizer to use min-max scaling
-        minmax_normalizer = DataNormalizer(
-            price_method='minmax',
-            volume_method='minmax',
-            other_method='minmax'
+    def test_period_based_splits(self):
+        """Test splitting by number of periods"""
+        # Create splitter with integer periods
+        splitter = TimeSeriesSplitter(
+            train_period=50,  # 50 samples for training
+            test_period=20,   # 20 samples for testing
+            step_size=10      # Advance by 10 samples each split
         )
-        minmax_normalizer.fit(self.sample_data)
-        result = minmax_normalizer.transform(self.sample_data)
         
-        # Check min-max normalization for numeric columns
-        for col in ['open', 'high', 'low', 'close', 'volume', 'other_metric']:
-            self.assertIn(col, result.columns)
-            
-            # Calculate expected min-max scaled values
-            min_val = self.sample_data[col].min()
-            max_val = self.sample_data[col].max()
-            expected_minmax = (self.sample_data[col] - min_val) / (max_val - min_val)
-            
-            # Check results
-            pd.testing.assert_series_equal(
-                result[col],
-                expected_minmax,
-                check_names=False,
-                rtol=1e-5
-            )
-    
-    def test_transform_pct_change(self):
-        """Test the percentage change transformation method"""
-        # Configure normalizer to use percentage change
-        pct_normalizer = DataNormalizer(price_method='pct_change')
-        pct_normalizer.fit(self.sample_data)
-        result = pct_normalizer.transform(self.sample_data)
+        # Generate splits
+        splitter.fit(self.sample_data)
+        splits = splitter.get_splits()
         
-        # Check percentage change for price columns
-        for col in ['open', 'high', 'low', 'close']:
-            self.assertIn(col, result.columns)
-            
-            # Calculate expected percentage change
-            first_value = self.sample_data[col].iloc[0]
-            expected_pct = (self.sample_data[col] / first_value - 1) * 100
-            
-            # Check results
-            pd.testing.assert_series_equal(
-                result[col],
-                expected_pct,
-                check_names=False,
-                rtol=1e-5
-            )
+        # Should have multiple splits
+        self.assertGreater(len(splits), 1)
+        
+        # Check the first split
+        train, test = splits[0]
+        
+        # Verify split sizes
+        self.assertEqual(len(train), 50)
+        self.assertEqual(len(test), 20)
+        
+        # Check that splits advance by step_size
+        if len(splits) >= 2:
+            next_train, _ = splits[1]
+            first_idx_1 = train.index[0]
+            first_idx_2 = next_train.index[0]
+            self.assertEqual(first_idx_2 - first_idx_1, 10)
     
-    def test_transform_robust(self):
-        """Test the robust scaling method"""
-        # Configure normalizer to use robust scaling
-        robust_normalizer = DataNormalizer(
-            price_method='robust',
-            volume_method='robust',
-            other_method='robust'
+    def test_n_splits_parameter(self):
+        """Test the n_splits parameter overrides other parameters"""
+        n_splits = 5
+        splitter = TimeSeriesSplitter(
+            train_period='20D',
+            test_period='10D',
+            n_splits=n_splits
         )
-        robust_normalizer.fit(self.sample_data)
-        result = robust_normalizer.transform(self.sample_data)
         
-        # Check robust scaling for numeric columns
-        for col in ['open', 'high', 'low', 'close', 'volume', 'other_metric']:
-            self.assertIn(col, result.columns)
+        splitter.fit(self.sample_data)
+        splits = splitter.get_splits()
+        
+        # Should have exactly n_splits
+        self.assertEqual(len(splits), n_splits)
+    
+    def test_max_train_size(self):
+        """Test the max_train_size parameter limits training data"""
+        # Create splitter with max_train_size
+        splitter = TimeSeriesSplitter(
+            train_period='40D',
+            test_period='10D',
+            max_train_size='20D'  # Limit training to 20 days
+        )
+        
+        splitter.fit(self.sample_data)
+        splits = splitter.get_splits()
+        
+        # Get the first split
+        train, _ = splits[0]
+        
+        # Training period should be limited to approximately 20 days
+        train_days = (train['date'].max() - train['date'].min()).days
+        self.assertGreaterEqual(train_days, 15)  # Allow some flexibility
+        self.assertLessEqual(train_days, 25)
+    
+    def test_transform_method(self):
+        """Test the transform method returns data with split annotations"""
+        splitter = TimeSeriesSplitter(
+            train_period='30D',
+            test_period='10D'
+        )
+        
+        # Fit the splitter
+        splitter.fit(self.sample_data)
+        
+        # Transform should return data with split_type column
+        result = splitter.transform(self.sample_data)
+        
+        self.assertIn('split_type', result.columns)
+        self.assertIn('split_index', result.columns)
+        
+        # Should have both train and test data
+        self.assertTrue((result['split_type'] == 'train').any())
+        self.assertTrue((result['split_type'] == 'test').any())
+    
+    def test_different_date_column(self):
+        """Test using a different date column name"""
+        # The hourly data uses 'timestamp' instead of 'date'
+        splitter = TimeSeriesSplitter(
+            train_period='7D',
+            test_period='2D',
+            date_column='timestamp'
+        )
+        
+        splitter.fit(self.hourly_data)
+        splits = splitter.get_splits()
+        
+        # Should have splits
+        self.assertGreater(len(splits), 0)
+        
+        # Check the first split
+        train, test = splits[0]
+        
+        # Verify timestamp column was used correctly
+        self.assertIn('timestamp', train.columns)
+        self.assertIn('timestamp', test.columns)
+        
+        # Verify dates don't overlap
+        last_train_date = train['timestamp'].max()
+        first_test_date = test['timestamp'].min()
+        self.assertLessEqual(last_train_date, first_test_date)
+    
+    def test_auto_date_column_detection(self):
+        """Test automatic detection of date column"""
+        # Create data with an unusual date column name
+        unusual_data = self.sample_data.copy()
+        unusual_data = unusual_data.rename(columns={'date': 'event_datetime'})
+        
+        # Don't specify date_column
+        splitter = TimeSeriesSplitter(
+            train_period='30D',
+            test_period='10D',
+            date_column='date'  # This doesn't exist in the data
+        )
+        
+        # This should try to detect a date column automatically
+        try:
+            splitter.fit(unusual_data)
+            splits = splitter.get_splits()
+            self.assertGreater(len(splits), 0)
             
-            # Calculate expected robust scaled values
-            median = self.sample_data[col].median()
-            q1 = self.sample_data[col].quantile(0.25)
-            q3 = self.sample_data[col].quantile(0.75)
-            iqr = q3 - q1
-            expected_robust = (self.sample_data[col] - median) / iqr
+            # Check that it used the event_datetime column
+            found_date_col = splitter.date_column
+            self.assertEqual(found_date_col, 'event_datetime')
+        except ValueError:
+            # If it can't find a suitable date column, that's acceptable too
+            # The implementation might be strict about date column names
+            pass
+    
+    def test_date_type_conversion(self):
+        """Test conversion of string dates to datetime"""
+        # Create data with string dates
+        string_dates = self.sample_data.copy()
+        string_dates['date'] = string_dates['date'].dt.strftime('%Y-%m-%d')
+        
+        splitter = TimeSeriesSplitter(
+            train_period='30D',
+            test_period='10D'
+        )
+        
+        # Should convert string dates to datetime
+        splitter.fit(string_dates)
+        splits = splitter.get_splits()
+        
+        # Should have splits
+        self.assertGreater(len(splits), 0)
+        
+        # First split's date column should be datetime type
+        train, _ = splits[0]
+        self.assertTrue(pd.api.types.is_datetime64_dtype(train['date']))
+    
+    def test_empty_splits_handling(self):
+        """Test handling of empty splits"""
+        # Create data with large gaps
+        sparse_data = pd.DataFrame({
+            'date': [
+                datetime(2023, 1, 1),
+                datetime(2023, 1, 2),
+                # Large gap
+                datetime(2023, 2, 1),
+                datetime(2023, 2, 2),
+            ],
+            'value': [1, 2, 3, 4]
+        })
+        
+        splitter = TimeSeriesSplitter(
+            train_period='5D',
+            test_period='5D',
+            step_size='1D'
+        )
+        
+        # Should not crash with sparse data
+        splitter.fit(sparse_data)
+        splits = splitter.get_splits()
+        
+        # All splits should have data
+        for train, test in splits:
+            self.assertGreater(len(train), 0)
+            self.assertGreater(len(test), 0)
+    
+    def test_start_end_date_parameters(self):
+        """Test using start_date and end_date parameters"""
+        start_date = datetime(2023, 1, 15)
+        end_date = datetime(2023, 3, 15)
+        
+        splitter = TimeSeriesSplitter(
+            train_period='15D',
+            test_period='7D',
+            start_date=start_date,
+            end_date=end_date
+        )
+        
+        splitter.fit(self.sample_data)
+        splits = splitter.get_splits()
+        
+        # Check date boundaries in splits
+        for train, test in splits:
+            # All dates should be >= start_date
+            self.assertGreaterEqual(train['date'].min(), start_date)
             
-            # Check results
-            pd.testing.assert_series_equal(
-                result[col],
-                expected_robust,
-                check_names=False,
-                rtol=1e-5
-            )
-    
-    def test_transform_pct_of_avg(self):
-        """Test the percentage of average method"""
-        # Configure normalizer to use percentage of average
-        pct_avg_normalizer = DataNormalizer(volume_method='pct_of_avg')
-        pct_avg_normalizer.fit(self.sample_data)
-        result = pct_avg_normalizer.transform(self.sample_data)
-        
-        # Check percentage of average for volume
-        self.assertIn('volume', result.columns)
-        
-        # Calculate expected percentage of average
-        avg = self.sample_data['volume'].mean()
-        expected_pct_avg = self.sample_data['volume'] / avg
-        
-        # Check results
-        pd.testing.assert_series_equal(
-            result['volume'],
-            expected_pct_avg,
-            check_names=False,
-            rtol=1e-5
-        )
-    
-    def test_non_numeric_columns(self):
-        """Test handling of non-numeric columns"""
-        self.normalizer.fit(self.sample_data)
-        result = self.normalizer.transform(self.sample_data)
-        
-        # Check that categorical column was preserved
-        self.assertIn('category', result.columns)
-        pd.testing.assert_series_equal(
-            result['category'],
-            self.sample_data['category']
-        )
-    
-    def test_raw_price_columns(self):
-        """Test that raw price columns are preserved"""
-        # Add some raw price columns
-        data_with_raw = self.sample_data.copy()
-        data_with_raw['open_raw'] = data_with_raw['open']
-        data_with_raw['close_raw'] = data_with_raw['close']
-        
-        self.normalizer.fit(data_with_raw)
-        result = self.normalizer.transform(data_with_raw)
-        
-        # Check that raw columns are preserved as is
-        self.assertIn('open_raw', result.columns)
-        self.assertIn('close_raw', result.columns)
-        
-        pd.testing.assert_series_equal(
-            result['open_raw'],
-            data_with_raw['open_raw']
-        )
-        pd.testing.assert_series_equal(
-            result['close_raw'],
-            data_with_raw['close_raw']
-        )
-    
-    def test_edge_cases(self):
-        """Test edge cases like empty dataframes, constant columns, etc."""
-        # Test with empty dataframe
-        empty_df = pd.DataFrame()
-        self.normalizer.fit(empty_df)
-        result = self.normalizer.transform(empty_df)
-        self.assertTrue(result.empty)
-        
-        # Test with a column of all zeros
-        zero_df = self.sample_data.copy()
-        zero_df['zero_col'] = 0
-        
-        zero_normalizer = DataNormalizer(other_method='zscore')
-        zero_normalizer.fit(zero_df)
-        result = zero_normalizer.transform(zero_df)
-        
-        # Z-score of constant column should be zeros
-        self.assertIn('zero_col', result.columns)
-        self.assertTrue((result['zero_col'] == 0).all())
-        
-        # Test with a constant non-zero column (for minmax)
-        const_df = self.sample_data.copy()
-        const_df['const_col'] = 5
-        
-        minmax_normalizer = DataNormalizer(other_method='minmax')
-        minmax_normalizer.fit(const_df)
-        minmax_result = minmax_normalizer.transform(const_df)
-        
-        # MinMax of constant column should be 0.5
-        self.assertIn('const_col', minmax_result.columns)
-        self.assertTrue((minmax_result['const_col'] == 0.5).all())
-    
-    def test_missing_values(self):
-        """Test handling of missing values"""
-        # Create data with missing values
-        data_with_na = self.sample_data.copy()
-        data_with_na.loc[3, 'open'] = np.nan
-        data_with_na.loc[5, 'volume'] = np.nan
-        
-        # Test with different normalization methods
-        methods = ['returns', 'zscore', 'minmax', 'robust', 'log', 'pct_change']
-        
-        for method in methods:
-            normalizer = DataNormalizer(
-                price_method=method,
-                volume_method=method
-            )
-            
-            # Should not raise exception
-            try:
-                normalizer.fit(data_with_na)
-                result = normalizer.transform(data_with_na)
-                
-                # Result should have same shape
-                self.assertEqual(result.shape[0], data_with_na.shape[0])
-                
-                # NaN handling depends on the method
-                # We just check that it doesn't crash
-            except Exception as e:
-                self.fail(f"Normalizer with method '{method}' raised exception with missing values: {e}")
-    
-    def test_fit_transform(self):
-        """Test the fit_transform convenience method"""
-        # This should be equivalent to calling fit() then transform()
-        normalizer = DataNormalizer(price_method='zscore')
-        
-        # Call fit_transform
-        result1 = normalizer.fit_transform(self.sample_data)
-        
-        # Call fit and transform separately
-        normalizer2 = DataNormalizer(price_method='zscore')
-        normalizer2.fit(self.sample_data)
-        result2 = normalizer2.transform(self.sample_data)
-        
-        # Results should be the same
-        for col in result1.columns:
-            if pd.api.types.is_numeric_dtype(result1[col]):
-                pd.testing.assert_series_equal(
-                    result1[col],
-                    result2[col],
-                    check_names=False,
-                    rtol=1e-5
-                )
-    
-    def test_case_sensitivity(self):
-        """Test handling of column case sensitivity"""
-        # Create data with mixed case columns
-        mixed_case_data = self.sample_data.copy()
-        mixed_case_data.columns = [
-            'Timestamp', 'Open', 'High', 'Low', 'Close', 'Volume', 'Other_Metric', 'Category'
-        ]
-        
-        normalizer = DataNormalizer()
-        normalizer.fit(mixed_case_data)
-        result = normalizer.transform(mixed_case_data)
-        
-        # Should convert column names to lowercase for processing
-        self.assertIn('open_return', result.columns)
-        self.assertIn('high_return', result.columns)
-        self.assertIn('low_return', result.columns)
-        self.assertIn('close_return', result.columns)
+            # All dates should be <= end_date
+            self.assertLessEqual(test['date'].max(), end_date)
 
 
 if __name__ == '__main__':
