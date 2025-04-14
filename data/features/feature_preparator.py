@@ -263,7 +263,8 @@ class FeaturePreparator(BaseProcessor):
         if self.price_transform_method == 'returns':
             # Calculate percentage returns
             for col in price_cols_in_data:
-                result[f"{col}_return"] = result[col].pct_change()
+                # Explicitly specify fill_method=None to address the FutureWarning
+                result[f"{col}_return"] = result[col].pct_change(fill_method=None)
                     
         elif self.price_transform_method == 'log':
             # Calculate log transformation
@@ -286,7 +287,7 @@ class FeaturePreparator(BaseProcessor):
             # Apply multiple transformations for comparison
             for col in price_cols_in_data:
                 # Returns
-                result[f"{col}_return"] = result[col].pct_change()
+                result[f"{col}_return"] = result[col].pct_change(fill_method=None)
                     
                 # Log transform
                 min_val = result[col].min()
