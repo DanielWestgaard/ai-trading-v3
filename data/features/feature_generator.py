@@ -49,7 +49,9 @@ class FeatureGenerator(BaseProcessor):
         # Standardize column names to lowercase for processing
         if self.preserve_original_case:
             self.column_mapping = {col.lower(): col for col in df.columns}
-            df.columns = [col.lower() for col in df.columns]
+        
+        # Always convert to lowercase for processing regardless of preserve_original_case
+        df.columns = [col.lower() for col in df.columns]
         
         # Ensure we have a proper datetime index for time-based features
         has_timestamp = self.timestamp_col in df.columns
@@ -84,11 +86,13 @@ class FeatureGenerator(BaseProcessor):
     def add_technical_indicators(self, data):
         """Public method to add only technical indicators"""
         df = data.copy()
-        if self.preserve_original_case:
-            df.columns = [col.lower() for col in df.columns]
+        
+        # Always convert to lowercase for processing
+        df.columns = [col.lower() for col in df.columns]
+        
         result = self._add_technical_indicators(df)
         
-        # Restore original case
+        # Restore original case only if needed
         if self.preserve_original_case:
             for col in self.column_mapping:
                 if col in result.columns:
@@ -99,11 +103,13 @@ class FeatureGenerator(BaseProcessor):
     def add_volatility_metrics(self, data):
         """Public method to add only volatility metrics"""
         df = data.copy()
-        if self.preserve_original_case:
-            df.columns = [col.lower() for col in df.columns]
+        
+        # Always convert to lowercase for processing
+        df.columns = [col.lower() for col in df.columns]
+        
         result = self._add_volatility_metrics(df)
         
-        # Restore original case
+        # Restore original case only if needed
         if self.preserve_original_case:
             for col in self.column_mapping:
                 if col in result.columns:
