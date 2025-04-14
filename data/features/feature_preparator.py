@@ -206,7 +206,11 @@ class FeaturePreparator(BaseProcessor):
                         first_valid_idx = df[col].first_valid_index()
                         if first_valid_idx is not None:
                             # Calculate the window size based on the first valid index
-                            window_size = first_valid_idx if isinstance(first_valid_idx, int) else df.index.get_loc(first_valid_idx)
+                            # Add 1 to convert from 0-based index to window size
+                            if isinstance(first_valid_idx, int):
+                                window_size = first_valid_idx + 1
+                            else:
+                                window_size = df.index.get_loc(first_valid_idx) + 1
                             self._window_sizes[col] = window_size
         
         # Calculate the maximum window size for each category
