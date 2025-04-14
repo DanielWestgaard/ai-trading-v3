@@ -308,12 +308,16 @@ class FeatureSelector(BaseProcessor):
         if self.category_balance and 'category' in importance_df.columns:
             selected = self._balance_feature_categories(importance_df, selected)
         
-        # Always include target column if requested
+        # Handle target column based on preserve_target flag
         if self.preserve_target and self.target_col:
             if self.target_col in importance_df['feature'].values and self.target_col not in selected:
                 selected.append(self.target_col)
                 logging.info(f"Preserving target column '{self.target_col}' for modeling")
-        
+        else:
+            # Explicitly remove target column if preserve_target is False
+            if self.target_col in selected:
+                selected.remove(self.target_col)
+                logging.info(f"Removed target column '{self.target_col}' as preserve_target=False")
         
         return selected
        
