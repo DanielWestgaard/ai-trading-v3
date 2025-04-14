@@ -90,7 +90,7 @@ class DataNormalizer(BaseProcessor):
         """Transform a single column based on the method"""
         if method == 'returns':
             # Daily returns calculation
-            result[f"{col}_return"] = data[col].pct_change()
+            result[f"{col}_return"] = data[col].pct_change(fill_method=None)
         elif method == 'pct_change':
             # Percentage change from first value
             first_value = data[col].iloc[0]
