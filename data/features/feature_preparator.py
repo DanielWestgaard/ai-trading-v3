@@ -228,9 +228,27 @@ class FeaturePreparator(BaseProcessor):
         """Transform price columns while preserving original values"""
         result = df.copy()
         
-        # Ensure we have price columns
-        price_cols_in_data = [col for col in self.price_cols if col in result.columns]
+        # Convert result column names to lowercase for consistent processing
+        column_case_map = {col.lower(): col for col in result.columns}
+        result.columns = [col.lower() for col in result.columns]
+        
+        # Ensure we have price columns - use lowercase matching
+        price_cols_in_data = []
+        for price_col in self.price_cols:
+            # Check if the column exists directly
+            if price_col in result.columns:
+                price_cols_in_data.append(price_col)
+                continue
+                
+            # Look for price columns using pattern matching if exact match failed
+            for col in result.columns:
+                if price_col in col:
+                    price_cols_in_data.append(col)
+                    break
+        
         if not price_cols_in_data:
+            # Restore original column case and return if no price columns found
+            result.columns = [column_case_map.get(col, col) for col in result.columns]
             return result
         
         # Preserve raw prices: These will never be normalized or modified
@@ -246,7 +264,7 @@ class FeaturePreparator(BaseProcessor):
             # Calculate percentage returns
             for col in price_cols_in_data:
                 result[f"{col}_return"] = result[col].pct_change()
-                
+                    
         elif self.price_transform_method == 'log':
             # Calculate log transformation
             for col in price_cols_in_data:
@@ -254,7 +272,7 @@ class FeaturePreparator(BaseProcessor):
                 min_val = result[col].min()
                 offset = 0 if min_val > 0 else abs(min_val) + 1e-8
                 result[f"{col}_log"] = np.log(result[col] + offset)
-                
+                    
         elif self.price_transform_method == 'pct_change':
             # Calculate percentage change from first value
             for col in price_cols_in_data:
@@ -263,13 +281,13 @@ class FeaturePreparator(BaseProcessor):
                     result[f"{col}_pct_change"] = (result[col] / first_value - 1) * 100
                 else:
                     result[f"{col}_pct_change"] = 0
-                    
+                        
         elif self.price_transform_method == 'multi':
             # Apply multiple transformations for comparison
             for col in price_cols_in_data:
                 # Returns
                 result[f"{col}_return"] = result[col].pct_change()
-                
+                    
                 # Log transform
                 min_val = result[col].min()
                 offset = 0 if min_val > 0 else abs(min_val) + 1e-8
@@ -277,6 +295,9 @@ class FeaturePreparator(BaseProcessor):
         
         # Original price columns are always preserved
         logging.info(f"Preserving original OHLC values for empirical feature selection")
+        
+        # Keep columns in lowercase without restoring original case
+        # This ensures consistent column naming for downstream processing
         
         return result
     
