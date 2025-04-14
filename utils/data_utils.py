@@ -250,39 +250,6 @@ def save_data_file(data:pd.DataFrame, type:str, filename:str, location:str=None)
 
     logging.info(f"File saved at: {file_path}")
 
-# Example usage
-if __name__ == "__main__":
-    # Raw data example
-    raw_filename = generate_filename(
-        symbol="AAPL",
-        timeframe="MINUTE_5",
-        start_date="2023-01-01",
-        end_date="2023-12-31",
-        is_raw=True,
-        data_source="yahoo"
-    )
-    print(f"Raw data filename: {raw_filename}")
-    # Output: raw_AAPL_1d_20230101_20231231_yahoo.csv
-    
-    # Processed data example
-    processed_filename = generate_filename(
-        symbol="AAPL",
-        timeframe="1day",
-        start_date="2020-02-24T00:00:00",
-        end_date="2020-02-24T00:00:00",
-        is_raw=False,
-        data_source="yahoo",
-        processing_info="normalized"
-    )
-    print(f"Processed data filename: {processed_filename}")
-    # Output: processed_normalized_AAPL_1d_20230101_20231231_yahoo.csv
-    
-    
-# TODO: Create a file that creates a filename for a file based on the processed file it's based on.
-# Ex. processed_GBPUSD_m5_20240101_20250101.csv gets meta_ in the beginning, model_performance and feature_importance (as they will be saved based on it).
-def filename_based_on_processed_datafile():
-    pass
-
 def extract_file_metadata(filename):
     """
     Extract metadata from a raw or processed filename.
@@ -387,7 +354,7 @@ def get_derived_file_path(processed_file, file_type, base_dir=None, sub_dir=None
     # Return the full file path
     return os.path.join(dir_path, filename)
 
-
+# Data column related
 def _find_column_by_pattern(df, pattern):
     """
     Find a column in the dataframe that matches the given pattern.
