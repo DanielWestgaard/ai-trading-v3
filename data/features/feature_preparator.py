@@ -154,16 +154,45 @@ class FeaturePreparator(BaseProcessor):
         
         # Categorize each column
         for col in columns:
+            col_lower = col.lower()
+            categorized = False
+            
+            # First try exact matches (for specific features like 'sma_50')
             for category, patterns in self.feature_category_rules.items():
-                if any(pattern in col for pattern in patterns):
-                    self._feature_categories[category].append(col)
+                if col_lower in patterns:
+                    self._feature_categories[category].append(col_lower)
+                    categorized = True
                     break
-        
-        # Handle any uncategorized columns
-        all_categorized = [col for sublist in self._feature_categories.values() for col in sublist]
-        uncategorized = [col for col in columns if col not in all_categorized]
-        if uncategorized:
-            self._feature_categories['other'] = uncategorized
+            
+            if not categorized:
+                # Then try pattern matching for more general patterns
+                for category, patterns in self.feature_category_rules.items():
+                    # Use pattern matching, but be more careful with numeric suffixes
+                    for pattern in patterns:
+                        # If pattern doesn't contain underscore (like 'open', 'volume'), match exactly
+                        if '_' not in pattern and pattern == col_lower:
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                        # If pattern has underscore (like 'sma_', 'volatility_'), ensure it's a prefix match
+                        elif '_' in pattern and col_lower.startswith(pattern):
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                        # Generic substring matching for other patterns
+                        elif pattern in col_lower:
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                    
+                    if categorized:
+                        break
+            
+            # Handle any uncategorized columns
+            if not categorized:
+                if 'other' not in self._feature_categories:
+                    self._feature_categories['other'] = []
+                self._feature_categories['other'].append(col_lower)
     
     def _detect_window_sizes(self, df):
         """
