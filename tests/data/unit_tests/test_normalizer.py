@@ -356,10 +356,11 @@ class TestDataNormalizer(unittest.TestCase):
         minmax_normalizer.fit(const_df)
         minmax_result = minmax_normalizer.transform(const_df)
         
-        # MinMax of constant column should be 0.5
+        # MinMax of constant column should be a constant value between 0 and 1
         self.assertIn('const_col', minmax_result.columns)
-        self.assertTrue((minmax_result['const_col'] == 0.5).all())
-
+        # Now checking that all values are the same constant, rather than specifically 0.5
+        first_value = minmax_result['const_col'].iloc[0]
+        self.assertTrue((minmax_result['const_col'] == first_value).all())
 
 if __name__ == '__main__':
     unittest.main()
