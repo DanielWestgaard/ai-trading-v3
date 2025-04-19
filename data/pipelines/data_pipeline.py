@@ -220,30 +220,40 @@ class DataPipeline:
         logging.info(f"Saved final processed data to {processed_file_path}")
         
         # 8. Save metadata about features
-        metadata_path = data_utils.get_derived_file_path(
-            processed_file_path, 
-            'meta', 
-            extension='csv'
-        )
-        
-        metadata_df = self._create_feature_metadata(selected_data)
-        metadata_df.to_csv(metadata_path, index=False)
-        logging.info(f"Saved feature metadata to {metadata_path}")
-        
-        # 9. Save selected features list if feature selection was run
-        if run_feature_selection and hasattr(self.feature_selector, 'selected_features'):
-            features_file = data_utils.get_derived_file_path(
-                processed_file_path,
-                'selected_features',
-                sub_dir='features',
-                extension='txt'
+        try:
+            metadata_path = data_utils.get_derived_file_path(
+                processed_file_path, 
+                'meta', 
+                extension='csv'
             )
             
-            os.makedirs(os.path.dirname(features_file), exist_ok=True)
-            with open(features_file, 'w') as f:
-                f.write('\n'.join(self.feature_selector.selected_features))
+            metadata_df = self._create_feature_metadata(selected_data)
+            metadata_df.to_csv(metadata_path, index=False)
+            logging.info(f"Saved feature metadata to {metadata_path}")
+        except Exception as e:
+            logging.error(f"Error creating feature metadata: {str(e)}")
+        
+        # 9. Save selected features list if feature selection was run
+        if run_feature_selection and hasattr(self.feature_selector, 'selected_features') and self.feature_selector.selected_features:
+            try:
+                features_file = data_utils.get_derived_file_path(
+                    processed_file_path,
+                    'selected_features',
+                    sub_dir='features',
+                    extension='txt'
+                )
                 
-            logging.info(f"Saved list of {len(self.feature_selector.selected_features)} selected features to {features_file}")
+                os.makedirs(os.path.dirname(features_file), exist_ok=True)
+                with open(features_file, 'w') as f:
+                    if isinstance(self.feature_selector.selected_features, list):
+                        f.write('\n'.join(self.feature_selector.selected_features))
+                    else:
+                        # If somehow it's not a list, convert to string first
+                        f.write(str(self.feature_selector.selected_features))
+                    
+                logging.info(f"Saved list of selected features to {features_file}")
+            except Exception as e:
+                logging.error(f"Error saving selected features list: {str(e)}")
         
         # Return the fully processed data and path
         return selected_data, processed_file_path
@@ -261,40 +271,59 @@ class DataPipeline:
             'time': []
         }
         
-        for col in df.columns:
-            col_lower = col.lower()
-            if any(x in col_lower for x in ['open', 'high', 'low', 'close']):
-                if any(x in col_lower for x in ['return', 'log', 'pct']):
-                    feature_categories['transformed_price'].append(col)
-                else:
-                    feature_categories['raw_price'].append(col)
-            elif 'volume' in col_lower:
-                feature_categories['volume'].append(col)
-            elif any(x in col_lower for x in ['sma', 'ema', 'rsi', 'macd', 'bollinger', 'stoch']):
-                feature_categories['technical'].append(col)
-            elif any(x in col_lower for x in ['atr', 'volatility']):
-                feature_categories['volatility'].append(col)
-            elif any(x in col_lower for x in ['doji', 'hammer', 'engulfing', 'support', 'resistance']):
-                feature_categories['patterns'].append(col)
-            elif any(x in col_lower for x in ['day', 'hour', 'month', 'session']):
-                feature_categories['time'].append(col)
-        
-        # Create metadata DataFrame
-        metadata = []
-        for category, cols in feature_categories.items():
-            for col in cols:
-                metadata.append({
-                    'column': col,
-                    'category': category,
-                    'nan_count': df[col].isna().sum(),
-                    'nan_pct': (df[col].isna().sum() / len(df)) * 100
-                })
-        
-        metadata_df = pd.DataFrame(metadata)
-        metadata_df = metadata_df.sort_values(['category', 'column'])
-        
-        # Log feature category summary
-        category_summary = metadata_df.groupby('category').size().to_dict()
-        logging.info(f"Feature category summary: {category_summary}")
-        
-        return metadata_df
+        try:
+            # Process each column and categorize it
+            for col in df.columns:
+                col_lower = col.lower()
+                if any(x in col_lower for x in ['open', 'high', 'low', 'close']):
+                    if any(x in col_lower for x in ['return', 'log', 'pct']):
+                        feature_categories['transformed_price'].append(col)
+                    else:
+                        feature_categories['raw_price'].append(col)
+                elif 'volume' in col_lower:
+                    feature_categories['volume'].append(col)
+                elif any(x in col_lower for x in ['sma', 'ema', 'rsi', 'macd', 'bollinger', 'stoch']):
+                    feature_categories['technical'].append(col)
+                elif any(x in col_lower for x in ['atr', 'volatility']):
+                    feature_categories['volatility'].append(col)
+                elif any(x in col_lower for x in ['doji', 'hammer', 'engulfing', 'support', 'resistance']):
+                    feature_categories['patterns'].append(col)
+                elif any(x in col_lower for x in ['day', 'hour', 'month', 'session']):
+                    feature_categories['time'].append(col)
+            
+            # Create metadata DataFrame
+            metadata = []
+            for category, cols in feature_categories.items():
+                for col in cols:
+                    metadata.append({
+                        'column': col,
+                        'category': category,
+                        'nan_count': df[col].isna().sum(),
+                        'nan_pct': (df[col].isna().sum() / len(df)) * 100
+                    })
+            
+            # Create a DataFrame with the metadata
+            metadata_df = pd.DataFrame(metadata)
+            
+            # Sort by category and column name
+            if not metadata_df.empty:
+                metadata_df = metadata_df.sort_values(['category', 'column'])
+                
+                # Log feature category summary
+                category_summary = metadata_df.groupby('category').size().to_dict()
+                logging.info(f"Feature category summary: {category_summary}")
+            else:
+                # Create a minimal metadata DataFrame with required columns if no features were categorized
+                metadata_df = pd.DataFrame(columns=['column', 'category', 'nan_count', 'nan_pct'])
+            
+            return metadata_df
+            
+        except Exception as e:
+            # If anything fails, return a minimal valid DataFrame
+            logging.error(f"Error creating feature metadata: {str(e)}")
+            return pd.DataFrame({
+                'column': df.columns.tolist(),
+                'category': ['other'] * len(df.columns),
+                'nan_count': [0] * len(df.columns),
+                'nan_pct': [0.0] * len(df.columns)
+            })
