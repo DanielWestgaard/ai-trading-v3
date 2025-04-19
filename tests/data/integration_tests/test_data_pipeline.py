@@ -384,48 +384,49 @@ class TestDataPipeline(unittest.TestCase):
                 self.assertGreater(len(result_df), 0)
     
     def test_metadata_creation(self):
-        """Test creation of feature metadata"""
-        # Create pipeline with small min_data_points
+        """Test creation of feature metadata directly"""
+        # Create pipeline 
         pipeline = DataPipeline()
-        pipeline.feature_preparator.min_data_points = 10  # Set much smaller than default 1000
         
-        # Create a mock for _create_feature_metadata that returns a proper dataframe
-        metadata_df = pd.DataFrame({
-            'column': ['open', 'high', 'low', 'close', 'volume'],
-            'category': ['price', 'price', 'price', 'price', 'volume'],
-            'nan_count': [0, 0, 0, 0, 0],
-            'nan_pct': [0.0, 0.0, 0.0, 0.0, 0.0]
+        # Create a simple test DataFrame
+        test_df = pd.DataFrame({
+            'Open': [100, 101, 102],
+            'High': [105, 106, 107],
+            'Low': [95, 96, 97],
+            'Close': [102, 103, 104],
+            'Volume': [1000, 1100, 1200],
+            'close_return': [0.01, 0.02, 0.01]
         })
         
-        # Save this metadata to a file so it can be read later in the test
-        metadata_file = os.path.join(self.processed_dir, f"meta_{self.fake_metadata['base_name']}.csv")
-        metadata_df.to_csv(metadata_file, index=False)
+        # DIRECTLY test the feature metadata creation method
+        metadata_df = pipeline._create_feature_metadata(test_df)
         
-        # Run pipeline
-        with patch('pandas.read_csv', return_value=self.sample_data), \
-             patch.object(pipeline, '_create_feature_metadata', return_value=metadata_df):
-            
-            result_df, result_path = pipeline.run(
-                target_path=self.processed_dir,
-                raw_data=self.sample_data_path,
-                save_intermediate=False,
-                run_feature_selection=False
-            )
-            
-            # The filename of the metadata file is controlled by our mock of get_derived_file_path
-            # We know the structure should be meta_[base_name].csv
-            
-            # Check if metadata file exists
-            self.assertTrue(os.path.exists(metadata_file), f"Metadata file not found: {metadata_file}")
-            
-            # Verify metadata content if file exists
-            if os.path.exists(metadata_file):
-                metadata_df = pd.read_csv(metadata_file)
-                
-                self.assertGreater(len(metadata_df), 0)
-                self.assertTrue('column' in metadata_df.columns)
-                self.assertTrue('category' in metadata_df.columns)
-    
+        # Print for debugging
+        print(f"Metadata categories: {metadata_df['category'].unique().tolist() if not metadata_df.empty else []}")
+        print(f"Metadata columns: {metadata_df.columns.tolist()}")
+        
+        # Verify metadata content directly
+        self.assertIsNotNone(metadata_df)
+        self.assertGreater(len(metadata_df), 0)
+        self.assertTrue('column' in metadata_df.columns, 
+                    f"'column' not found in columns: {metadata_df.columns.tolist()}")
+        self.assertTrue('category' in metadata_df.columns)
+        
+        # Verify it correctly categorized the columns - using the actual categories from the implementation
+        raw_price_cols = metadata_df[metadata_df['category'] == 'raw_price']['column'].tolist()
+        self.assertTrue(len(raw_price_cols) > 0, 
+                    f"No raw price columns found. Categories: {metadata_df['category'].unique().tolist()}")
+        
+        # Check transformed price
+        transformed_price_cols = metadata_df[metadata_df['category'] == 'transformed_price']['column'].tolist()
+        self.assertTrue(len(transformed_price_cols) > 0, 
+                    f"No transformed price columns found. Categories: {metadata_df['category'].unique().tolist()}")
+        
+        # Check volume
+        volume_cols = metadata_df[metadata_df['category'] == 'volume']['column'].tolist()
+        self.assertTrue(len(volume_cols) > 0, 
+                    f"No volume columns found. Categories: {metadata_df['category'].unique().tolist()}")
+        
     def test_error_handling_missing_file(self):
         """Test error handling when input file doesn't exist"""
         # Create pipeline
