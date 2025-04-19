@@ -4,6 +4,7 @@ import numpy as np
 import os
 import tempfile
 from datetime import datetime, timedelta
+import shutil
 
 from data.processors.cleaner import DataCleaner
 from data.features.feature_generator import FeatureGenerator
@@ -12,6 +13,9 @@ from data.processors.normalizer import DataNormalizer
 from data.features.feature_selector import FeatureSelector
 from data.processors.splitter import TimeSeriesSplitter
 from data.pipelines.data_pipeline import DataPipeline
+import config.constants.data_config as data_config
+import config.constants.system_config as sys_config
+
 
 
 class TestIntegration(unittest.TestCase):
@@ -19,7 +23,16 @@ class TestIntegration(unittest.TestCase):
     
     def setUp(self):
         """Set up test fixtures before each test method"""
-        # Create a temporary directory for test outputs
+        # Create the testing storage directory if it doesn't exist
+        os.makedirs(data_config.TEST_DUMMY_PATH, exist_ok=True)
+        
+        # Create subdirectories for raw and processed
+        self.test_raw_dir = os.path.join(data_config.TEST_DUMMY_PATH, 'raw')
+        self.test_processed_dir = os.path.join(data_config.TEST_DUMMY_PATH, 'processed')
+        os.makedirs(self.test_raw_dir, exist_ok=True)
+        os.makedirs(self.test_processed_dir, exist_ok=True)
+        
+        # Create a temporary directory for additional test outputs
         self.temp_dir = tempfile.TemporaryDirectory()
         
         # Create realistic OHLCV data for testing with price trends and patterns
@@ -60,9 +73,20 @@ class TestIntegration(unittest.TestCase):
             'Volume': volume
         })
         
-        # Save test data to file for pipeline tests
-        os.makedirs(os.path.join(self.temp_dir.name, 'raw'), exist_ok=True)
-        self.test_data_path = os.path.join(self.temp_dir.name, 'raw', 'BTCUSD_D1_20230101_20230720.csv')
+        # Override system config paths temporarily for testing
+        self.original_raw_dir = sys_config.CAPCOM_RAW_DATA_DIR
+        self.original_processed_dir = sys_config.CAPCOM_PROCESSED_DATA_DIR
+        sys_config.CAPCOM_RAW_DATA_DIR = self.test_raw_dir
+        sys_config.CAPCOM_PROCESSED_DATA_DIR = self.test_processed_dir
+        
+        # Save test data to file for pipeline tests with a proper parseable filename
+        self.test_symbol = "BTCUSD"
+        self.test_timeframe = "D1"
+        self.test_start_date = "20230101"
+        self.test_end_date = "20230720"
+        
+        self.test_data_filename = f"raw_{self.test_symbol}_{self.test_timeframe}_{self.test_start_date}_{self.test_end_date}.csv"
+        self.test_data_path = os.path.join(self.test_raw_dir, self.test_data_filename)
         self.sample_data.to_csv(self.test_data_path, index=False)
         
         # Initialize components
@@ -75,13 +99,24 @@ class TestIntegration(unittest.TestCase):
     
     def tearDown(self):
         """Clean up after each test method"""
+        # Restore original config paths
+        sys_config.CAPCOM_RAW_DATA_DIR = self.original_raw_dir
+        sys_config.CAPCOM_PROCESSED_DIR = self.original_processed_dir
+        
+        # Remove temporary directory
         self.temp_dir.cleanup()
-    
+        
+        # We're keeping the TESTING_STORAGE_DIR in case we want to examine files after tests
+        
     def test_cleaner_to_feature_generator(self):
         """Test that FeatureGenerator can properly handle data cleaned by DataCleaner"""
         # 1. Clean the data
         self.cleaner.fit(self.sample_data)
         cleaned_data = self.cleaner.transform(self.sample_data)
+        
+        # Save cleaned data for inspection if needed
+        cleaned_data_path = os.path.join(self.test_processed_dir, 'cleaned_data.csv')
+        cleaned_data.to_csv(cleaned_data_path, index=False)
         
         # Verify cleaned data structure
         self.assertIsInstance(cleaned_data, pd.DataFrame)
@@ -91,6 +126,10 @@ class TestIntegration(unittest.TestCase):
         # 2. Generate features from cleaned data
         self.feature_generator.fit(cleaned_data)
         featured_data = self.feature_generator.transform(cleaned_data)
+        
+        # Save featured data for inspection if needed
+        featured_data_path = os.path.join(self.test_processed_dir, 'featured_data.csv')
+        featured_data.to_csv(featured_data_path, index=False)
         
         # Verify featured data structure
         self.assertIsInstance(featured_data, pd.DataFrame)
@@ -111,6 +150,10 @@ class TestIntegration(unittest.TestCase):
         # 2. Prepare features
         self.feature_preparator.fit(featured_data)
         prepared_data = self.feature_preparator.transform(featured_data)
+        
+        # Save prepared data for inspection if needed
+        prepared_data_path = os.path.join(self.test_processed_dir, 'prepared_data.csv')
+        prepared_data.to_csv(prepared_data_path, index=False)
         
         # Verify prepared data structure
         self.assertIsInstance(prepared_data, pd.DataFrame)
@@ -134,6 +177,10 @@ class TestIntegration(unittest.TestCase):
         # 2. Normalize the prepared data
         self.normalizer.fit(prepared_data)
         normalized_data = self.normalizer.transform(prepared_data)
+        
+        # Save normalized data for inspection if needed
+        normalized_data_path = os.path.join(self.test_processed_dir, 'normalized_data.csv')
+        normalized_data.to_csv(normalized_data_path, index=False)
         
         # Verify normalized data structure
         self.assertIsInstance(normalized_data, pd.DataFrame)
@@ -168,10 +215,15 @@ class TestIntegration(unittest.TestCase):
             n_splits=2,
             save_visualizations=False,
             selection_method='threshold',
-            importance_threshold=0.01
+            importance_threshold=0.01,
+            output_dir=self.test_processed_dir
         )
         self.feature_selector.fit(normalized_data)
         selected_data = self.feature_selector.transform(normalized_data)
+        
+        # Save selected data for inspection if needed
+        selected_data_path = os.path.join(self.test_processed_dir, 'selected_data.csv')
+        selected_data.to_csv(selected_data_path, index=False)
         
         # Verify selected data structure
         self.assertIsInstance(selected_data, pd.DataFrame)
@@ -221,6 +273,10 @@ class TestIntegration(unittest.TestCase):
             train_featured['close_return'] = train_featured['close'].pct_change(1).shift(-1)
             train_featured['close_return'] = train_featured['close_return'].fillna(0)
         
+        # Save train featured data for inspection if needed
+        train_featured_path = os.path.join(self.test_processed_dir, 'train_featured_data.csv')
+        train_featured.to_csv(train_featured_path, index=False)
+        
         # 4. Run feature selection on training data
         selector = FeatureSelector(
             n_splits=2,
@@ -228,13 +284,18 @@ class TestIntegration(unittest.TestCase):
             # Specify a target column that exists and a minimum number of features
             target_col='close_return',
             min_features=3,
-            max_features=10
+            max_features=10,
+            output_dir=self.test_processed_dir
         )
         
         # Verify feature selection runs without errors on the training split
         try:
             selector.fit(train_featured)
             train_selected = selector.transform(train_featured)
+            
+            # Save train selected data for inspection if needed
+            train_selected_path = os.path.join(self.test_processed_dir, 'train_selected_data.csv')
+            train_selected.to_csv(train_selected_path, index=False)
             
             # Verify selected features are available
             self.assertIsNotNone(selector.selected_features)
@@ -252,6 +313,10 @@ class TestIntegration(unittest.TestCase):
                 test_featured['close_return'] = test_featured['close_return'].fillna(0)
             
             test_selected = selector.transform(test_featured)
+            
+            # Save test selected data for inspection if needed
+            test_selected_path = os.path.join(self.test_processed_dir, 'test_selected_data.csv')
+            test_selected.to_csv(test_selected_path, index=False)
             
             # Verify that the test data has the same selected features
             self.assertEqual(set(train_selected.columns), set(test_selected.columns))
@@ -275,12 +340,17 @@ class TestIntegration(unittest.TestCase):
         missing_data.loc[30:35, 'High'] = np.nan
         missing_data.loc[70:75, 'Volume'] = np.nan
         
-        # Save missing data to file
-        missing_path = os.path.join(self.temp_dir.name, 'raw', 'missing_data.csv')
+        # Save missing data to file with proper naming for extraction
+        missing_data_filename = f"raw_{self.test_symbol}_missing_{self.test_start_date}_{self.test_end_date}.csv"
+        missing_path = os.path.join(self.test_raw_dir, missing_data_filename)
         missing_data.to_csv(missing_path, index=False)
         
         # Run pipeline with different treatment modes
         for mode in ['basic', 'advanced', 'hybrid']:
+            # Create subdirectory for this test mode
+            mode_dir = os.path.join(self.test_processed_dir, f'missing_{mode}')
+            os.makedirs(mode_dir, exist_ok=True)
+            
             # Create pipeline with this treatment mode
             pipeline = DataPipeline(feature_treatment_mode=mode)
             pipeline.feature_preparator.min_data_points = 10  # Lower threshold for test data
@@ -288,9 +358,9 @@ class TestIntegration(unittest.TestCase):
             # Run pipeline
             try:
                 result_df, result_path = pipeline.run(
-                    target_path=os.path.join(self.temp_dir.name, f'missing_{mode}'),
+                    target_path=mode_dir,
                     raw_data=missing_path,
-                    save_intermediate=False,
+                    save_intermediate=True,  # Save intermediates for inspection
                     run_feature_selection=False
                 )
                 
@@ -319,9 +389,14 @@ class TestIntegration(unittest.TestCase):
         outlier_data.loc[50, 'High'] = outlier_data.loc[50, 'Close'] + 1
         outlier_data.loc[75, 'Low'] = outlier_data.loc[75, 'Open'] - 1
         
-        # Save outlier data to file
-        outlier_path = os.path.join(self.temp_dir.name, 'raw', 'outlier_data.csv')
+        # Save outlier data to file with proper naming
+        outlier_filename = f"raw_{self.test_symbol}_outliers_{self.test_start_date}_{self.test_end_date}.csv"
+        outlier_path = os.path.join(self.test_raw_dir, outlier_filename)
         outlier_data.to_csv(outlier_path, index=False)
+        
+        # Create directory for outlier test results
+        outlier_dir = os.path.join(self.test_processed_dir, 'outliers')
+        os.makedirs(outlier_dir, exist_ok=True)
         
         # Run pipeline with outlier handling
         pipeline = DataPipeline()
@@ -334,14 +409,14 @@ class TestIntegration(unittest.TestCase):
         
         # Run pipeline
         result_df, result_path = pipeline.run(
-            target_path=os.path.join(self.temp_dir.name, 'outliers'),
+            target_path=outlier_dir,
             raw_data=outlier_path,
             save_intermediate=True,
             run_feature_selection=False
         )
         
         # Load the cleaned data to check if outliers were handled
-        cleaned_file = os.path.join(self.temp_dir.name, 'outliers', 'clean', 'clean_BTCUSD_D1_20230101_20230720.csv')
+        cleaned_file = os.path.join(outlier_dir, 'clean', f"clean_{self.test_symbol}_outliers_{self.test_start_date}_{self.test_end_date}.csv")
         if os.path.exists(cleaned_file):
             cleaned_df = pd.read_csv(cleaned_file)
             
@@ -366,6 +441,15 @@ class TestIntegration(unittest.TestCase):
             'Close': 'price_close',
             'Volume': 'trading_volume'
         })
+        
+        # Save nonstandard data with proper filename
+        nonstandard_filename = f"raw_{self.test_symbol}_nonstandard_{self.test_start_date}_{self.test_end_date}.csv"
+        nonstandard_path = os.path.join(self.test_raw_dir, nonstandard_filename)
+        nonstandard_data.to_csv(nonstandard_path, index=False)
+        
+        # Create directory for nonstandard column test
+        nonstandard_dir = os.path.join(self.test_processed_dir, 'nonstandard')
+        os.makedirs(nonstandard_dir, exist_ok=True)
         
         # Create pipeline with custom column names
         pipeline = DataPipeline(
@@ -392,16 +476,12 @@ class TestIntegration(unittest.TestCase):
             volume_col='trading_volume'
         )
         
-        # Save data to test file
-        nonstandard_path = os.path.join(self.temp_dir.name, 'raw', 'nonstandard_columns.csv')
-        nonstandard_data.to_csv(nonstandard_path, index=False)
-        
         # Run pipeline
         try:
             result_df, result_path = pipeline.run(
-                target_path=os.path.join(self.temp_dir.name, 'nonstandard'),
+                target_path=nonstandard_dir,
                 raw_data=nonstandard_path,
-                save_intermediate=False,
+                save_intermediate=True,
                 run_feature_selection=False
             )
             
@@ -417,6 +497,10 @@ class TestIntegration(unittest.TestCase):
     
     def test_pipeline_with_custom_configurations(self):
         """Test pipeline with custom configurations for all components"""
+        # Create directory for custom configuration test
+        custom_dir = os.path.join(self.test_processed_dir, 'custom')
+        os.makedirs(custom_dir, exist_ok=True)
+        
         # Configure a highly customized pipeline
         pipeline = DataPipeline(
             feature_treatment_mode='hybrid',
@@ -458,7 +542,7 @@ class TestIntegration(unittest.TestCase):
         # Run pipeline
         try:
             result_df, result_path = pipeline.run(
-                target_path=os.path.join(self.temp_dir.name, 'custom'),
+                target_path=custom_dir,
                 raw_data=self.test_data_path,
                 save_intermediate=True,
                 run_feature_selection=False
