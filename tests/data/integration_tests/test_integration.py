@@ -211,10 +211,24 @@ class TestIntegration(unittest.TestCase):
         self.feature_generator.fit(train_data)
         train_featured = self.feature_generator.transform(train_data)
         
+        # Create the target column (close_return) by calculating future returns
+        # This is typically done by FeaturePreparator but we're using FeatureGenerator directly
+        if 'Close' in train_featured.columns:
+            train_featured['close_return'] = train_featured['Close'].pct_change(1).shift(-1)
+            # Fill the last row's NaN with 0 or the mean
+            train_featured['close_return'] = train_featured['close_return'].fillna(0)
+        elif 'close' in train_featured.columns:
+            train_featured['close_return'] = train_featured['close'].pct_change(1).shift(-1)
+            train_featured['close_return'] = train_featured['close_return'].fillna(0)
+        
         # 4. Run feature selection on training data
         selector = FeatureSelector(
             n_splits=2,
-            save_visualizations=False
+            save_visualizations=False,
+            # Specify a target column that exists and a minimum number of features
+            target_col='close_return',
+            min_features=3,
+            max_features=10
         )
         
         # Verify feature selection runs without errors on the training split
@@ -228,6 +242,15 @@ class TestIntegration(unittest.TestCase):
             
             # 5. Apply the same feature selection to test data
             test_featured = self.feature_generator.transform(test_data)
+            
+            # Create the same target column in test data
+            if 'Close' in test_featured.columns:
+                test_featured['close_return'] = test_featured['Close'].pct_change(1).shift(-1)
+                test_featured['close_return'] = test_featured['close_return'].fillna(0)
+            elif 'close' in test_featured.columns:
+                test_featured['close_return'] = test_featured['close'].pct_change(1).shift(-1)
+                test_featured['close_return'] = test_featured['close_return'].fillna(0)
+            
             test_selected = selector.transform(test_featured)
             
             # Verify that the test data has the same selected features
