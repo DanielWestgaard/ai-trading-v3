@@ -66,7 +66,7 @@ class DataPipeline:
         self.target_column = target_column
         self.preserve_target = preserve_target
         
-    def run(self, source=None, target_path=sys_config.CAPCOM_PROCESSED_DATA_DIR, 
+    def run(self, target_path=sys_config.CAPCOM_PROCESSED_DATA_DIR, 
             raw_data=data_config.TESTING_RAW_FILE, save_intermediate=False,
             run_feature_selection=True):
         """Execute the full pipeline with improved file organization"""
