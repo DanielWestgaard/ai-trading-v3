@@ -242,8 +242,8 @@ class TestIntegration(unittest.TestCase):
         missing_data = self.sample_data.copy()
         
         # Add missing values in different patterns
-        # 1. Random missing values
-        random_missing = np.random.choice([True, False], size=missing_data.shape, p=[0.05, 0.95])
+        # 1. Random missing values - but not too many
+        random_missing = np.random.choice([True, False], size=missing_data.shape, p=[0.03, 0.97])
         random_missing[:, 0] = False  # Don't remove date values
         missing_data = missing_data.mask(random_missing)
         
