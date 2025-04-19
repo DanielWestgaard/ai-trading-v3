@@ -211,7 +211,16 @@ class DataPipeline:
             if self.preserve_target and self.target_column not in selected_data.columns:
                 if self.target_column in normalized_data.columns:
                     logging.warning(f"Target column '{self.target_column}' was removed during feature selection. Re-adding it.")
-                    selected_data[self.target_column] = normalized_data[self.target_column]
+                    
+                    # Handle case where selected_data is empty
+                    if selected_data.empty and not normalized_data.empty:
+                        # Create a dataframe with just the target column
+                        selected_data = pd.DataFrame({
+                            self.target_column: normalized_data[self.target_column]
+                        })
+                    else:
+                        # Just add the column to existing dataframe
+                        selected_data[self.target_column] = normalized_data[self.target_column]
                 else:
                     logging.error(f"Target column '{self.target_column}' not found in normalized data. Cannot preserve it.")
         
