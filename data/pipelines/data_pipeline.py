@@ -23,6 +23,7 @@ class DataPipeline:
                  feature_selection_method='threshold',
                  feature_importance_threshold=0.01,
                  target_column='close_return',
+                 timestamp_column='Date',  # Add timestamp_column parameter
                  preserve_target=True):
         """
         Initialize the data pipeline with configuration.
@@ -34,23 +35,29 @@ class DataPipeline:
             feature_selection_method: Method for feature selection ('threshold', 'top_n', 'cumulative')
             feature_importance_threshold: Importance threshold for feature selection
             target_column: Target column for prediction (influences feature selection)
+            timestamp_column: Column name for timestamp/date data
             preserve_target: Whether to always preserve the target column
         """
+        # Store timestamp column name
+        self.timestamp_column = timestamp_column
+        
         # Configure the cleaner
         self.cleaner = DataCleaner(
             price_cols=['Open', 'High', 'Low', 'Close'],
             volume_col='Volume',
-            timestamp_col='Date',
+            timestamp_col=self.timestamp_column,
         )
         
         # Configure the feature generator
-        self.feature_generator = FeatureGenerator()
+        self.feature_generator = FeatureGenerator(
+            timestamp_col=self.timestamp_column
+        )
         
         # Configure the feature preparator - always preserve original prices
         self.feature_preparator = FeaturePreparator(
             price_cols=['Open', 'High', 'Low', 'Close'],
             volume_col='Volume',
-            timestamp_col='Date',
+            timestamp_col=self.timestamp_column,
             preserve_original_prices=True,
             price_transform_method=price_transform_method,
             treatment_mode=feature_treatment_mode
@@ -75,8 +82,33 @@ class DataPipeline:
         
         # 1. Load data
         logging.info(f"Loading raw data from {raw_data}")
-        raw_data_df = pd.read_csv(raw_data, parse_dates=['Date'])
-        logging.info(f"Loaded raw data with shape: {raw_data_df.shape}")
+        try:
+            # Use the configured timestamp column for parsing dates
+            raw_data_df = pd.read_csv(raw_data, parse_dates=[self.timestamp_column])
+            logging.info(f"Loaded raw data with shape: {raw_data_df.shape}")
+        except KeyError as e:
+            # Try a fallback approach if the configured column isn't found
+            logging.warning(f"Column {self.timestamp_column} not found in CSV. Attempting to load without date parsing.")
+            raw_data_df = pd.read_csv(raw_data)
+            
+            # Look for date/time columns
+            date_cols = [col for col in raw_data_df.columns if any(
+                date_str in col.lower() for date_str in ['date', 'time', 'timestamp'])]
+            
+            if date_cols:
+                # Update the timestamp column to what was found
+                self.timestamp_column = date_cols[0]
+                logging.info(f"Using '{self.timestamp_column}' as timestamp column")
+                
+                # Parse the found date column
+                raw_data_df[self.timestamp_column] = pd.to_datetime(raw_data_df[self.timestamp_column])
+                
+                # Update all components to use this column
+                self.cleaner.timestamp_col = self.timestamp_column.lower()
+                self.feature_generator.timestamp_col = self.timestamp_column.lower()
+                self.feature_preparator.timestamp_col = self.timestamp_column.lower()
+            else:
+                logging.warning("No date/time column found in the data")
         
         # Extract metadata from raw filename for consistent naming
         raw_metadata = data_utils.extract_file_metadata(raw_data)
