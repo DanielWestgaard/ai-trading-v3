@@ -7,6 +7,7 @@ import shutil
 from unittest.mock import patch, MagicMock
 
 # Import the class we're testing
+from config.constants import data_config
 from data.pipelines.data_pipeline import DataPipeline
 
 
@@ -43,7 +44,7 @@ class TestDataPipeline(unittest.TestCase):
             self.sample_data.loc[i, 'Low'] = low
         
         # Create directories
-        self.data_dir = os.path.join(self.temp_dir.name, 'data')
+        self.data_dir = data_config.TEST_DUMMY_PATH
         self.raw_dir = os.path.join(self.data_dir, 'raw')
         self.processed_dir = os.path.join(self.data_dir, 'processed')
         
