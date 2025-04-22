@@ -160,7 +160,6 @@ class TestErrorHandling(unittest.TestCase):
         """Test behavior with empty or very small datasets"""
         # Create an empty DataFrame with the same columns
         empty_df = pd.DataFrame(columns=self.sample_data.columns)
-        print(empty_df.size)
         
         # Test feature generator with empty data
         with self.assertRaises(Exception):
@@ -257,8 +256,10 @@ class TestErrorHandling(unittest.TestCase):
         
         # Test normalizer with extreme values
         try:
+            print(corrupted_df)
             self.normalizer.fit(corrupted_df)
             normalized_corrupted = self.normalizer.transform(corrupted_df)
+            print(normalized_corrupted)
             # Should produce finite values always
             self.assertTrue(np.isfinite(normalized_corrupted.select_dtypes(include=['number']).values).all())
         except Exception as e:
