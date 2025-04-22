@@ -12,3 +12,4 @@ xgboost
 graphviz
 pytest
 pytest-cov
+memory_profiler

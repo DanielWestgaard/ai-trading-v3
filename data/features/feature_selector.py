@@ -251,30 +251,49 @@ class FeatureSelector(BaseProcessor):
         else:
             logging.warning("No essential price columns found in the dataset!")
         
+        # Get a copy of the importance dataframe for manipulation
+        working_df = importance_df.copy()
+        
+        # Remove constant or near-constant features from consideration
+        # These would typically have importance scores of zero or very close to zero
+        constant_threshold = 1e-10  # Threshold for considering a feature as constant
+        constant_features = working_df[working_df['importance'] <= constant_threshold]['feature'].tolist()
+        
+        # Save target column info before removing constants
+        has_target = self.target_col in working_df['feature'].values
+        target_importance = 0
+        if has_target:
+            target_importance = working_df[working_df['feature'] == self.target_col]['importance'].iloc[0]
+        
+        if constant_features:
+            logging.info(f"Identified {len(constant_features)} constant or near-constant features that will be excluded from selection: {constant_features}")
+            # Filter out constant features for selection process
+            working_df = working_df[working_df['importance'] > constant_threshold].copy()
+        
         # Select features based on the method specified
         if self.selection_method == 'top_n':
             # Select top N features
-            n = self.n_features or min(self.max_features, len(importance_df) // 2)
-            selected = importance_df.head(n)['feature'].tolist()
+            n = self.n_features or min(self.max_features, len(working_df) // 2)
+            selected = working_df.head(n)['feature'].tolist()
             
         elif self.selection_method == 'threshold':
             # Select features above importance threshold
-            selected = importance_df[importance_df['importance'] >= self.importance_threshold]['feature'].tolist()
+            selected = working_df[working_df['importance'] >= self.importance_threshold]['feature'].tolist()
             
             # Ensure we have at least min_features
             if len(selected) < self.min_features:
-                selected = importance_df.head(self.min_features)['feature'].tolist()
+                selected = working_df.head(self.min_features)['feature'].tolist()
                 
             # Cap at max_features
             if len(selected) > self.max_features:
-                selected = importance_df.head(self.max_features)['feature'].tolist()
+                selected = working_df.head(self.max_features)['feature'].tolist()
                 
         elif self.selection_method == 'cumulative':
             # Select features until cumulative importance reaches threshold (e.g., 90%)
             threshold = self.importance_threshold if 0 < self.importance_threshold <= 1 else 0.9
             
             # Calculate cumulative importance
-            sorted_df = importance_df.sort_values('importance', ascending=False).copy()
+            sorted_df = working_df.sort_values('importance', ascending=False).copy()
             total_importance = sorted_df['importance'].sum()
             sorted_df['cumulative'] = sorted_df['importance'].cumsum() / total_importance
             
@@ -295,8 +314,8 @@ class FeatureSelector(BaseProcessor):
                     
         else:
             # Default to top 20% of features
-            n = min(self.max_features, max(self.min_features, int(len(importance_df) * 0.2)))
-            selected = importance_df.head(n)['feature'].tolist()
+            n = min(self.max_features, max(self.min_features, int(len(working_df) * 0.2)))
+            selected = working_df.head(n)['feature'].tolist()
         
         # Add the essential columns to the selection, ensuring no duplicates
         for col in available_essential_columns:
@@ -308,15 +327,28 @@ class FeatureSelector(BaseProcessor):
         if self.category_balance and 'category' in importance_df.columns:
             selected = self._balance_feature_categories(importance_df, selected)
         
-        # Always include target column if requested
+        # Handle target column based on preserve_target flag
         if self.preserve_target and self.target_col:
             if self.target_col in importance_df['feature'].values and self.target_col not in selected:
                 selected.append(self.target_col)
                 logging.info(f"Preserving target column '{self.target_col}' for modeling")
+        else:
+            # Explicitly remove target column if preserve_target is False
+            if self.target_col in selected:
+                selected.remove(self.target_col)
+                logging.info(f"Removed target column '{self.target_col}' as preserve_target=False")
         
+        # Ensure we remove any constant features from the final list
+        # But be careful not to remove the target if preserve_target is True
+        if self.preserve_target and self.target_col in constant_features and has_target:
+            # Keep target even if it's constant
+            constant_features = [f for f in constant_features if f != self.target_col]
+        
+        # Filter out constant features from final selection
+        selected = [feature for feature in selected if feature not in constant_features]
         
         return selected
-       
+        
     def _balance_feature_categories(self, importance_df, initial_selection):
         """
         Balance feature selection across categories.
@@ -550,7 +582,19 @@ class FeatureSelector(BaseProcessor):
         if shape_before[1] != shape_after[1]:
             logging.warning(f"Dropped {shape_before[1] - shape_after[1]} columns with NaN values")
         
-        # Get feature names after dropping NaN columns
+        # Check for constant columns and remove them
+        constant_cols = [col for col in X.columns if X[col].nunique() <= 1]
+        if constant_cols:
+            logging.warning(f"Removing {len(constant_cols)} constant columns with no variation: {constant_cols}")
+            X = X.drop(columns=constant_cols)
+            if X.empty:
+                logging.error("No features left after removing constant columns")
+                # Return empty importance DataFrame with proper structure
+                importance_df = pd.DataFrame(columns=['feature', 'importance'])
+                fold_df = pd.DataFrame(columns=['fold', 'mse', 'mae', 'r2', 'train_samples', 'test_samples'])
+                return importance_df, fold_df
+        
+        # Get feature names after dropping NaN and constant columns
         feature_names = X.columns.tolist()
         logging.info(f"Final feature set: {len(feature_names)} features")
         logging.debug(f"Feature list (first 10): {feature_names[:10]}")

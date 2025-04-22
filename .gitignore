@@ -6,3 +6,4 @@ broker/capital_com/rest_api/saved_responses/
 #data/storage/capital_com/processed
 walk_forward_results/
 .DS_Store
+data/storage/testing

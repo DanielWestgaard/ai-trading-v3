@@ -133,8 +133,63 @@ class FeaturePreparator(BaseProcessor):
             logging.warning(f"There are still {len(columns_with_missing)} columns with missing values.")
             for col in columns_with_missing.index:
                 logging.warning(f"  - {col}: {missing_counts[col]} missing values")
+            
+            # NEW: Force-fill any remaining missing values
+            df = self._ensure_no_missing_values(df)
         
         return df
+    
+    def _ensure_no_missing_values(self, df):
+        """Make sure there are absolutely no missing values in the final result"""
+        result = df.copy()
+        
+        # 1. Handle numeric columns
+        numeric_cols = result.select_dtypes(include=['number']).columns
+        for col in numeric_cols:
+            # Try forward fill first
+            result[col] = result[col].ffill()
+            
+            # If still has NaNs, try backward fill
+            if result[col].isna().any():
+                result[col] = result[col].bfill()
+                
+            # If STILL has NaNs, fill with column mean or 0
+            if result[col].isna().any():
+                if result[col].count() > 0:  # If we have at least some non-NaN values
+                    result[col] = result[col].fillna(result[col].mean())
+                else:
+                    # No valid values at all, fill with 0
+                    result[col] = result[col].fillna(0)
+        
+        # 2. Handle non-numeric columns
+        non_numeric_cols = result.select_dtypes(exclude=['number']).columns
+        for col in non_numeric_cols:
+            # Forward fill for non-numeric
+            result[col] = result[col].ffill()
+            
+            # If still has NaNs, backward fill
+            if result[col].isna().any():
+                result[col] = result[col].bfill()
+                
+            # If STILL has NaNs, fill with most common value or a placeholder
+            if result[col].isna().any():
+                if result[col].count() > 0:  # If we have at least some non-NaN values
+                    most_common = result[col].mode()[0]
+                    result[col] = result[col].fillna(most_common)
+                else:
+                    # No valid values at all, fill with "UNKNOWN"
+                    result[col] = result[col].fillna("UNKNOWN")
+        
+        # Verify all NaNs are gone
+        remaining_nans = result.isna().sum().sum()
+        if remaining_nans > 0:
+            logging.warning(f"Failed to remove all NaNs. {remaining_nans} still remain. Using more aggressive method.")
+            # Last resort - drop columns with NaNs
+            cols_with_nans = result.columns[result.isna().any()].tolist()
+            logging.warning(f"Dropping columns with remaining NaNs: {cols_with_nans}")
+            result = result.drop(columns=cols_with_nans)
+        
+        return result
     
     def _calculate_feature_stats(self, df):
         """Calculate statistics for features to guide preparation"""
@@ -154,16 +209,45 @@ class FeaturePreparator(BaseProcessor):
         
         # Categorize each column
         for col in columns:
+            col_lower = col.lower()
+            categorized = False
+            
+            # First try exact matches (for specific features like 'sma_50')
             for category, patterns in self.feature_category_rules.items():
-                if any(pattern in col for pattern in patterns):
-                    self._feature_categories[category].append(col)
+                if col_lower in patterns:
+                    self._feature_categories[category].append(col_lower)
+                    categorized = True
                     break
-        
-        # Handle any uncategorized columns
-        all_categorized = [col for sublist in self._feature_categories.values() for col in sublist]
-        uncategorized = [col for col in columns if col not in all_categorized]
-        if uncategorized:
-            self._feature_categories['other'] = uncategorized
+            
+            if not categorized:
+                # Then try pattern matching for more general patterns
+                for category, patterns in self.feature_category_rules.items():
+                    # Use pattern matching, but be more careful with numeric suffixes
+                    for pattern in patterns:
+                        # If pattern doesn't contain underscore (like 'open', 'volume'), match exactly
+                        if '_' not in pattern and pattern == col_lower:
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                        # If pattern has underscore (like 'sma_', 'volatility_'), ensure it's a prefix match
+                        elif '_' in pattern and col_lower.startswith(pattern):
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                        # Generic substring matching for other patterns
+                        elif pattern in col_lower:
+                            self._feature_categories[category].append(col_lower)
+                            categorized = True
+                            break
+                    
+                    if categorized:
+                        break
+            
+            # Handle any uncategorized columns
+            if not categorized:
+                if 'other' not in self._feature_categories:
+                    self._feature_categories['other'] = []
+                self._feature_categories['other'].append(col_lower)
     
     def _detect_window_sizes(self, df):
         """
@@ -177,7 +261,11 @@ class FeaturePreparator(BaseProcessor):
                         first_valid_idx = df[col].first_valid_index()
                         if first_valid_idx is not None:
                             # Calculate the window size based on the first valid index
-                            window_size = first_valid_idx if isinstance(first_valid_idx, int) else df.index.get_loc(first_valid_idx)
+                            # Add 1 to convert from 0-based index to window size
+                            if isinstance(first_valid_idx, int):
+                                window_size = first_valid_idx + 1
+                            else:
+                                window_size = df.index.get_loc(first_valid_idx) + 1
                             self._window_sizes[col] = window_size
         
         # Calculate the maximum window size for each category
@@ -195,9 +283,27 @@ class FeaturePreparator(BaseProcessor):
         """Transform price columns while preserving original values"""
         result = df.copy()
         
-        # Ensure we have price columns
-        price_cols_in_data = [col for col in self.price_cols if col in result.columns]
+        # Convert result column names to lowercase for consistent processing
+        column_case_map = {col.lower(): col for col in result.columns}
+        result.columns = [col.lower() for col in result.columns]
+        
+        # Ensure we have price columns - use lowercase matching
+        price_cols_in_data = []
+        for price_col in self.price_cols:
+            # Check if the column exists directly
+            if price_col in result.columns:
+                price_cols_in_data.append(price_col)
+                continue
+                
+            # Look for price columns using pattern matching if exact match failed
+            for col in result.columns:
+                if price_col in col:
+                    price_cols_in_data.append(col)
+                    break
+        
         if not price_cols_in_data:
+            # Restore original column case and return if no price columns found
+            result.columns = [column_case_map.get(col, col) for col in result.columns]
             return result
         
         # Preserve raw prices: These will never be normalized or modified
@@ -212,16 +318,20 @@ class FeaturePreparator(BaseProcessor):
         if self.price_transform_method == 'returns':
             # Calculate percentage returns
             for col in price_cols_in_data:
-                result[f"{col}_return"] = result[col].pct_change()
-                
+                # Explicitly specify fill_method=None to address the FutureWarning
+                result[f"{col}_return"] = result[col].pct_change(fill_method=None)
+                    
         elif self.price_transform_method == 'log':
             # Calculate log transformation
             for col in price_cols_in_data:
-                # Add small constant to avoid log(0)
+                # Add small constant to avoid log(0) or log(negative)
                 min_val = result[col].min()
                 offset = 0 if min_val > 0 else abs(min_val) + 1e-8
-                result[f"{col}_log"] = np.log(result[col] + offset)
-                
+                # Handle possible negatives or zeros
+                safe_values = result[col] + offset
+                # Replace infinities or NaNs from log with NaN
+                result[f"{col}_log"] = np.log(safe_values)
+                    
         elif self.price_transform_method == 'pct_change':
             # Calculate percentage change from first value
             for col in price_cols_in_data:
@@ -230,26 +340,32 @@ class FeaturePreparator(BaseProcessor):
                     result[f"{col}_pct_change"] = (result[col] / first_value - 1) * 100
                 else:
                     result[f"{col}_pct_change"] = 0
-                    
+                        
         elif self.price_transform_method == 'multi':
             # Apply multiple transformations for comparison
             for col in price_cols_in_data:
                 # Returns
-                result[f"{col}_return"] = result[col].pct_change()
-                
+                result[f"{col}_return"] = result[col].pct_change(fill_method=None)
+                    
                 # Log transform
                 min_val = result[col].min()
                 offset = 0 if min_val > 0 else abs(min_val) + 1e-8
-                result[f"{col}_log"] = np.log(result[col] + offset)
+                # Handle possible negatives or zeros
+                safe_values = result[col] + offset
+                result[f"{col}_log"] = np.log(safe_values)
         
         # Original price columns are always preserved
         logging.info(f"Preserving original OHLC values for empirical feature selection")
+        
+        # Keep columns in lowercase without restoring original case
+        # This ensures consistent column naming for downstream processing
         
         return result
     
     def _basic_treatment(self, df):
         """
-        Basic treatment: simply trim the initial periods with NaNs
+        Basic treatment: handle missing values with a more resilient approach
+        that preserves more data than simple trimming or dropping.
         """
         # Determine the maximum window size
         max_window_size = max(
@@ -261,14 +377,230 @@ class FeaturePreparator(BaseProcessor):
         # Use manually specified trim size if provided
         trim_size = self.trim_initial_periods or max_window_size
         
-        # Trim the data
+        # Trim the data if we have enough
         if len(df) > trim_size + self.min_data_points:
             logging.info(f"Trimming {trim_size} initial periods with potential NaN values.")
             result = df.iloc[trim_size:].reset_index(drop=True)
+            
+            # ENHANCED: Check if we still have NaNs after trimming and handle them
+            if result.isna().sum().sum() > 0:
+                logging.info(f"Still found NaNs after trimming. Applying additional filling.")
+                result = self._fill_remaining_nans(result)
         else:
+            # IMPROVED APPROACH: Instead of simple dropna(), use a more targeted strategy
             logging.warning(f"Not enough data to trim {trim_size} periods safely. "
-                          f"Using dropna() instead.")
-            result = df.dropna().reset_index(drop=True)
+                        f"Using targeted NaN handling instead.")
+            
+            result = self._fill_missing_values_by_type(df)
+        
+        return result
+    
+    def _fill_missing_values_by_type(self, df):
+        """Enhanced method for handling missing values based on column type"""
+        result = df.copy()
+        
+        # 1. Handle price columns - always critical
+        price_cols = []
+        for col in result.columns:
+            if any(price in col.lower() for price in self.price_cols):
+                price_cols.append(col)
+                
+        if price_cols:
+            # Forward fill then backward fill for price data
+            result[price_cols] = result[price_cols].ffill().bfill()
+        
+        # 2. Handle volume column
+        volume_cols = [col for col in result.columns if self.volume_col in col.lower()]
+        if volume_cols:
+            # Fill missing volume with nearest values or zeros
+            result[volume_cols] = result[volume_cols].ffill().bfill()
+            result[volume_cols] = result[volume_cols].fillna(0)  # Any remaining NaNs become 0
+        
+        # 3. Handle technical indicators by category
+        # Different handling for different types of indicators
+        
+        # Moving averages
+        ma_cols = [col for col in result.columns if any(x in col.lower() for x in ['sma', 'ema'])]
+        if ma_cols:
+            # First try to fill forward (most accurate for time series)
+            result[ma_cols] = result[ma_cols].ffill()
+            
+            # For any remaining NaNs, try to fill by taking average of price data
+            for col in ma_cols:
+                # Extract the window size from column name if possible (e.g., sma_20 -> 20)
+                parts = col.split('_')
+                if len(parts) >= 2 and parts[1].isdigit():
+                    window = int(parts[1])
+                    
+                    # Find the corresponding price column
+                    price_type = 'close'  # Default
+                    if 'open' in col:
+                        price_type = 'open'
+                    elif 'high' in col:
+                        price_type = 'high'
+                    elif 'low' in col:
+                        price_type = 'low'
+                    
+                    # Find the actual price column in the data
+                    price_col = None
+                    for pcol in result.columns:
+                        if price_type in pcol.lower() and 'raw' in pcol.lower():
+                            price_col = pcol
+                            break
+                    
+                    # If we found the price column, estimate the MA
+                    if price_col is not None:
+                        # Calculate rolling mean without NaN propagation
+                        rolling_mean = result[price_col].rolling(window, min_periods=1).mean()
+                        
+                        # Fill NaN values in the indicator with the calculated values
+                        mask = result[col].isna()
+                        result.loc[mask, col] = rolling_mean[mask]
+            
+            # Any remaining NaNs, fill by backward fill and interpolation
+            result[ma_cols] = result[ma_cols].bfill().interpolate(method='linear', limit_direction='both')
+        
+        # Oscillators (RSI, MACD, etc.)
+        osc_cols = [col for col in result.columns if any(x in col.lower() for x in ['rsi', 'macd', 'stoch'])]
+        if osc_cols:
+            # First fill with ffill/bfill
+            result[osc_cols] = result[osc_cols].ffill().bfill()
+            
+            # For RSI specifically, fill remaining NaNs with neutral values
+            rsi_cols = [col for col in osc_cols if 'rsi' in col.lower()]
+            for col in rsi_cols:
+                result[col] = result[col].fillna(50)  # Neutral value for RSI
+                
+            # For other oscillators, fill with column mean
+            for col in [c for c in osc_cols if c not in rsi_cols]:
+                if result[col].isna().any():
+                    if result[col].count() > 0:  # If we have non-NaN values
+                        result[col] = result[col].fillna(result[col].mean())
+                    else:
+                        result[col] = result[col].fillna(0)  # No data at all
+        
+        # Volatility metrics
+        vol_cols = [col for col in result.columns if any(x in col.lower() for x in ['atr', 'volatility', 'bollinger'])]
+        if vol_cols:
+            # Fill with ffill/bfill first
+            result[vol_cols] = result[vol_cols].ffill().bfill()
+            
+            # Bollinger bands specifically
+            bollinger_cols = [col for col in vol_cols if 'bollinger' in col.lower()]
+            if bollinger_cols:
+                # Find the price column
+                price_col = None
+                for pcol in result.columns:
+                    if 'close' in pcol.lower() and 'raw' in pcol.lower():
+                        price_col = pcol
+                        break
+                
+                if price_col is not None:
+                    # If middle band is missing, use price
+                    middle_cols = [col for col in bollinger_cols if 'middle' in col.lower()]
+                    for col in middle_cols:
+                        mask = result[col].isna()
+                        result.loc[mask, col] = result.loc[mask, price_col]
+                    
+                    # If upper/lower bands are missing, estimate from price and middle
+                    for col in [c for c in bollinger_cols if c not in middle_cols]:
+                        if 'upper' in col.lower():
+                            mask = result[col].isna()
+                            # Estimate upper as price + 5%
+                            if any(mask):
+                                middle_col = [c for c in middle_cols if c in result.columns][0] if middle_cols else price_col
+                                result.loc[mask, col] = result.loc[mask, middle_col] * 1.05
+                        elif 'lower' in col.lower():
+                            mask = result[col].isna()
+                            # Estimate lower as price - 5%
+                            if any(mask):
+                                middle_col = [c for c in middle_cols if c in result.columns][0] if middle_cols else price_col
+                                result.loc[mask, col] = result.loc[mask, middle_col] * 0.95
+            
+            # For remaining volatility measures, use average volatility or small value
+            for col in vol_cols:
+                if result[col].isna().any():
+                    if result[col].count() > 0:
+                        avg_vol = result[col].mean()
+                        result[col] = result[col].fillna(avg_vol)
+                    else:
+                        # Use a small positive value as fallback
+                        result[col] = result[col].fillna(0.01)
+        
+        # 4. Handle any NaNs in derived price columns (returns, etc.)
+        derived_price_cols = []
+        for col in result.columns:
+            if any(s in col.lower() for s in ['_return', '_log', '_pct_change']):
+                derived_price_cols.append(col)
+        
+        if derived_price_cols:
+            # First values are often NaN for returns
+            result[derived_price_cols] = result[derived_price_cols].fillna(0)
+        
+        # 5. Handle pattern and categorical features
+        pattern_cols = [col for col in result.columns if any(x in col.lower() for x in 
+                                                          ['doji', 'hammer', 'engulfing', 'day_', 'hour_', 'month'])]
+        if pattern_cols:
+            # Fill categorical with most frequent value, boolean with False
+            for col in pattern_cols:
+                if result[col].dtype == bool:
+                    result[col] = result[col].fillna(False)
+                else:
+                    # For categorical, use most frequent
+                    if result[col].count() > 0:
+                        most_frequent = result[col].mode()[0]
+                        result[col] = result[col].fillna(most_frequent)
+                    else:
+                        # If no data, use a placeholder
+                        result[col] = result[col].fillna("Unknown")
+        
+        # Final check - any remaining NaNs
+        if result.isna().sum().sum() > 0:
+            # Last resort interpolation for any numeric columns with remaining NaNs
+            numeric_cols = result.select_dtypes(include=['number']).columns
+            result[numeric_cols] = result[numeric_cols].interpolate(method='linear', limit_direction='both')
+            
+            # Forward/backward fill for any non-numeric
+            non_numeric_cols = result.select_dtypes(exclude=['number']).columns
+            result[non_numeric_cols] = result[non_numeric_cols].ffill().bfill()
+        
+        return result
+    
+    def _fill_remaining_nans(self, df):
+        """Fill any remaining NaNs after initial processing"""
+        result = df.copy()
+        
+        # Fill any remaining NaNs in numeric columns
+        numeric_cols = result.select_dtypes(include=['number']).columns.tolist()
+        if numeric_cols:
+            # First try interpolation
+            result[numeric_cols] = result[numeric_cols].interpolate(method='linear', limit_direction='both')
+            
+            # Then try forward/backward fill for any remaining
+            result[numeric_cols] = result[numeric_cols].ffill().bfill()
+            
+            # If still any NaNs, use column mean or 0
+            for col in numeric_cols:
+                if result[col].isna().any():
+                    if result[col].count() > 0:
+                        result[col] = result[col].fillna(result[col].mean())
+                    else:
+                        result[col] = result[col].fillna(0)
+        
+        # Handle non-numeric columns
+        non_numeric_cols = result.select_dtypes(exclude=['number']).columns.tolist()
+        if non_numeric_cols:
+            # Forward/backward fill
+            result[non_numeric_cols] = result[non_numeric_cols].ffill().bfill()
+            
+            # Fill remaining with most frequent or a placeholder
+            for col in non_numeric_cols:
+                if result[col].isna().any():
+                    if result[col].count() > 0:
+                        most_frequent = result[col].mode()[0]
+                        result[col] = result[col].fillna(most_frequent)
+                    else:
+                        result[col] = result[col].fillna("UNKNOWN")
         
         return result
     
@@ -323,8 +655,8 @@ class FeaturePreparator(BaseProcessor):
                     # Recombine
                     result = pd.concat([init_data, main_data], axis=0)
                 else:
-                    # Not enough data, drop rows with NaNs in medium window features
-                    result = result.dropna(subset=medium_cols)
+                    # Not enough data, use enhanced missing value handling
+                    result[medium_cols] = self._fill_remaining_nans(result[medium_cols])
         
         # Long window features - preserve NaNs and trim
         if 'long_window' in self._feature_categories:
@@ -337,8 +669,13 @@ class FeaturePreparator(BaseProcessor):
                 if len(result) > long_window + self.min_data_points:
                     result = result.iloc[long_window:].reset_index(drop=True)
                 else:
-                    # Not enough data, drop rows with NaNs in long window features
-                    result = result.dropna(subset=long_cols)
+                    # Not enough data, use extended missing value handling
+                    result[long_cols] = self._fill_missing_values_by_type(result[long_cols])
+        
+        # Final check for any remaining NaNs
+        if result.isna().sum().sum() > 0:
+            # Apply the enhanced nan filling
+            result = self._fill_remaining_nans(result)
         
         return result.reset_index(drop=True)
     
@@ -355,14 +692,7 @@ class FeaturePreparator(BaseProcessor):
         # 1. For very small datasets, preserve as much data as possible
         if len(df) < self.min_data_points * 1.5:
             # Handle all features to maximize data retention
-            for col in result.columns:
-                if result[col].isna().any():
-                    # For returns, fill with 0
-                    if any(pattern in col for pattern in self.feature_category_rules.get('returns', [])):
-                        result[col] = result[col].fillna(0)
-                    # For others, use forward-backward fill
-                    else:
-                        result[col] = result[col].ffill().bfill()
+            result = self._fill_missing_values_by_type(result)
             return result
         
         # 2. For medium-sized datasets, use a compromise approach
@@ -386,8 +716,10 @@ class FeaturePreparator(BaseProcessor):
                 long_cols = [col for col in self._feature_categories['long_window'] if col in result.columns]
                 # Drop long window features if they would cause too much data loss
                 if result[long_cols].isna().any(axis=1).sum() > len(result) // 3:
-                    result = result.drop(columns=long_cols)
                     logging.warning(f"Dropped {len(long_cols)} long window features to preserve sufficient data.")
+                    result = result.drop(columns=long_cols)
+                    # Mark these columns as dropped
+                    long_cols = []
             
             # Handle returns and categoricals
             if 'returns' in self._feature_categories:
@@ -401,9 +733,22 @@ class FeaturePreparator(BaseProcessor):
                         most_frequent = result[col].mode()[0]
                         result[col] = result[col].fillna(most_frequent)
             
-            # Finally, drop any remaining rows with NaNs
-            result = result.dropna().reset_index(drop=True)
+            # Handle any NaNs in columns we're keeping
+            cols_to_keep = short_cols + medium_cols + long_cols
+            if cols_to_keep:
+                result[cols_to_keep] = self._fill_remaining_nans(result[cols_to_keep])
+            
+            # Finally, check for any remaining NaNs in the dataset
+            if result.isna().sum().sum() > 0:
+                result = self._fill_remaining_nans(result)
+                
             return result
         
-        # 3. For large datasets, use the advanced treatment
-        return self._advanced_treatment(df)
+        # 3. For large datasets, use a modified advanced treatment with extra NaN checks
+        result = self._advanced_treatment(df)
+        
+        # Add a final check to catch any remaining NaNs
+        if result.isna().sum().sum() > 0:
+            result = self._fill_remaining_nans(result)
+            
+        return result

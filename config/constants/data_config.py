@@ -6,6 +6,7 @@ import config.constants.system_config as sys_config
 # Directories
 TESTING_RAW_FILE = os.path.join(sys_config.CAPCOM_RAW_DATA_DIR, 'raw_GBPUSD_m5_20240101_20250101.csv')
 TESTING_PROCESSED_DATA = os.path.join(sys_config.CAPCOM_PROCESSED_DATA_DIR, 'processed_GBPUSD_m5_20240101_20250101.csv')
+TEST_DUMMY_PATH = os.path.join(sys_config.BASE_DATA_DIR, 'testing')
 
 DEFAULT_PIPELINE_CONFIG = {
     'loader': {

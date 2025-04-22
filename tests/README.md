@@ -13,3 +13,15 @@ This is only temporary information during the development of tests. Once it is c
 - ```pytest tests/data/test_cleaner.py::TestDataCleaner::test_initialization```
 - ```pytest tests/data/test_cleaner.py```
 - ```pytest```
+
+# Suggestion to new structure
+```
+tests/
+├── data/
+│   ├── unit_tests/
+│   └── integration_tests/
+├── model/
+│   ├── unit_tests/
+│   └── integration_tests/
+...
+```
