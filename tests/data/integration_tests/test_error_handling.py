@@ -336,6 +336,9 @@ class TestErrorHandling(unittest.TestCase):
         mixed_types_df = self.sample_data.copy()
         
         # Add string values in numeric columns
+        # First explicitly casting the columns to object dtype for testing
+        mixed_types_df['Close'] = mixed_types_df['Close'].astype('object')
+        mixed_types_df['Volume'] = mixed_types_df['Volume'].astype('object')
         mixed_types_df.loc[5, 'Close'] = 'ERROR'
         mixed_types_df.loc[15, 'Volume'] = 'NA'
         
