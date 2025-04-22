@@ -251,6 +251,16 @@ class FeatureSelector(BaseProcessor):
         else:
             logging.warning("No essential price columns found in the dataset!")
         
+        # Remove constant or near-constant features from consideration
+        # These would typically have importance scores of zero or very close to zero
+        constant_threshold = 1e-10  # Threshold for considering a feature as constant
+        constant_features = importance_df[importance_df['importance'] <= constant_threshold]['feature'].tolist()
+        
+        if constant_features:
+            logging.info(f"Identified {len(constant_features)} constant or near-constant features that will be removed: {constant_features}")
+            # Filter out constant features from importance_df
+            importance_df = importance_df[importance_df['importance'] > constant_threshold].copy()
+        
         # Select features based on the method specified
         if self.selection_method == 'top_n':
             # Select top N features
@@ -318,6 +328,9 @@ class FeatureSelector(BaseProcessor):
             if self.target_col in selected:
                 selected.remove(self.target_col)
                 logging.info(f"Removed target column '{self.target_col}' as preserve_target=False")
+        
+        # Ensure constant features are not in the selected list
+        selected = [feature for feature in selected if feature not in constant_features]
         
         return selected
        
@@ -554,7 +567,19 @@ class FeatureSelector(BaseProcessor):
         if shape_before[1] != shape_after[1]:
             logging.warning(f"Dropped {shape_before[1] - shape_after[1]} columns with NaN values")
         
-        # Get feature names after dropping NaN columns
+        # Check for constant columns and remove them
+        constant_cols = [col for col in X.columns if X[col].nunique() <= 1]
+        if constant_cols:
+            logging.warning(f"Removing {len(constant_cols)} constant columns with no variation: {constant_cols}")
+            X = X.drop(columns=constant_cols)
+            if X.empty:
+                logging.error("No features left after removing constant columns")
+                # Return empty importance DataFrame with proper structure
+                importance_df = pd.DataFrame(columns=['feature', 'importance'])
+                fold_df = pd.DataFrame(columns=['fold', 'mse', 'mae', 'r2', 'train_samples', 'test_samples'])
+                return importance_df, fold_df
+        
+        # Get feature names after dropping NaN and constant columns
         feature_names = X.columns.tolist()
         logging.info(f"Final feature set: {len(feature_names)} features")
         logging.debug(f"Feature list (first 10): {feature_names[:10]}")
