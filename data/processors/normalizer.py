@@ -123,9 +123,19 @@ class DataNormalizer(BaseProcessor):
             else:
                 # Keep non-numeric columns as is
                 result[col] = df[col]
-                
+        
         # Handle any remaining NaNs that might have been introduced during transformation
-        return self._ensure_no_missing_values(result)
+        result = self._ensure_no_missing_values(result)
+        
+        # Final check for any non-finite values across all numeric columns
+        numeric_cols = result.select_dtypes(include=['number']).columns
+        for col in numeric_cols:
+            # Replace any non-finite values with 0
+            non_finite_mask = ~np.isfinite(result[col])
+            if non_finite_mask.any():
+                result[col] = np.where(np.isfinite(result[col]), result[col], 0)
+        
+        return result
     
     def _transform_column_safely(self, data, result, col, method):
         """Transform a single column based on the method with robust error handling"""
@@ -203,12 +213,21 @@ class DataNormalizer(BaseProcessor):
             else:
                 # Default: copy as is
                 result[col] = data[col]
+                
+            # Ensure all values are finite - replace any non-finite values with 0
+            # This is a critical step to ensure we never have NaN, inf, or -inf in the output
+            if col in result.columns and result[col].dtype.kind in 'fc':  # Float or complex types
+                result[col] = np.where(np.isfinite(result[col]), result[col], 0)
+                
         except Exception as e:
             # If anything goes wrong, just copy the original data
             import logging
             logging.warning(f"Error transforming column {col} with method {method}: {str(e)}")
             result[col] = data[col]
-    
+            # Even in error case, ensure values are finite
+            if col in result.columns and result[col].dtype.kind in 'fc':
+                result[col] = np.where(np.isfinite(result[col]), result[col], 0)
+        
     def _ensure_no_missing_values(self, df):
         """Make sure there are absolutely no missing values in the final result"""
         result = df.copy()
@@ -235,6 +254,11 @@ class DataNormalizer(BaseProcessor):
                     else:
                         # No valid values at all, fill with 0
                         result[col] = result[col].fillna(0)
+                
+                # Replace any non-finite values with 0
+                non_finite_mask = ~np.isfinite(result[col])
+                if non_finite_mask.any():
+                    result[col] = np.where(np.isfinite(result[col]), result[col], 0)
         
         # 2. Handle non-numeric columns
         non_numeric_cols = result.select_dtypes(exclude=['number']).columns
