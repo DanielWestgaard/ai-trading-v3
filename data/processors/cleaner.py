@@ -171,28 +171,11 @@ class DataCleaner(BaseProcessor):
         
         try:
             # Store original case before converting to lowercase 
-            original_columns = df.columns.tolist()
             if self.preserve_original_case:
                 self.column_mapping = {col.lower(): col for col in df.columns}
             
             # Convert column names to lowercase for consistent processing
             df.columns = [col.lower() for col in df.columns]
-            
-            # Identify price and volume columns with case-insensitive matching
-            price_cols_in_data = [col for col in df.columns if col in self.price_cols]
-            volume_col_in_data = self.volume_col if self.volume_col in df.columns else None
-            
-            # Convert price columns to numeric right away
-            for col in price_cols_in_data:
-                # Convert to numeric, coercing non-numeric values to NaN
-                df[col] = pd.to_numeric(df[col], errors='coerce')
-                non_numeric_count = df[col].isna().sum() - data[self.column_mapping.get(col, col) if self.preserve_original_case else col].isna().sum()
-                if non_numeric_count > 0:
-                    logging.warning(f"Converted {non_numeric_count} non-numeric values to NaN in column '{col}'")
-            
-            # Convert volume column to numeric as well
-            if volume_col_in_data:
-                df[volume_col_in_data] = pd.to_numeric(df[volume_col_in_data], errors='coerce')
             
             # Make a temporary copy of the timestamp column if we need to set it as index
             # This ensures we don't lose the original timestamp column
@@ -207,6 +190,16 @@ class DataCleaner(BaseProcessor):
                 if self.resample_rule:
                     logging.debug("Setting %s as temporary DataFrame index for resampling", self.timestamp_col)
                     df = df.set_index(self.timestamp_col)
+            
+            # Convert price and volume columns to numeric before cleaning operations
+            for col in self.price_cols + [self.volume_col]:
+                if col in df.columns:
+                    # Convert to numeric, coercing non-numeric values to NaN
+                    if not pd.api.types.is_numeric_dtype(df[col]):
+                        df[col] = pd.to_numeric(df[col], errors='coerce')
+                        non_numeric_count = df[col].isna().sum() - data[self.column_mapping.get(col, col) if self.preserve_original_case else col].isna().sum()
+                        if non_numeric_count > 0:
+                            logging.warning(f"Converted {non_numeric_count} non-numeric values to NaN in column '{col}'")
             
             # Ensure time continuity by resampling if requested
             if self.resample_rule and isinstance(df.index, pd.DatetimeIndex):
@@ -242,12 +235,6 @@ class DataCleaner(BaseProcessor):
                 logging.debug("Resetting index to include timestamp column")
                 df = df.reset_index()
             
-            # Final check to ensure all price and volume columns are numeric
-            for col in price_cols_in_data + ([volume_col_in_data] if volume_col_in_data else []):
-                if col in df.columns and not pd.api.types.is_numeric_dtype(df[col]):
-                    logging.warning(f"Column {col} is still not numeric after processing. Forcing conversion.")
-                    df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
-            
             # Restore original column case if needed
             if self.preserve_original_case:
                 # Create new column mapping that includes any new columns created during processing
@@ -263,30 +250,22 @@ class DataCleaner(BaseProcessor):
                 # Rename columns to original case
                 df = df.rename(columns=new_mapping)
                 logging.debug("Restored original column case")
-                
-                # Ensure all original price columns have numeric types in the output
-                for orig_col in original_columns:
-                    if orig_col.upper() in ['OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOLUME']:
-                        if orig_col in df.columns and not pd.api.types.is_numeric_dtype(df[orig_col]):
-                            logging.warning(f"Forcing {orig_col} to numeric in final output")
-                            df[orig_col] = pd.to_numeric(df[orig_col], errors='coerce').fillna(0)
+            
+            # Ensure all price columns are numeric in final output
+            col_case_fn = lambda x: x if not self.preserve_original_case else self.column_mapping.get(x, x)
+            for col in self.price_cols + [self.volume_col]:
+                col_name = col_case_fn(col)
+                if col_name in df.columns and not pd.api.types.is_numeric_dtype(df[col_name]):
+                    logging.warning(f"Column {col_name} is not numeric in final output. Converting to numeric.")
+                    df[col_name] = pd.to_numeric(df[col_name], errors='coerce').fillna(0)
                 
             logging.info("Data transformation completed. Final shape: %s", df.shape)
             return df
         except Exception as e:
             logging.error("Transform failed: %s", str(e))
-            # If transform fails, return a copy of input data with numeric price columns
-            try:
-                # Create a safe output with proper types
-                safe_df = data.copy()
-                for col in safe_df.columns:
-                    if col.upper() in ['OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOLUME']:
-                        safe_df[col] = pd.to_numeric(safe_df[col], errors='coerce').fillna(0)
-                return safe_df
-            except:
-                # If even that fails, return the input unchanged
-                return data
-    
+            # For unit tests and consistency with prior behavior, raise the exception
+            raise
+        
     def _handle_missing_values(self, df: pd.DataFrame, column_specific_methods=None) -> pd.DataFrame:
         """Handle missing values differently for price and volume"""
         logging.debug("Handling missing values for %d columns", len(df.columns))
@@ -585,59 +564,35 @@ class DataCleaner(BaseProcessor):
     
     def _ensure_ohlc_validity(self, df: pd.DataFrame) -> pd.DataFrame:
         """Ensure OHLC relationships are valid: High ≥ Open ≥ Close ≥ Low"""
-        
-        # Check if all required columns exist
-        price_cols = ['open', 'high', 'low', 'close']
-        if not all(col in df.columns for col in price_cols):
-            logging.debug("Skipping OHLC validity check, not all OHLC columns present")
-            return df
-        
-        try:
+        if all(col in df.columns for col in ['open', 'high', 'low', 'close']):
             logging.debug("Checking OHLC validity")
             
-            # Make sure all price columns are numeric
-            for col in price_cols:
-                if not pd.api.types.is_numeric_dtype(df[col]):
-                    df[col] = pd.to_numeric(df[col], errors='coerce')
-            
-            # Check for invalid relationships
-            high_vals = df['high'].copy()
-            low_vals = df['low'].copy()
-            open_vals = df['open'].copy()
-            close_vals = df['close'].copy()
-            
-            # Calculate max of open and close for each row safely
-            max_open_close = pd.DataFrame({'open': open_vals, 'close': close_vals}).max(axis=1)
-            min_open_close = pd.DataFrame({'open': open_vals, 'close': close_vals}).min(axis=1)
-            
-            # Find invalid high/low values
-            invalid_high_mask = high_vals < max_open_close
-            invalid_low_mask = low_vals > min_open_close
-            
-            invalid_high_count = invalid_high_mask.sum()
-            invalid_low_count = invalid_low_mask.sum()
-            
-            if invalid_high_count > 0 or invalid_low_count > 0:
-                logging.warning("Found %d invalid high values and %d invalid low values", 
-                                invalid_high_count, invalid_low_count)
-            
-            # Fix high values that are too low - use row-wise maximum
-            df.loc[invalid_high_mask, 'high'] = pd.DataFrame({
-                'high': df.loc[invalid_high_mask, 'high'],
-                'open': df.loc[invalid_high_mask, 'open'],
-                'close': df.loc[invalid_high_mask, 'close']
-            }).max(axis=1)
-            
-            # Fix low values that are too high - use row-wise minimum
-            df.loc[invalid_low_mask, 'low'] = pd.DataFrame({
-                'low': df.loc[invalid_low_mask, 'low'],
-                'open': df.loc[invalid_low_mask, 'open'],
-                'close': df.loc[invalid_low_mask, 'close']
-            }).min(axis=1)
-            
-            logging.debug("OHLC validity check and correction completed")
-        except Exception as e:
-            logging.error(f"Error ensuring OHLC validity: {str(e)}")
-            # Continue without fixing OHLC relationships if there's an error
-            
+            try:
+                # Ensure all price columns are numeric
+                for col in ['open', 'high', 'low', 'close']:
+                    if not pd.api.types.is_numeric_dtype(df[col]):
+                        df[col] = pd.to_numeric(df[col], errors='coerce')
+                
+                # Check for invalid relationships
+                invalid_high = (df['high'] < df[['open', 'close']].max(axis=1)).sum()
+                invalid_low = (df['low'] > df[['open', 'close']].min(axis=1)).sum()
+                
+                if invalid_high > 0 or invalid_low > 0:
+                    logging.warning("Found %d invalid high values and %d invalid low values", 
+                                invalid_high, invalid_low)
+                
+                # Fix high values that are too low
+                df['high'] = df[['high', 'open', 'close']].max(axis=1)
+                
+                # Fix low values that are too high
+                df['low'] = df[['low', 'open', 'close']].min(axis=1)
+                
+                logging.debug("OHLC validity check and correction completed")
+            except Exception as e:
+                logging.error(f"Error ensuring OHLC validity: {str(e)}")
+                # Don't suppress the error in unit tests
+                raise
+        else:
+            logging.debug("Skipping OHLC validity check, not all OHLC columns present")
+                
         return df
