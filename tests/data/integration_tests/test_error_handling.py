@@ -160,6 +160,7 @@ class TestErrorHandling(unittest.TestCase):
         """Test behavior with empty or very small datasets"""
         # Create an empty DataFrame with the same columns
         empty_df = pd.DataFrame(columns=self.sample_data.columns)
+        print(empty_df.size)
         
         # Test feature generator with empty data
         with self.assertRaises(Exception):

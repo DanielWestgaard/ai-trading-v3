@@ -37,6 +37,10 @@ class FeatureGenerator(BaseProcessor):
         
     def fit(self, data):
         """Store necessary information about the data"""
+        # Validate input - empty DataFrame is invalid for feature generation
+        if data.empty:
+            raise ValueError("Cannot fit FeatureGenerator on an empty DataFrame")
+        
         # Not much needed for fit in feature generation, but keeping for consistency
         if self.preserve_original_case:
             self.column_mapping = {col.lower(): col for col in data.columns}
