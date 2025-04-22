@@ -527,6 +527,8 @@ class TestErrorHandling(unittest.TestCase):
         challenging_df = self.sample_data.copy()
         
         # 1. Add mixed data types
+        # First explicitly casting the columns to object dtype for testing
+        challenging_df['Close'] = challenging_df['Close'].astype('object')
         challenging_df.loc[5, 'Close'] = 'ERROR'
         
         # 2. Add NaNs
@@ -560,7 +562,22 @@ class TestErrorHandling(unittest.TestCase):
             # Pipeline should overcome all issues
             self.assertIsInstance(result_df, pd.DataFrame)
             self.assertEqual(result_df.isna().sum().sum(), 0)  # No NaNs
-            self.assertTrue(pd.api.types.is_numeric_dtype(result_df.select_dtypes(include=['number'])))  # All numeric data is numeric
+            
+            # Check that numeric columns have numeric dtypes
+            numeric_cols = result_df.select_dtypes(include=['number']).columns
+            self.assertTrue(len(numeric_cols) > 0, "Should have at least some numeric columns")
+            
+            # Check each numeric column has a proper numeric dtype
+            for col in numeric_cols:
+                self.assertTrue(pd.api.types.is_numeric_dtype(result_df[col].dtype),
+                            f"Column {col} should have numeric dtype, has {result_df[col].dtype}")
+            
+            # Check that price columns are numeric
+            price_cols = [col for col in result_df.columns if any(
+                x in col.lower() for x in ['open', 'high', 'low', 'close', 'volume'])]
+            for col in price_cols:
+                self.assertTrue(pd.api.types.is_numeric_dtype(result_df[col].dtype),
+                            f"Price column {col} should have numeric dtype, has {result_df[col].dtype}")
             
         except Exception as e:
             self.fail(f"Pipeline failed with multiple challenges: {str(e)}")

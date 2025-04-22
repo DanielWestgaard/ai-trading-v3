@@ -74,8 +74,8 @@ class DataPipeline:
         self.preserve_target = preserve_target
         
     def run(self, target_path=sys_config.CAPCOM_PROCESSED_DATA_DIR, 
-            raw_data=data_config.TESTING_RAW_FILE, save_intermediate=False,
-            run_feature_selection=True):
+                raw_data=data_config.TESTING_RAW_FILE, save_intermediate=False,
+                run_feature_selection=True):
         """Execute the full pipeline with improved file organization"""
         # Configure logging
         logging.info("Starting data pipeline execution with empirical feature approach")
@@ -224,11 +224,31 @@ class DataPipeline:
                 else:
                     logging.error(f"Target column '{self.target_column}' not found in normalized data. Cannot preserve it.")
         
+        # 8. Final check for proper data types in price and numeric columns
+        try:
+            # Identify financial columns that should be numeric
+            financial_cols = [col for col in selected_data.columns if any(
+                x in col.lower() for x in ['open', 'high', 'low', 'close', 'volume', 'price', 'return'])]
+            
+            # Convert them to numeric with coercion
+            for col in financial_cols:
+                if not pd.api.types.is_numeric_dtype(selected_data[col]):
+                    logging.warning(f"Column {col} is not numeric in final output. Converting to numeric.")
+                    selected_data[col] = pd.to_numeric(selected_data[col], errors='coerce').fillna(0)
+            
+            # Also ensure other numeric columns have proper numeric dtypes
+            numeric_cols = selected_data.select_dtypes(include=['number']).columns
+            for col in numeric_cols:
+                if selected_data[col].dtype.kind not in 'ifc':  # integer, float, complex
+                    selected_data[col] = pd.to_numeric(selected_data[col], errors='coerce').fillna(0)
+        except Exception as e:
+            logging.error(f"Error during final type conversion: {str(e)}")
+        
         # Save the processed data
         selected_data.to_csv(processed_file_path, index=False)
         logging.info(f"Saved final processed data to {processed_file_path}")
         
-        # 8. Save metadata about features
+        # 9. Save metadata about features
         try:
             metadata_path = data_utils.get_derived_file_path(
                 processed_file_path, 
@@ -242,7 +262,7 @@ class DataPipeline:
         except Exception as e:
             logging.error(f"Error creating feature metadata: {str(e)}")
         
-        # 9. Save selected features list if feature selection was run
+        # 10. Save selected features list if feature selection was run
         if run_feature_selection and hasattr(self.feature_selector, 'selected_features') and self.feature_selector.selected_features:
             try:
                 features_file = data_utils.get_derived_file_path(
