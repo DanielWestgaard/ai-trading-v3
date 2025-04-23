@@ -41,7 +41,7 @@ def main():
         broker = CapitalCom()
         broker.start_session()
         # broker.session_details(print_answer=True)
-        #broker.switch_active_account(print_answer=False)
+        # broker.switch_active_account(print_answer=False)
         # broker.list_all_accounts(print_answer=True)
         # broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
         #                            max=1000,
@@ -65,7 +65,7 @@ def main():
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
-      
+    
     if args.walk_forward_analysis:
         from backtesting.walk_forward_analysis import WalkForwardAnalysis
 
