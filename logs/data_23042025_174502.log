@@ -1,0 +1,153 @@
+23-04-2025 17:45:02 - INFO - Logging system initialized. Environment: development
+23-04-2025 17:45:02 - INFO - Initiating data cleaning with configuration: {'price_cols': ['Open', 'High', 'Low', 'Close'], 'volume_col': 'Volume', 'missing_method': 'ffill', 'outlier_method': 'winsorize', 'outlier_threshold': 3.0, 'resample_rule': None}
+23-04-2025 17:45:02 - INFO - Starting data pipeline execution with empirical feature approach
+23-04-2025 17:45:02 - INFO - Loading raw data from /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/raw/raw_GBPUSD_m5_20240101_20250101.csv
+23-04-2025 17:45:02 - INFO - Loaded raw data with shape: (74723, 6)
+23-04-2025 17:45:02 - INFO - Processing GBPUSD m5 data from 20240101 to 20250101
+23-04-2025 17:45:02 - INFO - Cleaning data
+23-04-2025 17:45:02 - INFO - Fitting DataCleaner on dataset with shape (74723, 6)
+23-04-2025 17:45:03 - DEBUG - Converted column names to lowercase: ['date', 'open', 'high', 'low', 'close', 'volume']
+23-04-2025 17:45:03 - DEBUG - Calculating statistics for column: open
+23-04-2025 17:45:03 - DEBUG - Calculating statistics for column: high
+23-04-2025 17:45:03 - DEBUG - Calculating statistics for column: low
+23-04-2025 17:45:03 - DEBUG - Calculating statistics for column: close
+23-04-2025 17:45:03 - INFO - DataCleaner fitting completed. Statistics calculated for 4 columns.
+23-04-2025 17:45:03 - INFO - Starting data transformation on dataset with shape (74723, 6)
+23-04-2025 17:45:03 - INFO - Handling missing values with method: ffill. Total missing values: 0
+23-04-2025 17:45:03 - DEBUG - Handling missing values for 6 columns
+23-04-2025 17:45:03 - INFO - Missing values after handling: 0 (reduction: 0)
+23-04-2025 17:45:03 - INFO - Handling outliers with method: winsorize and threshold: 3.000000
+23-04-2025 17:45:03 - DEBUG - Handling outliers using method: winsorize
+23-04-2025 17:45:03 - DEBUG - Processing outliers for column: open
+23-04-2025 17:45:03 - INFO - Column open: Winsorizing 743 lower outliers and 746 upper outliers
+23-04-2025 17:45:03 - DEBUG - Processing outliers for column: high
+23-04-2025 17:45:03 - INFO - Column high: Winsorizing 742 lower outliers and 747 upper outliers
+23-04-2025 17:45:03 - DEBUG - Processing outliers for column: low
+23-04-2025 17:45:03 - INFO - Column low: Winsorizing 748 lower outliers and 748 upper outliers
+23-04-2025 17:45:03 - DEBUG - Processing outliers for column: close
+23-04-2025 17:45:03 - INFO - Column close: Winsorizing 748 lower outliers and 744 upper outliers
+23-04-2025 17:45:03 - DEBUG - Outlier handling completed
+23-04-2025 17:45:03 - INFO - Ensuring OHLC validity
+23-04-2025 17:45:03 - DEBUG - Checking OHLC validity
+23-04-2025 17:45:03 - DEBUG - OHLC validity check and correction completed
+23-04-2025 17:45:03 - DEBUG - OHLC validity check completed
+23-04-2025 17:45:03 - DEBUG - Restored original column case
+23-04-2025 17:45:03 - INFO - Data transformation completed. Final shape: (74723, 6)
+23-04-2025 17:45:03 - INFO - Cleaned data shape: (74723, 6)
+23-04-2025 17:45:03 - INFO - Generating features
+23-04-2025 17:45:03 - INFO - Generated features. New shape: (74723, 62)
+23-04-2025 17:45:03 - INFO - Preparing features for modeling
+23-04-2025 17:45:03 - INFO - Feature preparation strategy fitted. Found 7 short window, 11 medium window, and 6 long window features.
+23-04-2025 17:45:03 - INFO - Preserving original OHLC values for empirical feature selection
+23-04-2025 17:45:03 - INFO - Prepared features. New shape: (74523, 74)
+23-04-2025 17:45:03 - INFO - Normalizing data
+23-04-2025 17:45:03 - INFO - Normalized data. Shape: (74523, 70)
+23-04-2025 17:45:03 - INFO - Performing feature selection
+23-04-2025 17:45:03 - INFO - Starting feature selection with target 'close_return' using threshold method
+23-04-2025 17:45:03 - INFO - Found 55 numeric features for analysis
+23-04-2025 17:45:03 - INFO - Analyzing feature importance for target 'close_return' with 5 splits
+23-04-2025 17:45:03 - INFO - Starting feature importance analysis (target: close_return, lookback: 1)
+23-04-2025 17:45:03 - INFO - Using provided DataFrame
+23-04-2025 17:45:03 - INFO - Data loaded successfully with shape: (74523, 70) (74523 rows, 70 columns)
+23-04-2025 17:45:03 - INFO - Column categories:
+23-04-2025 17:45:03 - INFO -   - Raw price columns: 4
+23-04-2025 17:45:03 - INFO -   - Transformed price columns: 4
+23-04-2025 17:45:03 - INFO -   - Technical indicators: 17
+23-04-2025 17:45:03 - INFO -   - Other columns: 41
+23-04-2025 17:45:03 - INFO - Target column: close_return
+23-04-2025 17:45:03 - INFO - Target statistics: mean=-0.000000, std=1.000000
+23-04-2025 17:45:03 - INFO - Created future target with lookback=1. Dropped 1 rows with NaN targets.
+23-04-2025 17:45:03 - INFO - Target shape after NaN removal: (74522, 71)
+23-04-2025 17:45:03 - INFO - Feature matrix shape: (74522, 68), Target vector shape: (74522,)
+23-04-2025 17:45:03 - WARNING - Dropping 13 non-numeric columns: ['doji', 'hammer', 'bullish_engulfing', 'bearish_engulfing', 'asian_session', 'european_session', 'us_session', 'market_overlap', 'day_0', 'day_1', 'day_2', 'day_3', 'day_4']
+23-04-2025 17:45:03 - INFO - Final feature set: 55 features
+23-04-2025 17:45:03 - INFO - Setting up time series cross-validation with 5 splits
+23-04-2025 17:45:03 - INFO - Processing fold 1/5
+23-04-2025 17:47:17 - INFO -   Fold 1 results: MSE=1.412077, MAE=0.824514, R²=-0.699557 (took 134.05s)
+23-04-2025 17:47:17 - INFO - Processing fold 2/5
+23-04-2025 17:53:22 - INFO -   Fold 2 results: MSE=0.783775, MAE=0.556964, R²=-0.055981 (took 365.35s)
+23-04-2025 17:53:22 - INFO - Processing fold 3/5
+23-04-2025 18:03:48 - INFO -   Fold 3 results: MSE=1.431742, MAE=0.893355, R²=-0.600867 (took 626.15s)
+23-04-2025 18:03:48 - INFO - Processing fold 4/5
+23-04-2025 18:20:58 - INFO -   Fold 4 results: MSE=1.199316, MAE=0.761517, R²=-0.191682 (took 1029.93s)
+23-04-2025 18:20:58 - INFO - Processing fold 5/5
+23-04-2025 18:44:32 - INFO -   Fold 5 results: MSE=1.467782, MAE=0.804679, R²=-0.032283 (took 1413.74s)
+23-04-2025 18:44:32 - INFO - Cross-validation performance summary:
+23-04-2025 18:44:32 - INFO -   MSE: 1.258938 (±0.285598)
+23-04-2025 18:44:32 - INFO -   MAE: 0.768206 (±0.127310)
+23-04-2025 18:44:32 - INFO -   R²: -0.316074 (±0.312980)
+23-04-2025 18:44:32 - INFO - Top 20 features by importance:
+23-04-2025 18:44:32 - INFO -   33. gk_volatility: 0.050416
+23-04-2025 18:44:32 - INFO -   4. volume: 0.046998
+23-04-2025 18:44:32 - INFO -   1. open_return: 0.041265
+23-04-2025 18:44:32 - INFO -   2. high_return: 0.041091
+23-04-2025 18:44:32 - INFO -   3. low_return: 0.040866
+23-04-2025 18:44:32 - INFO -   29. volatility_5: 0.038901
+23-04-2025 18:44:32 - INFO -   43. price_accel: 0.037522
+23-04-2025 18:44:32 - INFO -   30. volatility_10: 0.034269
+23-04-2025 18:44:32 - INFO -   22. roc_1: 0.034218
+23-04-2025 18:44:32 - INFO -   23. roc_5: 0.033907
+23-04-2025 18:44:32 - INFO -   31. volatility_20: 0.031815
+23-04-2025 18:44:32 - INFO -   24. roc_10: 0.030152
+23-04-2025 18:44:32 - INFO -   18. macd_hist: 0.029860
+23-04-2025 18:44:32 - INFO -   32. volatility_30: 0.029830
+23-04-2025 18:44:32 - INFO -   17. macd_signal: 0.029653
+23-04-2025 18:44:32 - INFO -   25. roc_20: 0.029541
+23-04-2025 18:44:32 - INFO -   42. dist_to_support_20: 0.029135
+23-04-2025 18:44:32 - INFO -   37. dist_to_resistance_10: 0.026703
+23-04-2025 18:44:32 - INFO -   15. rsi_14: 0.026568
+23-04-2025 18:44:32 - INFO -   34. normalized_atr: 0.026123
+23-04-2025 18:44:32 - INFO - Feature importance by category:
+23-04-2025 18:44:32 - INFO -   Other: 0.304230 (30.42%)
+23-04-2025 18:44:32 - INFO -   Volatility: 0.234885 (23.49%)
+23-04-2025 18:44:32 - INFO -   Oscillators: 0.155741 (15.57%)
+23-04-2025 18:44:32 - INFO -   Transformed Price: 0.123221 (12.32%)
+23-04-2025 18:44:32 - INFO -   Moving Averages: 0.062014 (6.20%)
+23-04-2025 18:44:32 - INFO -   Volume: 0.046998 (4.70%)
+23-04-2025 18:44:32 - INFO -   Time: 0.034279 (3.43%)
+23-04-2025 18:44:32 - INFO -   Price Other: 0.023609 (2.36%)
+23-04-2025 18:44:32 - INFO -   Raw Price: 0.015024 (1.50%)
+23-04-2025 18:44:32 - INFO - Feature importance analysis completed in 3569.33 seconds
+23-04-2025 18:44:32 - INFO - Feature importance analysis complete. Found 55 features.
+23-04-2025 18:44:32 - INFO - Creating feature importance visualization for top 30 features
+23-04-2025 18:44:32 - INFO - Top 30 features by category:
+23-04-2025 18:44:32 - INFO -   Other: 9 features
+23-04-2025 18:44:32 - INFO -   Volatility: 7 features
+23-04-2025 18:44:32 - INFO -   Oscillators: 6 features
+23-04-2025 18:44:32 - INFO -   Transformed Price: 3 features
+23-04-2025 18:44:32 - INFO -   Time: 2 features
+23-04-2025 18:44:32 - INFO -   Moving Averages: 2 features
+23-04-2025 18:44:32 - INFO -   Volume: 1 features
+23-04-2025 18:44:33 - INFO - Saved feature importance visualization to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/feature_importance_GBPUSD_m5_20240101_20250101.png
+23-04-2025 18:44:33 - INFO - Saved feature importance visualization to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/feature_importance_GBPUSD_m5_20240101_20250101.png
+23-04-2025 18:44:33 - INFO - Creating feature importance by category visualization
+23-04-2025 18:44:33 - INFO - Saved category importance visualization to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/category_importance_GBPUSD_m5_20240101_20250101.png
+23-04-2025 18:44:33 - INFO - Saved category importance visualization to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/category_importance_GBPUSD_m5_20240101_20250101.png
+23-04-2025 18:44:33 - INFO - Saved feature importance scores to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/feature_importance_GBPUSD_m5_20240101_20250101.csv
+23-04-2025 18:44:33 - INFO - Saved model performance metrics to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/performance/model_performance_GBPUSD_m5_20240101_20250101.csv
+23-04-2025 18:44:33 - INFO - Preserving essential price columns: ['open_raw', 'high_raw', 'low_raw', 'close_raw', 'open_original', 'high_original', 'low_original', 'close_original']
+23-04-2025 18:44:33 - INFO - Added essential column open_raw to selected features
+23-04-2025 18:44:33 - INFO - Added essential column high_raw to selected features
+23-04-2025 18:44:33 - INFO - Added essential column low_raw to selected features
+23-04-2025 18:44:33 - INFO - Added essential column close_raw to selected features
+23-04-2025 18:44:33 - INFO - Added essential column open_original to selected features
+23-04-2025 18:44:33 - INFO - Added essential column high_original to selected features
+23-04-2025 18:44:33 - INFO - Added essential column low_original to selected features
+23-04-2025 18:44:33 - INFO - Added essential column close_original to selected features
+23-04-2025 18:44:33 - INFO - Selected 41 features using 'threshold' method
+23-04-2025 18:44:33 - INFO -   - Moving Averages: 4 features
+23-04-2025 18:44:33 - INFO -   - Oscillators: 6 features
+23-04-2025 18:44:33 - INFO -   - Other: 9 features
+23-04-2025 18:44:33 - INFO -   - Price Other: 4 features
+23-04-2025 18:44:33 - INFO -   - Raw Price: 4 features
+23-04-2025 18:44:33 - INFO -   - Time: 3 features
+23-04-2025 18:44:33 - INFO -   - Transformed Price: 3 features
+23-04-2025 18:44:33 - INFO -   - Volatility: 7 features
+23-04-2025 18:44:33 - INFO -   - Volume: 1 features
+23-04-2025 18:44:33 - INFO - Transformed data to include 41 selected features
+23-04-2025 18:44:33 - INFO - Selected features. Final shape: (74523, 42)
+23-04-2025 18:44:33 - WARNING - Target column 'close_return' was removed during feature selection. Re-adding it.
+23-04-2025 18:44:35 - INFO - Saved final processed data to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv
+23-04-2025 18:44:35 - INFO - Feature category summary: {'patterns': 4, 'raw_price': 8, 'technical': 10, 'time': 3, 'transformed_price': 4, 'volatility': 7, 'volume': 1}
+23-04-2025 18:44:35 - INFO - Saved feature metadata to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/meta_GBPUSD_m5_20240101_20250101.csv
+23-04-2025 18:44:35 - INFO - Saved list of selected features to /Users/danielwestgaard/progRel/ai-trading-v3/data/storage/capital_com/processed/features/selected_features_GBPUSD_m5_20240101_20250101.txt

@@ -127,7 +127,7 @@ class FeatureGenerator(BaseProcessor):
         result = df.copy()
         
         # Find the necessary price columns
-        columns = data_util._get_price_columns(result)
+        columns = data_util.get_price_columns(result)
         close_col = columns['close']
         high_col = columns['high']
         low_col = columns['low']
@@ -190,7 +190,7 @@ class FeatureGenerator(BaseProcessor):
         result = df.copy()
         
         # Find the necessary price columns
-        columns = data_util._get_price_columns(result)
+        columns = data_util.get_price_columns(result)
         open_col = columns['open']
         high_col = columns['high']
         low_col = columns['low']
@@ -237,7 +237,7 @@ class FeatureGenerator(BaseProcessor):
         result = df.copy()
         
         # Find the necessary price columns
-        columns = data_util._get_price_columns(result)
+        columns = data_util.get_price_columns(result)
         open_col = columns['open']
         high_col = columns['high']
         low_col = columns['low']

@@ -25,7 +25,7 @@ def parse_arguments():
     parser.add_argument('--data-pipeline', action='store_true', default=False, help='Run data processing pipeline')
     parser.add_argument('--walk-forward-analysis', action='store_true', default=False, 
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
-    parser.add_argument('--train-model', action='store_true', default=True, help='Train model')
+    parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
     parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     parser.add_argument('--live-integration', action='store_true', default=False, help='Test backtesting (simple)')
@@ -35,13 +35,13 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="live", log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="data", log_to_file=True, log_level=sys_config.DEBUG_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
         broker.start_session()
         # broker.session_details(print_answer=True)
-        #broker.switch_active_account(print_answer=False)
+        # broker.switch_active_account(print_answer=False)
         # broker.list_all_accounts(print_answer=True)
         # broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
         #                            max=1000,
@@ -65,7 +65,7 @@ def main():
         data_pipeline = DataPipeline()
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
-      
+    
     if args.walk_forward_analysis:
         from backtesting.walk_forward_analysis import WalkForwardAnalysis
 
