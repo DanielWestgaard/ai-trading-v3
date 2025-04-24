@@ -378,7 +378,7 @@ def _find_column_by_pattern(df, pattern):
     # Return None if no match is found
     return None
 
-def _get_price_columns(df):
+def get_price_columns(df):
     """
     Find all the necessary price columns (open, high, low, close) in the dataframe.
     
