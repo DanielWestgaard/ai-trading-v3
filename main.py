@@ -27,7 +27,7 @@ def parse_arguments():
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
-    parser.add_argument('--test-backtest', action='store_true', default=True, help='Test backtesting (simple)')
+    parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
     parser.add_argument('--live-integration', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
@@ -142,11 +142,11 @@ def main():
             run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
         else:  # Model has not newly been trained, so need to fetch a model
             logger.info("Backtesting older model.")
-            model_type = "xgboost"  # or "random_forest" depending on is already saved
+            model_type = "random_forest"  # or "random_forest" depending on is already saved
             model = ModelFactory.create_model(model_type)
 
             # 2. Load the saved model from disk
-            model_path = "model_registry/model_storage/xgboost_20250403_102300_20250403_102301.pkl"
+            model_path = "model_registry/model_storage/random_forest_20250425_095329.pkl"
             success = model.load(model_path)
             if success:
                 run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
