@@ -27,7 +27,7 @@ def parse_arguments():
                         help='Run Walk-Forward Testing and Cross-Validation Implementation with Backtesting system.')
     parser.add_argument('--train-model', action='store_true', default=False, help='Train model')
     parser.add_argument('--backtest-trained-model', action='store_true', default=False, help='Run backtesting on trained model')
-    parser.add_argument('--test-backtest', action='store_true', default=False, help='Test backtesting (simple)')
+    parser.add_argument('--test-backtest', action='store_true', default=True, help='Test backtesting (simple)')
     parser.add_argument('--live-integration', action='store_true', default=False, help='Test backtesting (simple)')
     
     return parser.parse_args()
@@ -35,7 +35,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="data", log_to_file=False, log_level=sys_config.DEFAULT_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="data", log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
