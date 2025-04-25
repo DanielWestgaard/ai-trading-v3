@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from models.base_model import BaseModel
 from typing import Dict, List, Union, Tuple, Optional, Any
+import config.constants.system_config as sys_congig
 
 class RandomForestModel(BaseModel):
     """Random Forest model implementation."""
@@ -15,7 +16,7 @@ class RandomForestModel(BaseModel):
                  prediction_type: str = 'classification',
                  lookback_periods: int = 10,
                  prediction_horizon: int = 1,
-                 model_dir: str = 'model_storage',
+                 model_dir: str = sys_congig.SAVED_MODELS_DIR,
                  **rf_params):
         """
         Initialize Random Forest model.

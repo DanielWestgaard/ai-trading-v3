@@ -35,7 +35,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="data", log_to_file=False, log_level=sys_config.DEBUG_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="data", log_to_file=False, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
@@ -113,7 +113,7 @@ def main():
         
     if args.train_model:
         model_config = {
-            'model_type': 'xgboost',
+            'model_type': 'random_forest',
             'prediction_type': 'classification',
             'target': 'close_return',  # Be explicit
             'features': None,
@@ -121,16 +121,16 @@ def main():
             'test_size': 0.2,
             'cross_validate': True,
             'scale_features': True,
-            'model_params': {
-                'n_estimators': 100,
-                'max_depth': 5,
-                'learning_rate': 0.1,
-                'subsample': 0.8,
-                'colsample_bytree': 0.8,
-                'objective': 'binary:logistic',
-                'eval_metric': 'auc',
-                'random_state': 42
-            }
+            # 'model_params': {
+            #     'n_estimators': 100,
+            #     'max_depth': 5,
+            #     'learning_rate': 0.1,
+            #     'subsample': 0.8,
+            #     'colsample_bytree': 0.8,
+            #     'objective': 'binary:logistic',
+            #     'eval_metric': 'auc',
+            #     'random_state': 42
+            # }
         }
         
         model, trainer = run_model.main(data_path=data_config.TESTING_PROCESSED_DATA, model_config=model_config)
