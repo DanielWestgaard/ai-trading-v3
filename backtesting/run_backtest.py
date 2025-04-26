@@ -201,7 +201,7 @@ def run_backtest(model, data_path, backtest_config):
 def main_backtest_trained_model(model, DATA_PATH):
     # Backtest configuration
     backtest_config = {
-        'backtest_id': f'xgboost_gbpusd_{datetime.now().strftime("%Y%m%d_%H%M%S")}',
+        'backtest_id': f'{model.type}_gbpusd_{datetime.now().strftime("%Y%m%d_%H%M%S")}',  
         'market_data': {
             'symbols': ['GBPUSD'],
             'date_col': 'date'

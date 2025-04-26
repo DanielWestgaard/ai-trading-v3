@@ -200,14 +200,15 @@ class ModelBasedStrategy(BaseStrategy):
                     
                     # Create feature array for prediction
                     X = np.array([list(feature_dict.values())])
+                    X_pred = pd.DataFrame(X, columns=self.model.features)
                     
                     # Make prediction
                     if hasattr(self.model, 'predict_proba'):
-                        proba = self.model.predict_proba(X)
+                        proba = self.model.predict_proba(X_pred)
                         confidence = proba[0, 1]  # Probability of positive class
                     else:
                         # For models without predict_proba
-                        pred = self.model.predict(X)[0]
+                        pred = self.model.predict(X_pred)[0]
                         confidence = abs(pred)
                     
                     # Store prediction and confidence
