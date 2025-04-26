@@ -35,7 +35,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="data", log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="train_backtest", log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
@@ -138,13 +138,13 @@ def main():
     if args.backtest_trained_model:
         if args.train_model:  # The model has just been trained
             logger.info("Backtesting newly trained model.")
-            print(model.features)
+            model.type = model_config.get('model_type')  # hacky
             run_backtest.main_backtest_trained_model(model=model, DATA_PATH=data_config.TESTING_PROCESSED_DATA)
         else:  # Model has not newly been trained, so need to fetch a model
             logger.info("Backtesting older model.")
             model_type = "random_forest"  # or "random_forest" depending on is already saved
             model = ModelFactory.create_model(model_type)
-            model.type = model_type
+            model.type = model_type  # hacky
 
             # 2. Load the saved model from disk
             model_path = "model_registry/model_storage/random_forest_20250425_095329.pkl"
