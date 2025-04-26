@@ -144,6 +144,7 @@ def main():
             logger.info("Backtesting older model.")
             model_type = "random_forest"  # or "random_forest" depending on is already saved
             model = ModelFactory.create_model(model_type)
+            model.type = model_type
 
             # 2. Load the saved model from disk
             model_path = "model_registry/model_storage/random_forest_20250425_095329.pkl"
