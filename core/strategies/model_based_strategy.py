@@ -107,8 +107,6 @@ class ModelBasedStrategy(BaseStrategy):
         Returns:
             List of signal events
         """
-        import pandas as pd
-        import numpy as np
         from data.features.feature_generator import FeatureGenerator
         
         signals = []
