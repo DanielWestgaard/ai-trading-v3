@@ -59,7 +59,7 @@ def train_model(df, model_config):
     model = trainer.train(df)
     
     # Cross-validate if requested
-    if model_config.get('cross_validate', False):
+    if model_config.get('cross_validate', True):
         logger.info("Performing cross-validation")
         cv_results = trainer.cross_validate(df)
         logger.info(f"Cross-validation results: {cv_results}")
