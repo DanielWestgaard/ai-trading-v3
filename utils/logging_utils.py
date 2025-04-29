@@ -81,6 +81,10 @@ def setup_logging(
     timestamp = get_timestamp()
     # Add main file handler
     if log_to_file:
+        for subdir in sys_config.DIFFERENT_LOG_DIRS:
+            if type is subdir:
+                full_path = os.path.join(log_dir, subdir)
+                log_dir = full_path
         main_log_file = os.path.join(log_dir, f"{name}_{timestamp}.log")
         
         main_file_handler = RotatingFileHandler(

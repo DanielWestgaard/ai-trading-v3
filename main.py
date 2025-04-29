@@ -35,7 +35,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="train_backtest", log_to_file=False, log_level=sys_config.DEFAULT_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="blaaa", type="training", log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
