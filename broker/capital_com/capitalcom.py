@@ -153,8 +153,7 @@ class CapitalCom(BaseBroker):
             
             dealIds = br_util.process_positions(all_positions_after_new)
             
-            logging.info(f"Sleeping for 5 seconds before closing ALL active positions..")
-            time.sleep(5)
+            logging.info(f"About to close ALL active positions...")
             
             for dealId in dealIds:
                 logging.info(f"Closing trade/position with dealId: {dealId}")

@@ -288,7 +288,7 @@ def run_live_trading(config_path, model_path, duration_hours=None):
         if 'broker' in locals():
             broker.end_session()
         
-        logging.info("Live trading session ended")
+        logging.info("Live trading session ended. Waiting for ping to close (may take up to a minute)...")
 
 
 if __name__ == "__main__":

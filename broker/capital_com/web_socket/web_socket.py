@@ -131,4 +131,4 @@ def setup_ping_timer(ws, X_SECURITY_TOKEN, CST, interval_seconds=120):
     
     # Start the first ping task
     threading.Timer(interval_seconds, ping_task).start()
-    print(f"Automatic ping scheduled every {interval_seconds} seconds")
+    logging.info(f"Automatic ping scheduled every {interval_seconds} seconds")
