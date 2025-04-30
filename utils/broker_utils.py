@@ -7,6 +7,7 @@ import json
 
 import config.constants.system_config as sys_config
 import config.constants.market_config as mark_config
+import broker.capital_com.capitalcom as broker
 
 
 def load_secrets_alpaca(file_path="secrets/secrets.txt"):
@@ -232,5 +233,17 @@ def convert_json_to_ohlcv_csv(json_data, output_file):
     
     logging.info(f"Data successfully converted and saved to {output_file}")
 
-def parse_live_market_data():
-    pass
+def get_capital_from_json(json_data : str, account_name):
+    """
+    Method to extrect the capital of the active account.
+    """
+    try:
+        parsed_data = json.loads(json_data)
+        for account in parsed_data["accounts"]:
+            if account["accountName"] == account_name:
+                available_balance = account["balance"]["available"]
+                logging.info(f"Successfully found available account balance USD {available_balance} to account {account_name}!")
+                return available_balance
+    except:
+        logging.error("Unable to find available balance from provided json data! Returning static capital 1000.")
+        return 1000
