@@ -358,7 +358,7 @@ class PipelineMarketData(DataFrameMarketData):
     def __init__(self, 
                 processed_data_path: str,
                 symbols: List[str] = None,
-                date_col: str = 'date'):  # Note: Changed to lowercase 'date' based on your sample
+                date_col: str = 'date'):
         self.processed_data_path = processed_data_path
         self.date_col = date_col
         
