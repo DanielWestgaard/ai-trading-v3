@@ -66,8 +66,8 @@ def main():
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
     
-    if args.walk_forward_analysis:
-        from backtesting.walk_forward_analysis import WalkForwardAnalysis
+    if args.walk_forward_analysis:  # This whole block can be removed when I have implemented my own WFA, but keeping it for reference
+        from deprecated_code.walk_forward_analysis import WalkForwardAnalysis
 
         # Load your processed data
         data = pd.read_csv("data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv", 
