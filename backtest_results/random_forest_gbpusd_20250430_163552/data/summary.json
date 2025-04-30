@@ -1,0 +1,10 @@
+{
+    "backtest_id": "random_forest_gbpusd_20250430_163552",
+    "strategy": "ModelBasedStrategy",
+    "initial_capital": 10000.0,
+    "final_equity": 9998.085223336788,
+    "return": -0.019147766632121588,
+    "total_trades": 257,
+    "execution_time": 2071.299101829529,
+    "timestamp": "2025-04-30 17:10:28"
+}
