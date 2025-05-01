@@ -47,7 +47,6 @@ class LiveTradingService:
         self.logger = logger or logging.getLogger(__name__)
         
         # Portfolio tracking
-        print("Have capital ", initial_capital)
         self.portfolio = Portfolio(initial_capital=initial_capital)
         self.active_positions = {}  # symbol -> position details
         self.max_active_positions = max_active_positions
