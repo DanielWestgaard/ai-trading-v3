@@ -196,6 +196,7 @@ def run_live_trading(config_path, model_path, duration_hours=None):
         # Switch to demo account
         broker.switch_active_account(account_name=config.get('account_name'))
         logging.info(f"Switched to account: {config.get('account_name', 'default')}")
+        actual_capital = broker.get_account_capital()
         
         # Create data handler with pipeline components
         feature_generator = None  # Initialize if needed
@@ -227,7 +228,7 @@ def run_live_trading(config_path, model_path, duration_hours=None):
             broker=broker,
             data_handler=data_handler,
             risk_manager=risk_manager,
-            initial_capital=config.get('initial_capital', 10000.0),
+            initial_capital=actual_capital or config.get('initial_capital', 10000.0),
             max_active_positions=config.get('max_active_positions', 3)
         )
         

@@ -59,18 +59,6 @@ class CapitalCom(BaseBroker):
             logging.error("Error switching active account! Unable to switch!")
             return None
         return session.switch_active_account(self.account_id, self.account_name, X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
-    
-    def get_account_capital(self):
-        """
-        Method to extrect the capital of the active account.
-        Important! Assuming that the code already has switched to active account USD_testing!!
-        """
-        try:
-            if self.all_accounts is not None:  # Will throw error if now initialized
-                return br_util.get_capital_from_json(json_data=self.all_accounts, account_name=self.account_name)
-        except Exception as e:
-            logging.error("Unable to fetch account capital! Must switch active account first! ")
-            return None
             
     # ==================== DATA METHODS ====================
     
@@ -99,10 +87,17 @@ class CapitalCom(BaseBroker):
         self.all_accounts = account.list_all_accounts(X_SECURITY_TOKEN=X_SECURITY_TOKEN or self.x_security_token, CST=CST or self.cst, print_answer=print_answer)
         return self.all_accounts
     
-    def get_account_balance(self) -> Dict:
-        """Get account balance information."""
-        logging.info("Getting account balance")
-        return {}  # Return empty dict
+    def get_account_capital(self):
+        """
+        Method to extrect the capital of the active account.
+        Important! Assuming that the code already has switched to active account USD_testing!!
+        """
+        try:
+            if self.all_accounts is not None:  # Will throw error if now initialized
+                return br_util.get_capital_from_json(json_data=self.all_accounts, account_name=self.account_name)
+        except Exception as e:
+            logging.error("Unable to fetch account capital! Must switch active account first! ")
+            return None
     
     def get_positions(self) -> List[Dict]:
         """Get current open positions."""
