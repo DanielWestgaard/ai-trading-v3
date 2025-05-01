@@ -35,13 +35,14 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     log_utils._is_configured = False
-    logger = log_utils.setup_logging(name="blaaa", type="training", log_to_file=True, log_level=sys_config.DEFAULT_LOG_LEVEL)
+    logger = log_utils.setup_logging(name="blaaa", type="training", log_to_file=False, log_level=sys_config.DEFAULT_LOG_LEVEL)
     
     if args.broker_func:
         broker = CapitalCom()
         broker.start_session()
         # broker.session_details(print_answer=True)
-        # broker.switch_active_account(print_answer=False)
+        broker.switch_active_account(print_answer=False)
+        broker.get_account_capital()
         # broker.list_all_accounts(print_answer=True)
         # broker.get_historical_data(epic="GBPUSD", resolution="MINUTE",
         #                            max=1000,
@@ -66,8 +67,8 @@ def main():
         # Run pipeline with intermediate saves for inspection
         result, saved_file = data_pipeline.run(save_intermediate=False)
     
-    if args.walk_forward_analysis:
-        from backtesting.walk_forward_analysis import WalkForwardAnalysis
+    if args.walk_forward_analysis:  # This whole block can be removed when I have implemented my own WFA, but keeping it for reference
+        from deprecated_code.walk_forward_analysis import WalkForwardAnalysis
 
         # Load your processed data
         data = pd.read_csv("data/storage/capital_com/processed/processed_GBPUSD_m5_20240101_20250101.csv", 

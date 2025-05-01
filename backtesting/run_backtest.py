@@ -213,7 +213,7 @@ def main_backtest_trained_model(model, DATA_PATH):
         'risk_manager': {
             'position_sizing_method': 'percent',
             'position_sizing_params': {
-                'percent': 2.0  # Use 2% of equity per trade
+                'percent': 40.0  # Use 40% of equity per trade
             }
         }
     }

@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from datetime import datetime
 
 # Import the walk-forward testing module
-from backtesting.walk_forward_analysis import WalkForwardAnalysis
+from deprecated_code.walk_forward_analysis import WalkForwardAnalysis
 
 # Path configuration
 DATA_DIR = "data/storage/capital_com/processed"

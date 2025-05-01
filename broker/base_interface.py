@@ -50,7 +50,6 @@ class BaseBroker(ABC):
     
     # ==================== ACCOUNT METHODS ====================
     
-    @abstractmethod
     def get_account_balance(self) -> Dict:
         """Get account balance information.
         

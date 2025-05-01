@@ -316,7 +316,7 @@ class RiskManager:
                  position_sizing_params: Dict[str, Any] = None,
                  max_position_size: Optional[float] = None,
                  max_correlated_positions: int = 5,
-                 max_portfolio_risk: float = 20.0,  # 20% max portfolio risk
+                 max_portfolio_risk: float = 40.0,  # 40% max portfolio risk
                  auto_stop_loss: bool = True,
                  stop_loss_method: str = 'percent',
                  stop_loss_params: Dict[str, Any] = None,
@@ -348,7 +348,7 @@ class RiskManager:
         self.position_sizer = position_sizer or PositionSizer(
             method=position_sizing_method,
             params=position_sizing_params or {
-                'percent': 10.0,  # Default to 10% of equity
+                'percent': 20.0,  # Default to 20% of equity
                 'risk_percent': 1.0,  # Default to 1% risk per trade
                 'stop_loss_percent': 2.0  # Default to 2% stop loss
             },
@@ -364,10 +364,10 @@ class RiskManager:
         self.auto_stop_loss = auto_stop_loss
         self.stop_loss_method = stop_loss_method
         self.stop_loss_params = stop_loss_params or {
-            'percent': 2.0,  # Default 2% stop loss
+            'percent': 4.0,       # Default 4% stop loss
             'atr_multiple': 2.0,  # Default 2x ATR
-            'min_percent': 1.0,  # Minimum 1%
-            'max_percent': 5.0  # Maximum 5%
+            'min_percent': 2.0,   # Minimum 2%
+            'max_percent': 6.0    # Maximum 6%
         }
         
         # Take profit settings
